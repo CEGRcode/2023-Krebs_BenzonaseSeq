@@ -1,0 +1,27 @@
+#!/bin/bash
+#PBS -l nodes=1:ppn=4
+#PBS -l pmem=14gb
+#PBS -l walltime=24:00:00
+#PBS -A open
+#PBS -o logs/run_strainid.log.out
+#PBS -e logs/run_strainid.log.err
+
+module load gcc
+module load samtools
+module load anaconda3
+
+### CHANGE ME
+source activate my-env # load conda environment with GenoPipe dependencies
+STRAINID=/path/to/GenoPipe/StrainID
+WRK=/path/to/20XX-LastName_Journal/
+GENOME=/path/to/sacCer3.fa
+###
+INPUTBAM=$WRK/data/BAM
+OUTPUT=$WRK/01_Run_GenoPipe/strainid
+
+cd $WRK
+[ -d logs ] || mkdir logs
+[ -d $OUTPUT ] || mkdir $OUTPUT
+
+cd $STRAINID
+bash identify-Strain.sh -i $INPUTBAM -v $STRAINID/sacCer3_VCF/ -g $GENOME -o $OUTPUT
