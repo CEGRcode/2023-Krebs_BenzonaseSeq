@@ -35,3 +35,19 @@ optional arguments:
   -i <composite-dir>, --input <composite-dir>   directory with all the composite data files
   -o <outfile>, --output <outfile>              output name to save workbook to
 ```
+
+
+### upstream_seq_tally.py
+Tally up kmers upstream of each read (can use proper-pair flag for paired-end data). Reverse-stand mapped reads are reverse complemented to orient kmers with the read on the right.
+```
+usage: upstream_seq_tally.py [-h] -i bam_fn -g fasta_fn -o tsv_fn [-p]
+                             [-k KMER]
+upstream_seq_tally.py: error: the following arguments are required: -i/--input, -g/--genome, -o/--output
+```
+
+### kmer_tally_to_pwm.py
+Can feed this script the tally output from `upstream_seq_tally.py` to summarize the kmer tallies' positional nucleotide content.
+```
+usage: kmer_tally_to_pwm.py [-h] -i bam_fn -o tsv_fn [-c COLUMN]
+kmer_tally_to_pwm.py: error: the following arguments are required: -i/--input, -o/--output
+```
