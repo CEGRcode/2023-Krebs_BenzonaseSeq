@@ -1,0 +1,26 @@
+#!/bin/bash
+#PBS -l nodes=1:ppn=6
+#PBS -l pmem=24gb
+#PBS -l walltime=00:30:00
+#PBS -A open
+#PBS -o logs/download.data.log.out
+#PBS -e logs/download.data.log.err
+#PBS -t 1-NSAMPLES
+
+WRK=/path/to/00_Download_and_Preprocessing
+cd $WRK
+
+DPEAK=../data/PEAKS
+[ -d logs ] || mkdir logs
+[ -d $DPEAK ] || mkdir -p $DPEAK
+
+# Replace with your own peak metadata file
+METADATA=hg19_peak_encff.tsv
+INFO=`sed "${PBS_ARRAYID}q;d" $METADATA`
+ENCFF=`echo $INFO | awk '{print $1}'`
+#echo $INFO
+
+# ENCODE data download
+cd $DPEAK
+echo "Fetching from https://www.encodeproject.org/files/$ENCFF/@@download/$ENCFF.bed.gz"
+wget https://www.encodeproject.org/files/$ENCFF/@@download/$ENCFF.bed.gz
