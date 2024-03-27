@@ -25,7 +25,8 @@ cp $MERGED/25863_25871_25967_25974_Benz_0sonicCycles_BX_H3K36me3_master.bam $BAM
 cp $MERGED/28457_28797_28465_28802_Benz_0sonicCycles_BX_H4_master.bam $BAMDIR/BNase-ChIP_H4_merge_hg19.bam
 
 # BI
-#??????
+BZNASE=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/230718_MERGE/
+cp $BZNASE/K562_benzonase-seq_master.bam $BAMDIR/BNase-seq_50U_merge_hg19.bam
 
 # DNase sample & MNase titration
 MNASE=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/230810_MNase_DNase/final_files/

@@ -47,3 +47,27 @@ For each TF, there should be one of each the following files:
 data/JASPAR/TF_MAXXXX-X.meme
 03_Call_Motifs/narrowPeaks/TF_ENCFFXXXXXX.meme
 ```
+
+### 1_FIMO_Motifs_from_Genome.sbatch
+Run FIMO for each JASPAR motif to get all instances in the genome and filter to keep motifs that are at least 500bp from all blacklisted regions.
+```
+sbatch 1_FIMO_Motifs_from_Genome.sbatch
+```
+Results in four intermediate files for each TF:
+```
+FIMO/TF/fimo.gff
+FIMO/TF/fimo.bed
+FIMO/TF/fimo_1000bp.bed
+FIMO/TF/filtered.bed
+```
+
+### 2_Intersect_Motifs_wENCODE_ChIP-seq_peaks.sbatch
+Get "lowly bound" motifs by intersecting the motif occurrences with ENCODE's ChIP-seq peaks and filtering for the bottom half of motifs (sorted by ENCODE binding score),
+```
+sbatch 2_Intersect_Motifs_wENCODE_ChIP-seq_peaks.sbatch
+```
+Along with intermediate files, two final motif RefPT files are generated for each TF:
+```
+../data/RefPT-Motif/TF.bed
+../data/RefPT-Motif/1000bp/TF_1000bp.bed
+```
