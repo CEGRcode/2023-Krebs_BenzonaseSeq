@@ -1,8 +1,14 @@
 #!/bin/bash
 
 # Before digging into alignment and pre-processing scripts, simply copy existing
-# merged BAM files from Jordan into standard file naming system to work on
+# merged BAM/BED files from Jordan into standard file naming system to work on
 # building downstream figures.
+
+#====Copy BED====
+DIR=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/230720_plus1_minus1/02_NFR_output_231128/
+cp $DIR/K562_trueNFR.bed ../data/RefPT-Krebs/NFR_K562.bed
+
+#====Copy BAM====
 
 BAMDIR=../data/BAM
 
@@ -51,7 +57,6 @@ cp $CUTRUN/H3K27me3/H3K27me3_4DN_CUTRUN.bam $BAMDIR/CUTandRUN_H3K27me3_merge_hg1
 cp $CUTRUN/H3K4me1/H3K4me1_4DN_CUTRUN.bam $BAMDIR/CUTandRUN_H3K4me1_merge_hg19.bam
 cp $CUTRUN/H3K4me3/H3K4me3_4DN_CUTRUN.bam $BAMDIR/CUTandRUN_H3K4me3_merge_hg19.bam
 cp $CUTRUN/IgG/IgG_4DN_CUTRUN.bam $BAMDIR/CUTandRUN_IgG_merge_hg19.bam
-
 
 for BAMFILE in $BAMDIR/*.bam;
 do

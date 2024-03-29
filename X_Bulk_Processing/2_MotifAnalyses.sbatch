@@ -5,7 +5,7 @@
 #SBATCH -A open
 #SBATCH -o logs/2_MotifAnalyses.log.out-%a
 #SBATCH -e logs/2_MotifAnalyses.log.err-%a
-#SBATCH --array 1-11
+#SBATCH --array 1-13
 
 # Loop through each BEDFILE in data/RefPT-Motif/1000bp and perform motif analyses:
 # - Four color plots (QC)

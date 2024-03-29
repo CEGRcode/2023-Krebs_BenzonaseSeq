@@ -20,6 +20,20 @@ data
     |--SPI1_MA0080-6.meme
     |--ZKSCAN1_MA1585-1.meme
   |--RefPT-Motifs
+    |--ATF7_LowerBound.bed
+    |--ATF7_NotPromoterProximal.bed
+    |--ATF7_PromoterProximal.bed
+    |--BACH1_LowerBound.bed
+    |--CTCF_LowerBound.bed
+    |--ELF1_LowerBound.bed
+    |--MAX_LowerBound.bed
+    |--MEIS2_LowerBound.bed
+    |--NFIC_LowerBound.bed
+    |--REST_LowerBound.bed
+    |--SP1_LowerBound.bed
+    |--SPI1_LowerBound.bed
+    |--ZKSCAN1_LowerBound.bed
+
 03_Call_Motifs
   |--narrowPeak
     |--ATF7_ENCFF868QLL.bed.gz
@@ -70,4 +84,15 @@ Along with intermediate files, two final motif RefPT files are generated for eac
 ```
 ../data/RefPT-Motif/TF.bed
 ../data/RefPT-Motif/1000bp/TF_1000bp.bed
+```
+
+### 3_Filter-ATF7_PromoterProximal.sh
+```
+sh 3_Filter-ATF7_PromoterProximal.sh
+```
+```
+../data/RefPT-Motif/ATF7_PromoterProximal.bed
+../data/RefPT-Motif/ATF7_NotPromoterProximal.bed
+../data/RefPT-Motif/1000bp/ATF7_PromoterProximal_1000bp.bed
+../data/RefPT-Motif/1000bp/ATF7_NotPromoterProximal_1000bp.bed
 ```
