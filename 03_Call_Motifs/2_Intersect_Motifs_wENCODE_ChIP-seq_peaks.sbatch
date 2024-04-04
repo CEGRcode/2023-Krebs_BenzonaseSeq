@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -N 1
 #SBATCH --mem=14gb
-#SBATCH -t 20:00:00
+#SBATCH -t 00:10:00
 #SBATCH -A open
 #SBATCH -o logs/2_Intersect_Motifs_wENCODE_ChIP.log.out-%a
 #SBATCH -e logs/2_Intersect_Motifs_wENCODE_ChIP.log.err-%a
@@ -18,7 +18,6 @@ WRK=/storage/home/owl5022/scratch/2023-Krebs_Benzonase-seq/03_Call_Motifs
 # Dependencies
 # - bedtools
 # - java
-# - MEME suite (FIMO)
 
 set -exo
 module load anaconda3
@@ -28,6 +27,9 @@ source activate bx
 # Inputs and outputs
 GENOME=$WRK/../data/hg19_files/hg19.fa
 BLACKLIST=$WRK/../data/hg19_files/hg19_exclude.bed
+
+# Script shortcuts
+DEDUP=$WRK/../bin/dedup_coord_by_ID.py
 ORIGINAL_SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
 SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14-$SLURM_ARRAY_TASK_ID.jar
 cp $ORIGINAL_SCRIPTMANAGER $SCRIPTMANAGER
@@ -58,19 +60,21 @@ gzip -dc narrowPeaks/$TF\_$ENCFF.bed.gz | shuf > $ODIR/ENCODE_shuffled.bed
 java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 20   $ODIR/JASPAR_shuffled.bed -o $ODIR/JASPAR_shuffled_20bp.bed
 # Expand ENCODE by 1000bp
 java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 1000 $ODIR/ENCODE_shuffled.bed -o $ODIR/ENCODE_shuffled_1000bp.bed
-# Intersect peaks with motifs
-bedtools intersect -wo -a $ODIR/ENCODE_shuffled_1000bp.bed -b $ODIR/JASPAR_shuffled_20bp.bed > $ODIR/Intersect.bed
+# Intersect peaks with motifs - filter to keep overlap - move ENCODE ChIP value ("signal value") to score col - sort by ID, then score
+bedtools intersect -loj -a Intersect/$TF/JASPAR_shuffled_20bp.bed -b Intersect/$TF/ENCODE_shuffled_1000bp.bed \
+	| awk '{OFS="\t"}{FS="\t"}{if($8>0) print $1,$2,$3,$4,$13,$6}' | sort -rnk4,5 \
+	> $ODIR/BoundMotifs-wDup.bed
+# Deduplicate motifs by keeping first instance (larger ENCODE score based on previous command sort)
+python $DEDUP -i $ODIR/BoundMotifs-wDup.bed -o $ODIR/BoundMotifs.bed
 # Count sites and divide by two (# lower half)
-NSITES=`wc -l $ODIR/Intersect.bed | awk '{print int($1/2)}'`
+NSITES=`wc -l $ODIR/BoundMotifs.bed | awk '{print int($1/2)}'`
 echo NSITES=$NSITES
-# cat $TARGET_INTERSECT | wc -l | awk '{printf \"%.f\\n\", \$1 * 0.5}' > $NUMBER
-# Sort by ChIP enrichment value ("signal value") column 7 (from ENCODE peak file), then make bedfile from columns 11-16 (from motif bedfile).
-sort -rnk7,7 $ODIR/Intersect.bed | tail -n $NSITES | \
-	awk '{FS="\t"}{OFS="\t"}{print $11,$12,$13,$14,$15,$16}' > Intersect/$TF/LowerBound.bed
+# Sort by ChIP enrichment and take bottom half
+sort -rnk5,5 $ODIR/BoundMotifs.bed | tail -n $NSITES > Intersect/$TF/LowerBound.bed
 
 [ -d $MOTIF ] || mkdir $MOTIF
 [ -d $MOTIF/1000bp ] || mkdir $MOTIF/1000bp
 
-mv Intersect/$TF/LowerBound.bed $MOTIF/$TF\_LowerBound.bed
+mv Intersect/$TF/LowerBound.bed $MOTIF/$TF\_Bound-LowerHalf.bed
 # Expand 1000bp (Motif-centered lower-bound intersect)
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 1000 $MOTIF/$TF\_LowerBound.bed -o $MOTIF/1000bp/$TF\_LowerBound_1000bp.bed
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 1000 $MOTIF/$TF\_Bound-LowerHalf.bed -o $MOTIF/1000bp/$TF\_Bound-LowerHalf_1000bp.bed

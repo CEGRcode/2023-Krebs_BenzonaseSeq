@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -N 1
 #SBATCH --mem=14gb
-#SBATCH -t 20:00:00
+#SBATCH -t 01:00:00
 #SBATCH -A open
 #SBATCH -o logs/1_FIMO_Motifs_from_Genome.log.out-%a
 #SBATCH -e logs/1_FIMO_Motifs_from_Genome.log.err-%a
@@ -28,6 +28,9 @@ source activate bx
 # Inputs and outputs
 GENOME=$WRK/../data/hg19_files/hg19.fa
 BLACKLIST=$WRK/../data/hg19_files/hg19_exclude.bed
+
+# Script shortcuts
+DEDUP=$WRK/../bin/dedup_coord_by_ID.py
 ORIGINAL_SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
 SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14-$SLURM_ARRAY_TASK_ID.jar
 cp $ORIGINAL_SCRIPTMANAGER $SCRIPTMANAGER
@@ -50,13 +53,20 @@ PWMFILE=$JDIR/$TF\_$FJASPAR.meme
 echo "($SLURM_ARRAY_TASK_ID) $TF"
 
 # Run FIMO to scan genome for motif occurrences
-#fimo --oc FIMO_default/$TF           --verbosity 1 --thresh 1.0E-4 $PWMFILE $GENOME
-#fimo --oc FIMO/$TF --bfile --motif-- --verbosity 1 --thresh 1.0E-4 $PWMFILE $GENOME
+# fimo --oc FIMO_original/$TF --bfile --motif-- --verbosity 1 --thresh 1.0E-4 $PWMFILE $GENOME
+# fimo --oc FIMO/$TF                            --verbosity 1 --thresh 1.0E-4 $PWMFILE $GENOME
 
 # Convert GFF to BED format
-java -jar $SCRIPTMANAGER coordinate-manipulation gff-to-bed <(sed '1d' FIMO/$TF/fimo.gff) -o FIMO/$TF/fimo.bed
+java -jar $SCRIPTMANAGER coordinate-manipulation gff-to-bed <(sed '1d' FIMO/$TF/fimo.gff) -o FIMO/$TF/fimo_unformatted_unfiltered.bed
 
-# Expand 1000 bp
+# Rename motif instances by coord info and sort by id, then FIMO motif score
+awk '{OFS="\t"}{FS="\t"}{print $1,$2,$3,$1"_"$2"_"$3,$5,$6}' FIMO/$TF/fimo_unformatted_unfiltered.bed \
+	| sort -k4 -rnk5 > FIMO/$TF/fimo_unfiltered.bed
+
+# Handle palindromic motifs with dedup keeping higher FIMO score
+python $DEDUP -i FIMO/$TF/fimo_unfiltered.bed -o FIMO/$TF/fimo.bed
+
+# Expand 1000bp
 java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 1000 FIMO/$TF/fimo.bed -o FIMO/$TF/fimo_1000bp.bed
 
 # Filter blacklist (exclude coords expanded off chromosome)

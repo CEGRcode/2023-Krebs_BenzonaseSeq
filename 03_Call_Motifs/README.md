@@ -20,20 +20,21 @@ data
     |--SPI1_MA0080-6.meme
     |--ZKSCAN1_MA1585-1.meme
   |--RefPT-Motifs
-    |--ATF7_LowerBound.bed
-    |--ATF7_NotPromoterProximal.bed
-    |--ATF7_PromoterProximal.bed
-    |--BACH1_LowerBound.bed
-    |--CTCF_LowerBound.bed
-    |--ELF1_LowerBound.bed
-    |--MAX_LowerBound.bed
-    |--MEIS2_LowerBound.bed
-    |--NFIC_LowerBound.bed
-    |--REST_LowerBound.bed
-    |--SP1_LowerBound.bed
-    |--SPI1_LowerBound.bed
-    |--ZKSCAN1_LowerBound.bed
-
+    |--ATF7_Bound-LowerHalf.bed
+    |--ATF7_Bound-NonPromoter.bed
+    |--ATF7_Bound-Promoter.bed
+    |--BACH1_Bound-LowerHalf.bed
+    |--CTCF_Bound-LowerHalf.bed
+    |--ELF1_Bound-LowerHalf.bed
+    |--MAX_Bound-LowerHalf.bed
+    |--MEIS2_Bound-LowerHalf.bed
+    |--NFIC_Bound-LowerHalf.bed
+    |--REST_Bound-LowerHalf.bed
+    |--SP1_Bound-LowerHalf.bed
+    |--SPI1_Bound-LowerHalf.bed
+    |--ZKSCAN1_Bound-LowerHalf.bed
+    |--1000bp/
+      |--...<see above with _1000bp.bed suffix>
 03_Call_Motifs
   |--narrowPeak
     |--ATF7_ENCFF868QLL.bed.gz
@@ -87,6 +88,7 @@ Along with intermediate files, two final motif RefPT files are generated for eac
 ```
 
 ### 3_Filter-ATF7_PromoterProximal.sh
+Intersect `BoundMotifs.bed` instances with NFRs to get `Promoter` and `NonPromoter` motif sets.
 ```
 sh 3_Filter-ATF7_PromoterProximal.sh
 ```

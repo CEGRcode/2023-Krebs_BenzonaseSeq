@@ -1,11 +1,10 @@
 #!/bin/bash
 #SBATCH -N 1
 #SBATCH --mem=14gb
-#SBATCH -t 20:00:00
+#SBATCH -t 00:05:00
 #SBATCH -A open
-#SBATCH -o logs/2_Intersect_Motifs_wENCODE_ChIP.log.out-%a
-#SBATCH -e logs/2_Intersect_Motifs_wENCODE_ChIP.log.err-%a
-#SBATCH --array 1-11
+#SBATCH -o logs/3_Filter-ATF7_PromoterProximal.log.out
+#SBATCH -e logs/3_Filter-ATF7_PromoterProximal.log.err
 
 # Re-intersect all ATF7 motif with ChIP-seq peaks and sort into
 # promoter-proximal and not promoter-proximal (NFR overlap or not)
@@ -17,7 +16,7 @@ WRK=/storage/home/owl5022/scratch/2023-Krebs_Benzonase-seq/03_Call_Motifs
 
 # Dependencies
 # - bedtools
-# - javas
+# - java
 
 set -exo
 module load anaconda3
@@ -34,17 +33,13 @@ JASPAR=MA0834-1
 ENCFF=ENCFF868QLL
 ODIR=Intersect/$TF
 
-# Expand ENCODE by 1000bp
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 1000 $ODIR/ENCODE_shuffled.bed -o $ODIR/ENCODE_shuffled_1000bp.bed
-# Intersect JASPAR motif instances with ENCODE ChIP-seq peaks and write the motif-centered hits
-bedtools intersect -wb -a $ODIR/ENCODE_shuffled_1000bp.bed -b $ODIR/JASPAR_shuffled_20bp.bed > $ODIR/Intersect_Motif-centered.bed
 # Intersect with NFR RefPT for NFR overlap or not (a.k.a. "promoter proximal" or not)
-bedtools intersect -u -a $ODIR/Intersect_Motif-centered.bed -b $NFR_BEDFILE > $MOTIF/$TF\_PromoterProximal.bed
-bedtools intersect -v -a $ODIR/Intersect_Motif-centered.bed -b $NFR_BEDFILE > $MOTIF/$TF\_NotPromoterProximal.bed
+bedtools intersect -wa -u -a $ODIR/BoundMotifs.bed -b $NFR_BEDFILE > $MOTIF/$TF\_Bound-Promoter.bed
+bedtools intersect -wa -v -a $ODIR/BoundMotifs.bed -b $NFR_BEDFILE > $MOTIF/$TF\_Bound-NonPromoter.bed
 # Expand 1000bp
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 1000 $MOTIF/$TF\_PromoterProximal.bed -o $MOTIF/1000bp/$TF\_PromoterProximal_1000bp.bed
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 1000 $MOTIF/$TF\_NotPromoterProximal.bed -o $MOTIF/1000bp/$TF\_NotPromoterProximal_1000bp.bed
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 1000 $MOTIF/$TF\_Bound-Promoter.bed -o $MOTIF/1000bp/$TF\_Bound-Promoter_1000bp.bed
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 1000 $MOTIF/$TF\_Bound-NonPromoter.bed -o $MOTIF/1000bp/$TF\_Bound-NonPromoter_1000bp.bed
 # Print line count stats
-wc -l $ODIR/Intersect_Motif-centered.bed
-wc -l $MOTIF/$TF\_PromoterProximal.bed
-wc -l $MOTIF/$TF\_NotPromoterProximal.bed
+wc -l $ODIR/BoundMotifs.bed
+wc -l $MOTIF/$TF\_Bound-Promoter.bed
+wc -l $MOTIF/$TF\_Bound-NonPromoter.bed
