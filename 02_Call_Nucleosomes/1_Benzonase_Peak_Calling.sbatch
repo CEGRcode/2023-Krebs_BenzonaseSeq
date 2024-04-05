@@ -10,6 +10,7 @@
 # see 02_Genetrack/01_BAM_to_scIDX.sh
 # see 02_Genetrack/02_convert_scIDX_for_GeneTrack.sh
 # see 02_Genetrack/03_scIDX_to_Genetrack.sh
+# see 02_Genetrack/04_Genetrack_bedfiles.sh (partial)
 
 ### CHANGE ME
 WRK=/path/to/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes
@@ -56,7 +57,6 @@ java -jar $SCRIPTMANAGER bam-format-converter bam-to-scidx -m -p -n 165        $
 wait
 time2=$(date +%s)
 echo "Elapsed Time (sub): $(($time2-$time1)) seconds"
-#
 
 # Reformat combined value to "forward" and zero out "reverse"
 echo "Reformat..."
@@ -85,3 +85,46 @@ wait
 time2=$(date +%s)
 echo "Elapsed Time (sub): $(($time2-$time1)) seconds"
 # <1 hour (3562 sec)
+
+# Convert to BED
+echo "Convert GFF to BED..."
+time1=$(date +%s)
+java -jar $SCRIPTMANAGER coordinate-manipulation gff-to-bed sub/genetrack_s10e20/formatted_s10e20.gff       -o sub/genetrack_output.bed &
+java -jar $SCRIPTMANAGER coordinate-manipulation gff-to-bed tet/genetrack_s20e40F5/formatted_s20e40F5.gff   -o tet/genetrack_output.bed &
+java -jar $SCRIPTMANAGER coordinate-manipulation gff-to-bed hex/genetrack_s30e60F6/formatted_s30e60F6.gff   -o hex/genetrack_output.bed &
+java -jar $SCRIPTMANAGER coordinate-manipulation gff-to-bed nuc/genetrack_s40e80F5/formatted_s40e80F5.gff   -o nuc/genetrack_output.bed &
+java -jar $SCRIPTMANAGER coordinate-manipulation gff-to-bed sup/genetrack_s50e100F3/formatted_s50e100F3.gff -o sup/genetrack_output.bed &
+wait
+time2=$(date +%s)
+echo "Elapsed Time (sub): $(($time2-$time1)) seconds"
+# 6 min (377 sec)
+
+# Expand BED (max DNA frag size for indicated nuc peak except supraoctasomes expanded to 200bp)
+echo "Expand BED..."
+time1=$(date +%s)
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 54  sub/genetrack_output.bed -o sub/expanded.bed &
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 91  tet/genetrack_output.bed -o tet/expanded.bed &
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 127 hex/genetrack_output.bed -o hex/expanded.bed &
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 164 nuc/genetrack_output.bed -o nuc/expanded.bed &
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 200 sup/genetrack_output.bed -o sup/expanded.bed &
+wait
+time2=$(date +%s)
+echo "Elapsed Time (sub): $(($time2-$time1)) seconds"
+# 49 sec
+
+# Filter to exclude lines expanded into negative value coordinate indexes & add 7th column with particle type indicated
+echo "Filter out negative coordinates and build ID..."
+time1=$(date +%s)
+awk '{OFS="\t"}{FS="\t"}{if ($2>0) {$4="Subtetra-" NR "-" $1"_"$2"_"$3"_"$4; print;}}' sub/expanded.bed > AllParticles/Subtetra.bed &
+awk '{OFS="\t"}{FS="\t"}{if ($2>0) {$4="Tetra-"    NR "-" $1"_"$2"_"$3"_"$4; print;}}' tet/expanded.bed > AllParticles/Tetra.bed &
+awk '{OFS="\t"}{FS="\t"}{if ($2>0) {$4="Hex-"      NR "-" $1"_"$2"_"$3"_"$4; print;}}' hex/expanded.bed > AllParticles/Hex.bed &
+awk '{OFS="\t"}{FS="\t"}{if ($2>0) {$4="Nuc-"      NR "-" $1"_"$2"_"$3"_"$4; print;}}' nuc/expanded.bed > AllParticles/Nucleosome.bed &
+awk '{OFS="\t"}{FS="\t"}{if ($2>0) {$4="Supraoct-" NR "-" $1"_"$2"_"$3"_"$4; print;}}' sup/expanded.bed > AllParticles/Supraoct.bed &
+wait
+time2=$(date +%s)
+echo "Elapsed Time (sub): $(($time2-$time1)) seconds"
+# 41 sec
+
+# Merge all labeled nucleosome particles
+cat AllParticles/*.bed | bedtools sort -i - > Merged_Redundant_Nucleosome-Particles.bed #K562_redundant_master_nucleosomal_particles.bed
+wc -l Merged_Redundant_Nucleosome-Particles.bed
