@@ -1,2 +1,6 @@
 **.DS_Store
-data/BAM/*
+data/BAM/*.bam
+data/BAM/*.bai
+X_Bulk_Processing/Library*
+
+z-archive
