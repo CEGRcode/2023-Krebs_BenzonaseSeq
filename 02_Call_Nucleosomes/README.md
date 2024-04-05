@@ -15,6 +15,15 @@ data
     |--Hex.bed
     |--Nucleosome.bed
     |--Supraoct.bed
+  |--UniqueParticles
+    |--uHex.bed
+    |--uTetra.bed
+    |--uSubtetra.bed
+    |--uSupraoct.bed
+    |--Nucleosome_uHex.bed
+    |--Nucleosome_uHex_uTetra.bed
+    |--Nucleosome_uHex_uTetra_uSubtetra.bed
+    |--Merged_Nonredundant_particles.bed
   |--SCIDX
     |--sub.tab
     |--tet.tab
@@ -81,4 +90,10 @@ sbatch 1_Benzonase_Peak_Calling.sbatch
 Perform a positioning check with a subsampled Tag Pileup composite.
 ```
 sbatch 1b_Check_Shift.sbatch
+```
+
+### 2_Identify_Unique_Peaks.sbatch
+Create a non-redundant set of non-overlapping (complete overlap) particle peaks (favoring peaks from larger fragments).
+```
+sbatch 2_Identify_Unique_Peaks.sbatch
 ```
