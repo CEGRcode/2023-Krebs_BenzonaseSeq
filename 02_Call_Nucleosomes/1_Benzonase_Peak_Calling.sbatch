@@ -11,6 +11,7 @@
 # see 02_Genetrack/02_convert_scIDX_for_GeneTrack.sh
 # see 02_Genetrack/03_scIDX_to_Genetrack.sh
 # see 02_Genetrack/04_Genetrack_bedfiles.sh (partial)
+# see 02_Genetrack/06_Genetrack_bedfiles.sh (partial - assign unique ids)
 
 ### CHANGE ME
 WRK=/path/to/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes

@@ -24,6 +24,17 @@ data
     |--Nucleosome_uHex_uTetra.bed
     |--Nucleosome_uHex_uTetra_uSubtetra.bed
     |--Merged_Nonredundant_particles.bed
+  |--Intersect
+    |--Nucleosomes_intersect_redundantHex.bed
+    |--Nucleosomes_intersect_redundantTetra.bed
+    |--Nucleosomes_intersect_redundantSubtetra.bed
+    |--Nucleosomes_intersect_redundantSupraoct.bed
+    |--uHex_intersect_redundantTetra.bed
+    |--uHex_intersect_redundantSubtetra.bed
+    |--uHex_intersect_redundantSupraoct.bed
+    |--uTetra_intersect_redundantSubtetra.bed
+    |--uTetra_intersect_redundantSupraoct.bed
+    |--uSubtetra_intersect_redundantSupraoct.bed
   |--SCIDX
     |--sub.tab
     |--tet.tab
@@ -96,4 +107,10 @@ sbatch 1b_Check_Shift.sbatch
 Create a non-redundant set of non-overlapping (complete overlap) particle peaks (favoring peaks from larger fragments).
 ```
 sbatch 2_Identify_Unique_Peaks.sbatch
+```
+
+### 3_Aggregate_Nucleosome_Peaks.sbatch
+
+```
+sbatch 3_Aggregate_Nucleosome_Peaks.sbatch
 ```
