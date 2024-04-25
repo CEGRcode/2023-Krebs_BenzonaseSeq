@@ -7,6 +7,9 @@ Perform peak-calling on Benzonase-seq data to infer nucleosomes and build RefPT 
 ```
 data
   |--RefPT-Krebs
+    |--TSS_GROUP-All_SORT-CappedExpression.bed
+    |--TSS_GROUP-Expressed_SORT-Expression.bed
+    |--TSS_GROUP-Unexpressed.bed
 02_Call_Nucleosomes
   |--Merged_Redundant_Nucleosome-Particles.bed
   |--AllParticles
@@ -35,6 +38,31 @@ data
     |--uTetra_intersect_redundantSubtetra.bed
     |--uTetra_intersect_redundantSupraoct.bed
     |--uSubtetra_intersect_redundantSupraoct.bed
+  |--MakeTSS
+    |--CappedExpression.out
+    |--Capped_READ2_anti.cdt
+    |--Capped_READ2_sense.cdt
+    |--Capped_READ2_TSS_40bp_anti.cdt
+    |--Capped_READ2_TSS_40bp_sense.cdt
+    |--hg19.knownCanonicalPep.id-transcripts.gtf
+    |--hg19_knownCanonicalPep-TSS_100bp.bed
+    |--hg19_knownCanonicalPep-TSS.bed
+    |--hg19.knownGene.id-transcripts.gtf
+    |--hg19.knownGene.transcripts.gtf
+    |--hg19.knownGene.transcripts.ids
+    |--knownCanonical.ids
+    |--knownCanonicalPep.ids
+    |--knownCanonicalPep-NoNames.txt
+    |--knownGenePep.ids
+    |--knownToLynx_FILTER-RemoveMalacards.txt
+    |--knownToLynx.txt
+    |--knownToMalacards.ids
+    |--knownToMalacards-wLynx.txt
+    |--knownTo_NameMap.txt
+    |--maxPeak.bed
+    |--TSS.bed
+    |--TSS_200bp.bed
+    |--TSS_SCORE-CappedExpression.bed
   |--SCIDX
     |--sub.tab
     |--tet.tab
@@ -113,4 +141,10 @@ sbatch 2_Identify_Unique_Peaks.sbatch
 
 ```
 sbatch 3_Aggregate_Nucleosome_Peaks.sbatch
+```
+
+### 4_Build_TSS_RefPT.sbatch
+Call TSS reference points, trued up by CoPRO mode signal.
+```
+sbatch 4_Build_TSS_RefPT.sbatch
 ```

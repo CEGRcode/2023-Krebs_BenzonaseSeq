@@ -12,6 +12,12 @@ cp $DIR/K562_trueNFR.bed ../data/RefPT-Krebs/NFR_K562.bed
 
 BAMDIR=../data/BAM
 
+# CoPRO
+MERGED=/storage/group/bfp2/default/wkl2-WillLai/MEP_Project/01_BAM/CoPRO/
+cp $MERGED/CoPRO_K562_MERGE.bam $BAMDIR/CoPRO_-_merge_hg19.bam
+cp $MERGED/CoPRO_K562_Capped_SORT.bam $BAMDIR/CoPRO_Capped_merge_hg19.bam
+cp $MERGED/CoPRO_K562_Uncapped_SORT.bam $BAMDIR/CoPRO_Uncapped_merge_hg19.bam
+
 # XO
 MERGED=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/230810_ChIPs/MERGED_datasets/
 cp $MERGED/19354_19355_NoBenz_10sonicCycles_XO_PolII_master.bam $BAMDIR/ChIP-exo_Pol2_merge_hg19.bam
