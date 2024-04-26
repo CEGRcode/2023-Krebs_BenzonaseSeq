@@ -7,6 +7,14 @@ Perform peak-calling on Benzonase-seq data to infer nucleosomes and build RefPT 
 ```
 data
   |--RefPT-Krebs
+    |--MinusOneDyad_SORT-DistToExpressedTSS.bed
+    |--MinusOneDyad_SORT-DistToUnexpressedTSS.bed
+    |--MinusOneDyad_SORT-Expression.bed
+    |--PlusOneDyad_SORT-DistToExpressedTSS.bed
+    |--PlusOneDyad_SORT-DistToUnexpressedTSS.bed
+    |--PlusOneDyad_SORT-Expression.bed
+    |--PlusOneDyad_SORT-Expression_GROUP-Nuc-Dyad.bed
+    |--PlusOneDyad_SORT-Expression_WithUnexpressed.bed
     |--TSS_GROUP-All_SORT-CappedExpression.bed
     |--TSS_GROUP-Expressed_SORT-Expression.bed
     |--TSS_GROUP-Unexpressed.bed
@@ -63,6 +71,23 @@ data
     |--TSS.bed
     |--TSS_200bp.bed
     |--TSS_SCORE-CappedExpression.bed
+  |--MakePlusMinus
+    |--MinusOneDyad_SORT-DistToExpressedTSS.tsv
+    |--MinusOneDyad_SORT-DistToUnexpressedTSS.tsv
+    |--Nuc-Dyad.ids
+    |--Nucleosomes.bed
+    |--PlusOneDyad_SORT-DistToExpressedTSS.tsv
+    |--PlusOneDyad_SORT-DistToUnexpressedTSS.tsv
+    |--TSS_downstream_Octomers.bed
+    |--TSS_SORT-Genomic.bed
+    |--TSS_SORT-RankExpression_1bp.bed
+    |--TSS_SORT-RankExpression.bed
+    |--TSS_upstream_Octomers.bed
+    |--uTSS_downstream_Octomers.bed
+    |--uTSS_SORT-Genomic.bed
+    |--uTSS_SORT-RankSort_1bp.bed
+    |--uTSS_SORT-RankSort.bed
+    |--uTSS_upstream_Octomers.bed
   |--SCIDX
     |--sub.tab
     |--tet.tab
@@ -147,4 +172,10 @@ sbatch 3_Aggregate_Nucleosome_Peaks.sbatch
 Call TSS reference points, trued up by CoPRO mode signal.
 ```
 sbatch 4_Build_TSS_RefPT.sbatch
+```
+
+
+### 5_Determine_PlusOne-MinusOne-Dyads.sh
+```
+sh 5_Determine_PlusOne-MinusOne-Dyads.sh
 ```
