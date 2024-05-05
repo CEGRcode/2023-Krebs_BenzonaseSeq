@@ -25,7 +25,7 @@ source activate bx
 
 # Inputs and outputs
 MOTIF=$WRK/../data/RefPT-Motif
-NFR_BEDFILE=$WRK/../data/RefPT-Krebs/NFR_K562.bed
+NFR_BEDFILE=$WRK/../data/RefPT-Krebs/NFR_SORT-NFRLength.bed
 SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
 
 TF=ATF7
