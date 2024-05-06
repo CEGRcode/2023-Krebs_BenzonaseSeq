@@ -83,6 +83,21 @@ do
 	mv $FILE F4/b/$TARGET\_$BASE
 done
 
+[ -d F4/c ] || mkdir F4/c
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-seq_50U_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint_combined.out F4/c/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H2AZ_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_5read1-MIN128-MAX164.out F4/c/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H2B_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_5read1-MIN128-MAX164.out F4/c/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_5read1-MIN128-MAX164.out F4/c/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H4_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_5read1-MIN128-MAX164.out F4/c/
+
+# Rename for plotter
+for FILE in F4/c/*.out;
+do
+	BASE=`basename $FILE`
+	TARGET=`echo $BASE | cut -d"_" -f2`
+	mv $FILE F4/c/$TARGET\_$BASE
+done
+
 # ===============================================================================================================================
 
 [ -d S1 ] || mkdir S1
