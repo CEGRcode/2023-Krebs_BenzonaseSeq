@@ -47,6 +47,44 @@ cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-seq_50U_merge_hg
 
 # ===============================================================================================================================
 
+[ -d F4 ] || mkdir F4
+
+[ -d F4/a ] || mkdir F4/a
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H2A_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H2AZ_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H2B_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H3K4me1_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H3K9ac_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H3K27ac_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H3K27me3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H3K36me3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H4_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/a/
+
+[ -d F4/b ] || mkdir F4/b
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H2A_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H2AZ_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H2B_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H3K4me1_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H3K9ac_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H3K27ac_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H3K27me3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H3K36me3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H4_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/b/
+
+# Rename for plotter
+for FILE in F4/b/*.out;
+do
+	BASE=`basename $FILE`
+	TARGET=`echo $BASE | cut -d"_" -f2`
+	mv $FILE F4/b/$TARGET\_$BASE
+done
+
+# ===============================================================================================================================
+
 [ -d S1 ] || mkdir S1
 # CpG heatmap - see custom script
 cp $LIBRARY/TSS_GROUP-Expressed_SORT-CpG_2000bp/SVG/MNase-seq_5U_rep1_hg19_TSS_GROUP-Expressed_SORT-CpG_2000bp_midpoint_combined_treeview_label.svg S1/

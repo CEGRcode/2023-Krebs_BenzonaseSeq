@@ -6,3 +6,14 @@ FF00FF	NaN	NaN	../data/BAM/BNase-seq_50U_merge_hg19.bam	../data/RefPT-Krebs/2000
 000000	NaN	NaN	../data/BAM/MNase-seq_304U_rep1_hg19.bam	../data/RefPT-Krebs/2000bp/TSS_GROUP-Expressed_SORT-CpG_2000bp.bed
 FF00FF	NaN	NaN	../data/BAM/BNase-seq_50U_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp.bed
 FF00FF	NaN	NaN	../data/BAM/BNase-seq_50U_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
+FFCC33	128	164	../data/BAM/BNase-ChIP_H2A_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
+999900	128	164	../data/BAM/BNase-ChIP_H2AZ_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
+FF0000	128	164	../data/BAM/BNase-ChIP_H2B_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
+0000FF	128	164	../data/BAM/BNase-ChIP_H3_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
+FF6699	128	164	../data/BAM/BNase-ChIP_H3K4me1_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
+FF9900	128	164	../data/BAM/BNase-ChIP_H3K4me3_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
+0068C9	128	164	../data/BAM/BNase-ChIP_H3K9ac_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
+9900FF	128	164	../data/BAM/BNase-ChIP_H3K27ac_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
+999999	128	164	../data/BAM/BNase-ChIP_H3K27me3_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
+00CC00	128	164	../data/BAM/BNase-ChIP_H3K36me3_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
+009900	128	164	../data/BAM/BNase-ChIP_H4_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
