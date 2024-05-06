@@ -54,10 +54,10 @@ data
     |--CappedExpression.out
     |--Capped_READ2_anti.cdt
     |--Capped_READ2_sense.cdt
-    |--Capped_READ2_TSS_40bp_anti.cdt
-    |--Capped_READ2_TSS_40bp_sense.cdt
+    |--Capped_READ2_TSS_200bp_anti.cdt
+    |--Capped_READ2_TSS_200bp_sense.cdt
     |--hg19.knownCanonicalPep.id-transcripts.gtf
-    |--hg19_knownCanonicalPep-TSS_100bp.bed
+    |--hg19_knownCanonicalPep-TSS_200bp.bed
     |--hg19_knownCanonicalPep-TSS.bed
     |--hg19.knownGene.id-transcripts.gtf
     |--hg19.knownGene.transcripts.gtf
@@ -72,7 +72,7 @@ data
     |--knownToMalacards-wLynx.txt
     |--knownTo_NameMap.txt
     |--maxPeak.bed
-    |--TSS_40bp.bed
+    |--TSS_200bp.bed
     |--TSS.bed
     |--TSS_CpG.cdt
     |--TSS_CpG_SORTED.cdt
