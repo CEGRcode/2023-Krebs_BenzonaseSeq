@@ -1,0 +1,2 @@
+833C0C	NaN	NaN	../data/BAM/ChIP-exo_Pol2_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp.bed
+833C0C	NaN	NaN	../data/BAM/ChIP-exo_Pol2_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed

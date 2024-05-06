@@ -110,4 +110,4 @@ cat $KREBS/PlusOneDyad_SORT-Expression.bed $KREBS/PlusOneDyad_SORT-DistToUnexpre
 java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-Expression.bed -o $KREBS/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
 # java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/MinusOneDyad_SORT-Expression.bed -o $KREBS/2000bp/MinusOneDyad_SORT-Expression_2000bp.bed
 java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-Expression_GROUP-Nuc-Dyad.bed -o $KREBS/2000bp/PlusOneDyad_SORT-Expression_GROUP-Nuc-Dyad_2000bp.bed
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-Expression_WithUnexpressed.bed -o $KREBS/2000bp/PlusOneDyad_SORT-ExpressionExpression_WithUnexpressed_2000bp.bed
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-Expression_WithUnexpressed.bed -o $KREBS/2000bp/PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp.bed

@@ -31,6 +31,22 @@ cp $LIBRARY/TSS_GROUP-Expressed_SORT-CpG_2000bp/SVG/DNase-seq_-_rep1_hg19_TSS_GR
 
 # ===============================================================================================================================
 
+[ -d F3 ] || mkdir F3
+
+[ -d F3/a ] || mkdir F3/a
+cp $LIBRARY/PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp/SVG/CoPRO_-_merge_hg19_PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp_5read2_merge_treeview_label.svg F3/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp/SVG/CoPRO_-_merge_hg19_PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp_5read1_merge_treeview_label.svg F3/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp/SVG/ChIP-exo_Pol2_merge_hg19_PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp_5read1_combined_treeview_label.svg F3/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp/SVG/BNase-seq_50U_merge_hg19_PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp_midpoint_combined_treeview_label.svg F3/a/
+
+[ -d F3/b ] || mkdir F3/b
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/CoPRO_-_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_5read2.out F3/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/CoPRO_-_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_5read1.out F3/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/ChIP-exo_Pol2_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_5read1_combined.out F3/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-seq_50U_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint_combined.out F3/b/
+
+# ===============================================================================================================================
+
 [ -d S1 ] || mkdir S1
 # CpG heatmap - see custom script
 cp $LIBRARY/TSS_GROUP-Expressed_SORT-CpG_2000bp/SVG/MNase-seq_5U_rep1_hg19_TSS_GROUP-Expressed_SORT-CpG_2000bp_midpoint_combined_treeview_label.svg S1/

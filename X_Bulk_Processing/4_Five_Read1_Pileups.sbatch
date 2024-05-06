@@ -1,22 +1,22 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --mem=24gb
+#SBATCH --mem=14gb
 #SBATCH -t 00:15:00
 #SBATCH -A open
-#SBATCH -o logs/3_Midpoint_Pileups.log.out-%a
-#SBATCH -e logs/3_Midpoint_Pileups.log.err-%a
-#SBATCH --array 1-8
+#SBATCH -o logs/4_Five_Read1_Pileups.log.out-%a
+#SBATCH -e logs/4_Five_Read1_Pileups.log.err-%a
+#SBATCH --array 1-2
 
 # SLURM_ARRAY_TASK_ID=2
 
-# Pileup midpoint (heatmaps) and composites for a custom
-# combination of BAM x BED files with RGB info.
-# No scaling, 95% heatmap color contrast threshold
+# Pileup 5' R1 (heatmaps) and composites for a custom combination of BAM x BED
+# files with RGB info and custom insert size filters.
+# Primarily ChIP data with some CUT&RUN.
 
 ### CHANGE ME
 WRK=/path/to/2023-Krebs_BenzonaseSeq/X_Bulk_Processing
 WRK=/storage/home/owl5022/scratch/2023-Krebs_Benzonase-seq/X_Bulk_Processing
-METADATA=Midpoint_Pileups.txt
+METADATA=Five_Read1_Pileups.txt
 THREADS=4
 ###
 
@@ -74,19 +74,19 @@ DIR=$OUTDIR/$BED
 [ -d $DIR ] || mkdir $DIR
 [[ -d $DIR/CDT ]] || mkdir $DIR/CDT
 [[ -d $DIR/Composites ]] || mkdir $DIR/Composites
-[[ -d $DIR/PNG ]] || mkdir $DIR/PNG
+[[ -d $DIR/PNG/Strand ]] || mkdir -p $DIR/PNG/Strand
 [[ -d $DIR/SVG ]] || mkdir $DIR/SVG
 
 # ===============================================================================================================================
 
-echo "Run Nucleosome mid pileup (All fragments)"
-BASE=$BAM\_$BED\_midpoint
+echo "Run pileup (5' end, Read 1, combined)"
+BASE=$BAM\_$BED\_5read1
 
 [[ $MIN =~ "NaN" ]] || BASE=$BASE\-MIN$MIN || PARAMS="-n $MIN"
 [[ $MAX =~ "NaN" ]] || BASE=$BASE\-MAX$MAX || PARAMS=$PARAMS" -x $MAX"
 
-# Pileup (mid)
-java -jar $SCRIPTMANAGER read-analysis tag-pileup $BEDFILE $BAMFILE --cpu $THREADS -m -p $PARAMS --combined -z -o $DIR/Composites/$BASE\_combined.out -M $DIR/CDT/$BASE
+# Pileup (5read1)
+java -jar $SCRIPTMANAGER read-analysis tag-pileup $BEDFILE $BAMFILE --cpu $THREADS -5 -1 -p $PARAMS --combined -z -o $DIR/Composites/$BASE\_combined.out -M $DIR/CDT/$BASE
 # No scaling
 
 # Two-color heatmap
@@ -97,3 +97,26 @@ java -jar $SCRIPTMANAGER figure-generation label-heatmap $DIR/PNG/$BASE\_combine
 	-l $LLABEL -m "0" -r $RLABEL -w 2 -f 18 \
 	-x $BED -y "$BED occurences (${NSITES} sites)" \
 	-o $DIR/SVG/$BASE\_combined_treeview_label.svg
+
+# ===============================================================================================================================
+
+echo "Run pileup (5' end, Read 1, seperate)"
+BASE=$BAM\_$BED\_5read1
+
+[[ $MIN =~ "NaN" ]] || BASE=$BASE\-MIN$MIN || PARAMS="-n $MIN"
+[[ $MAX =~ "NaN" ]] || BASE=$BASE\-MAX$MAX || PARAMS=$PARAMS" -x $MAX"
+
+# Pileup (5read1)
+java -jar $SCRIPTMANAGER read-analysis tag-pileup $BEDFILE $BAMFILE --cpu $THREADS -5 -1 -p $PARAMS -z -o $DIR/Composites/$BASE.out -M $DIR/CDT/$BASE
+# No scaling
+
+# Two-color heatmap
+java -jar $SCRIPTMANAGER figure-generation heatmap --blue -p .95 $DIR/CDT/$BASE\_sense.cdt.gz -o $DIR/PNG/Strand/$BASE\_sense_treeview.png
+java -jar $SCRIPTMANAGER figure-generation heatmap --red  -p .95 $DIR/CDT/$BASE\_anti.cdt.gz  -o $DIR/PNG/Strand/$BASE\_anti_treeview.png
+java -jar $SCRIPTMANAGER figure-generation merge-heatmap $DIR/PNG/Strand/$BASE\_sense_treeview.png $DIR/PNG/Strand/$BASE\_anti_treeview.png -o $DIR/PNG/$BASE\_merge_treeview.png
+
+# Label heatmap
+java -jar $SCRIPTMANAGER figure-generation label-heatmap $DIR/PNG/$BASE\_merge_treeview.png \
+	-l $LLABEL -m "0" -r $RLABEL -w 2 -f 18 \
+	-x $BED -y "$BED occurences (${NSITES} sites)" \
+	-o $DIR/SVG/$BASE\_merge_treeview_label.svg
