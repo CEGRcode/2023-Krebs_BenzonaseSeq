@@ -1,0 +1,2 @@
+FF00FF	NaN	NaN	../data/BAM/BNase-seq_50U_merge_hg19.bam	../data/RefPT-Krebs/2000bp/TSS_GROUP-Expressed_SORT-CpG_2000bp.bed
+00FF1E	NaN	NaN	../data/BAM/DNase-seq_-_rep1_hg19.bam	../data/RefPT-Krebs/2000bp/TSS_GROUP-Expressed_SORT-CpG_2000bp.bed

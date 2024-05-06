@@ -10,14 +10,18 @@ data
     |--MinusOneDyad_SORT-DistToExpressedTSS.bed
     |--MinusOneDyad_SORT-DistToUnexpressedTSS.bed
     |--MinusOneDyad_SORT-Expression.bed
+    |--NFR_SORT-NFRLength.bed
     |--PlusOneDyad_SORT-DistToExpressedTSS.bed
     |--PlusOneDyad_SORT-DistToUnexpressedTSS.bed
     |--PlusOneDyad_SORT-Expression.bed
     |--PlusOneDyad_SORT-Expression_GROUP-Nuc-Dyad.bed
     |--PlusOneDyad_SORT-Expression_WithUnexpressed.bed
     |--TSS_GROUP-All_SORT-CappedExpression.bed
+    |--TSS_GROUP-Expressed_SORT-CpG.bed
     |--TSS_GROUP-Expressed_SORT-Expression.bed
     |--TSS_GROUP-Unexpressed.bed
+  |--RefPT-Other
+    |--CpG_Islands.bed
 02_Call_Nucleosomes
   |--Merged_Redundant_Nucleosome-Particles.bed
   |--AllParticles
@@ -68,16 +72,25 @@ data
     |--knownToMalacards-wLynx.txt
     |--knownTo_NameMap.txt
     |--maxPeak.bed
+    |--TSS_40bp.bed
     |--TSS.bed
-    |--TSS_200bp.bed
+    |--TSS_CpG.cdt
+    |--TSS_CpG_SORTED.cdt
     |--TSS_SCORE-CappedExpression.bed
   |--MakePlusMinus
+    |--MatchedDyads_SORT-RankExpression.tsv
+    |--MatchedDyads_SORT-RankExpression_WithNFRInfo.tsv
+    |--Matched-MinusOneDyad_SORT-DistToExpressedTSS.tsv
+    |--Matched-MinusOneDyad_SORT-RankExpression.tsv
+    |--Matched-PlusOneDyad_SORT-DistToExpressedTSS.tsv
+    |--Matched-PlusOneDyad_SORT-RankExpression.tsv
     |--MinusOneDyad_SORT-DistToExpressedTSS.tsv
     |--MinusOneDyad_SORT-DistToUnexpressedTSS.tsv
     |--Nuc-Dyad.ids
     |--Nucleosomes.bed
     |--PlusOneDyad_SORT-DistToExpressedTSS.tsv
     |--PlusOneDyad_SORT-DistToUnexpressedTSS.tsv
+    |--Shared_RankIDs.ids
     |--TSS_downstream_Octomers.bed
     |--TSS_SORT-Genomic.bed
     |--TSS_SORT-RankExpression_1bp.bed

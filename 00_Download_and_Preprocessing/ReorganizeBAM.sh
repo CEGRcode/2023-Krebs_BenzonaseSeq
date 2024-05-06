@@ -7,6 +7,8 @@
 #====Copy BED====
 DIR=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/230720_plus1_minus1/02_NFR_output_231128/
 cp $DIR/K562_trueNFR.bed ../data/RefPT-Krebs/NFR_K562.bed
+DIR=/storage/group/bfp2/default/wkl2-WillLai/NucleosomeAtlas_Project/figures/fig1_atTSS_CpGsort/bedfiles/
+cp $DIR/UCSCgb_hg19_CpGislands_230426.bed ../data/RefPT-Other/CpG_Islands.bed
 
 #====Copy BAM====
 
