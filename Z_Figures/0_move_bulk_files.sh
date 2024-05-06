@@ -19,6 +19,16 @@ LIBRARY=$WRK/../X_Bulk_Processing/Library
 cp $LIBRARY/TSS_GROUP-Expressed_SORT-CpG_2000bp/SVG/BNase-seq_50U_merge_hg19_TSS_GROUP-Expressed_SORT-CpG_2000bp_midpoint_combined_treeview_label.svg F1/b/
 cp $LIBRARY/TSS_GROUP-Expressed_SORT-CpG_2000bp/SVG/DNase-seq_-_rep1_hg19_TSS_GROUP-Expressed_SORT-CpG_2000bp_midpoint_combined_treeview_label.svg F1/b/
 
+[ -d F1/c ] || mkdir F1/c
+# Insert (BI) - see custom script
+
+[ -d F1/e ] || mkdir F1/e
+# Insert (MNase 21U) - see custom script
+# Insert (MNase 304U) - see custom script
+
+[ -d F1/f ] || mkdir F1/f
+# Insert (DNase) - see custom script
+
 # ===============================================================================================================================
 
 [ -d S1 ] || mkdir S1
