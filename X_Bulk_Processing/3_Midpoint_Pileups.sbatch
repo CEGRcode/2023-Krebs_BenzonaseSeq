@@ -5,7 +5,7 @@
 #SBATCH -A open
 #SBATCH -o logs/3_Midpoint_Pileups.log.out-%a
 #SBATCH -e logs/3_Midpoint_Pileups.log.err-%a
-#SBATCH --array 1-32
+#SBATCH --array 1-38
 
 # SLURM_ARRAY_TASK_ID=2
 

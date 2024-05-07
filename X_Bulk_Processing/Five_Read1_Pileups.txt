@@ -7,3 +7,6 @@ FF0000	128	164	../data/BAM/BNase-ChIP_H2B_merge_hg19.bam	../data/RefPT-Krebs/200
 FF9900	128	164	../data/BAM/BNase-ChIP_H3K4me3_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
 0068C9	128	164	../data/BAM/BNase-ChIP_H3K9ac_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
 9900FF	128	164	../data/BAM/BNase-ChIP_H3K27ac_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
+833C0C	NaN	NaN	../data/BAM/ChIP-exo_Pol2_merge_hg19.bam	../data/RefPT-Krebs/200bp/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_200bp.bed
+833C0C	NaN	NaN	../data/BAM/ChIP-exo_Pol2_merge_hg19.bam	../data/RefPT-Krebs/500bp/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-TOP-1K_500bp.bed
+833C0C	NaN	NaN	../data/BAM/ChIP-exo_Pol2_merge_hg19.bam	../data/RefPT-Krebs/500bp/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-BOTTOM-1K_500bp.bed

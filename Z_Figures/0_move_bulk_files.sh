@@ -140,6 +140,22 @@ cp $LIBRARY/PlusOneDyad_SORT-Expression_GROUP-Nuc-Dyad_2000bp/Composites/BNase-C
 cp $LIBRARY/PlusOneDyad_SORT-Expression_GROUP-Nuc-Dyad_2000bp/Composites/BNase-ChIP_H3K27ac_merge_hg19_PlusOneDyad_SORT-Expression_GROUP-Nuc-Dyad_2000bp_midpoint-MIN92-MAX127_combined.out F5/b/
 cp $LIBRARY/PlusOneDyad_SORT-Expression_GROUP-Nuc-Dyad_2000bp/Composites/MNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-Expression_GROUP-Nuc-Dyad_2000bp_midpoint-MIN92-MAX127_combined.out F5/b/
 
+[ -d F5/c ] || mkdir F5/c
+cp $LIBRARY/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_200bp/SVG/BNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_200bp_midpoint-MIN92-MAX127_combined_treeview_label.svg F5/c/
+cp $LIBRARY/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_200bp/SVG/MNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_200bp_midpoint-MIN92-MAX127_combined_treeview_label.svg F5/c/
+cp $LIBRARY/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_200bp/SVG/CoPRO_-_merge_hg19_PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_200bp_5read1_merge_treeview_label.svg F5/c/
+cp $LIBRARY/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_200bp/SVG/ChIP-exo_Pol2_merge_hg19_PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_200bp_5read1_combined_treeview_label.svg F5/c/
+
+[ -d F5/d ] || mkdir F5/d
+cp $LIBRARY/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-TOP-1K_500bp/Composites/BNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-TOP-1K_500bp_midpoint-MIN92-MAX127_combined.out F5/d/
+cp $LIBRARY/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-TOP-1K_500bp/Composites/MNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-TOP-1K_500bp_midpoint-MIN92-MAX127_combined.out F5/d/
+cp $LIBRARY/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-TOP-1K_500bp/Composites/CoPRO_-_merge_hg19_PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-TOP-1K_500bp_5read1.out F5/d/
+cp $LIBRARY/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-TOP-1K_500bp/Composites/ChIP-exo_Pol2_merge_hg19_PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-TOP-1K_500bp_5read1_combined.out F5/d/
+cp $LIBRARY/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-BOTTOM-1K_500bp/Composites/BNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-BOTTOM-1K_500bp_midpoint-MIN92-MAX127_combined.out F5/d/
+cp $LIBRARY/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-BOTTOM-1K_500bp/Composites/MNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-BOTTOM-1K_500bp_midpoint-MIN92-MAX127_combined.out F5/d/
+cp $LIBRARY/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-BOTTOM-1K_500bp/Composites/CoPRO_-_merge_hg19_PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-BOTTOM-1K_500bp_5read1.out F5/d/
+cp $LIBRARY/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-BOTTOM-1K_500bp/Composites/ChIP-exo_Pol2_merge_hg19_PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-BOTTOM-1K_500bp_5read1_combined.out F5/d/
+
 
 # ===============================================================================================================================
 
