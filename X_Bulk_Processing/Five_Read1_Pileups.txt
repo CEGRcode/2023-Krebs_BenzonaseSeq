@@ -4,3 +4,6 @@ FFCC33	128	164	../data/BAM/BNase-ChIP_H2AZ_merge_hg19.bam	../data/RefPT-Krebs/20
 FF0000	128	164	../data/BAM/BNase-ChIP_H2B_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
 0000FF	128	164	../data/BAM/BNase-ChIP_H3_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
 009900	128	164	../data/BAM/BNase-ChIP_H4_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
+FF9900	128	164	../data/BAM/BNase-ChIP_H3K4me3_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
+0068C9	128	164	../data/BAM/BNase-ChIP_H3K9ac_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
+9900FF	128	164	../data/BAM/BNase-ChIP_H3K27ac_merge_hg19.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed

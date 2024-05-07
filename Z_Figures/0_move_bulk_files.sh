@@ -98,6 +98,10 @@ do
 	mv $FILE F4/c/$TARGET\_$BASE
 done
 
+[ -d F4/d ] || mkdir F4/d
+# Violin plots of occupancy - see custom script
+
+
 # ===============================================================================================================================
 
 [ -d S1 ] || mkdir S1
