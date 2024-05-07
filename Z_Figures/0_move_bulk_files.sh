@@ -101,6 +101,22 @@ done
 [ -d F4/d ] || mkdir F4/d
 # Violin plots of occupancy - see custom script
 
+[ -d F4/e ] || mkdir F4/e
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/CUTandRUN_H2AZ_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/e/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/CUTandRUN_H3K4me1_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/e/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/CUTandRUN_H3K4me3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/e/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/CUTandRUN_H3K27ac_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/e/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/CUTandRUN_H3K27me3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/e/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/CUTandRUN_IgG_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined_treeview_label.svg F4/e/
+
+[ -d F4/f ] || mkdir F4/f
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/CUTandRUN_H2AZ_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/f/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/CUTandRUN_H3K4me1_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/f/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/CUTandRUN_H3K4me3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/f/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/CUTandRUN_H3K27ac_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/f/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/CUTandRUN_H3K27me3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/f/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/CUTandRUN_IgG_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MIN128-MAX164_combined.out F4/f/
+
 
 # ===============================================================================================================================
 
