@@ -89,8 +89,8 @@ java -jar $SCRIPTMANAGER read-analysis tag-pileup $BEDFILE $BAMFILE --cpu $THREA
 # No scaling
 
 # Two-color heatmap -a 0.4
-java -jar $SCRIPTMANAGER figure-generation heatmap -a 1 -c 0000FF $RGB $DIR/CDT/$BASE\_sense.cdt.gz -o $DIR/PNG/Strand/$BASE\_sense_treeview.png
-java -jar $SCRIPTMANAGER figure-generation heatmap -a 1 -c FF0000 $RGB $DIR/CDT/$BASE\_anti.cdt.gz -o $DIR/PNG/Strand/$BASE\_anti_treeview.png
+java -jar $SCRIPTMANAGER figure-generation heatmap -a 1 -c 7F00FF $RGB $DIR/CDT/$BASE\_sense.cdt.gz -o $DIR/PNG/Strand/$BASE\_sense_treeview.png
+java -jar $SCRIPTMANAGER figure-generation heatmap -a 1 -c 0099FF $RGB $DIR/CDT/$BASE\_anti.cdt.gz -o $DIR/PNG/Strand/$BASE\_anti_treeview.png
 java -jar $SCRIPTMANAGER figure-generation merge-heatmap $DIR/PNG/Strand/$BASE\_sense_treeview.png $DIR/PNG/Strand/$BASE\_anti_treeview.png -o $DIR/PNG/$BASE\_merge_treeview.png
 
 # Label heatmap
@@ -109,8 +109,8 @@ java -jar $SCRIPTMANAGER read-analysis tag-pileup $BEDFILE $BAMFILE --cpu $THREA
 # No scaling
 
 # Two-color heatmap (?) -a 0.6
-java -jar $SCRIPTMANAGER figure-generation heatmap -a 1 -c 0099FF $RGB $DIR/CDT/$BASE\_sense.cdt.gz -o $DIR/PNG/Strand/$BASE\_sense_treeview.png
-java -jar $SCRIPTMANAGER figure-generation heatmap -a 1 -c 7F00FF $RGB $DIR/CDT/$BASE\_anti.cdt.gz -o $DIR/PNG/Strand/$BASE\_anti_treeview.png
+java -jar $SCRIPTMANAGER figure-generation heatmap -a 1 -c FF0000 $RGB $DIR/CDT/$BASE\_sense.cdt.gz -o $DIR/PNG/Strand/$BASE\_sense_treeview.png
+java -jar $SCRIPTMANAGER figure-generation heatmap -a 1 -c 0000FF $RGB $DIR/CDT/$BASE\_anti.cdt.gz -o $DIR/PNG/Strand/$BASE\_anti_treeview.png
 java -jar $SCRIPTMANAGER figure-generation merge-heatmap $DIR/PNG/Strand/$BASE\_sense_treeview.png $DIR/PNG/Strand/$BASE\_anti_treeview.png -o $DIR/PNG/$BASE\_merge_treeview.png
 
 # Label heatmap
