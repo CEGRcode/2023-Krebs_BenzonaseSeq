@@ -159,6 +159,31 @@ cp $LIBRARY/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-BOTTOM-1K_500bp/Comp
 
 # ===============================================================================================================================
 
+[ -d F6 ] || mkdir F6
+
+[ -d F6/a ] || mkdir F6/a
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H2A_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MAX80_combined_treeview_label.svg F6/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H2AZ_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MAX80_combined_treeview_label.svg F6/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MAX80_combined_treeview_label.svg F6/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MAX80_combined_treeview_label.svg F6/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H3K9ac_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MAX80_combined_treeview_label.svg F6/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/BNase-ChIP_H3K27ac_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MAX80_combined_treeview_label.svg F6/a/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/SVG/MNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MAX80_combined_treeview_label.svg F6/a/
+
+[ -d F6/b ] || mkdir F6/b
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H2A_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MAX80_combined.out F6/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H2AZ_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MAX80_combined.out F6/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MAX80_combined.out F6/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MAX80_combined.out F6/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H3K9ac_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MAX80_combined.out F6/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/BNase-ChIP_H3K27ac_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MAX80_combined.out F6/b/
+cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/MNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-Expression_2000bp_midpoint-MAX80_combined.out F6/b/
+
+# F6/c is a schematic
+
+
+# ===========================
+
 [ -d S1 ] || mkdir S1
 # CpG heatmap - see custom script
 cp $LIBRARY/TSS_GROUP-Expressed_SORT-CpG_2000bp/SVG/MNase-seq_5U_rep1_hg19_TSS_GROUP-Expressed_SORT-CpG_2000bp_midpoint_combined_treeview_label.svg S1/
