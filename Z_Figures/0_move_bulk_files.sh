@@ -182,7 +182,11 @@ cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/MNase-ChIP_H3K4me3_mer
 # F6/c is a schematic
 
 
-# ===========================
+[ -d F6/d ] || mkdir F6/d
+# Violin plots of occupancy - see custom script
+
+
+# ===============================================================================================================================
 
 [ -d S1 ] || mkdir S1
 # CpG heatmap - see custom script

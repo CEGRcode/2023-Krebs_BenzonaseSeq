@@ -5,7 +5,7 @@
 #SBATCH -A open
 #SBATCH -o logs/4_Five_Read1_Pileups.log.out-%a
 #SBATCH -e logs/4_Five_Read1_Pileups.log.err-%a
-#SBATCH --array 1-12
+#SBATCH --array 1-17
 
 # SLURM_ARRAY_TASK_ID=2
 
