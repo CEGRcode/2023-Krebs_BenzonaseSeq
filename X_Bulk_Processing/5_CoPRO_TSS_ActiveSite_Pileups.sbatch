@@ -5,7 +5,7 @@
 #SBATCH -A open
 #SBATCH -o logs/5_CoPRO_TSS_ActiveSite_Pileups.log.out-%a
 #SBATCH -e logs/5_CoPRO_TSS_ActiveSite_Pileups.log.err-%a
-#SBATCH --array 1-5
+#SBATCH --array 1-8
 
 # SLURM_ARRAY_TASK_ID=2
 
@@ -26,6 +26,9 @@ LIST=(
 	"../data/RefPT-Krebs/200bp/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_200bp.bed"
 	"../data/RefPT-Krebs/500bp/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-TOP-1K_500bp.bed"
 	"../data/RefPT-Krebs/500bp/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-BOTTOM-1K_500bp.bed"
+	"../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-pHN-dHN_2000bp.bed"
+	"../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_2000bp.bed"
+	"../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_2000bp.bed"
 )
 
 # Dependencies

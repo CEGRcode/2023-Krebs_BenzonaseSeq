@@ -181,9 +181,26 @@ cp $LIBRARY/PlusOneDyad_SORT-Expression_2000bp/Composites/MNase-ChIP_H3K4me3_mer
 
 # F6/c is a schematic
 
-
 [ -d F6/d ] || mkdir F6/d
 # Violin plots of occupancy - see custom script
+
+[ -d F6/e ] || mkdir F6/e
+cp $LIBRARY/PlusOneDyad_SORT-pHN-dHN_2000bp/SVG/CoPRO_-_merge_hg19_PlusOneDyad_SORT-pHN-dHN_2000bp_5read2_merge_treeview_label.svg F6/e/
+cp $LIBRARY/PlusOneDyad_SORT-pHN-dHN_2000bp/SVG/CoPRO_-_merge_hg19_PlusOneDyad_SORT-pHN-dHN_2000bp_5read1_merge_treeview_label.svg F6/e/
+cp $LIBRARY/PlusOneDyad_SORT-pHN-dHN_2000bp/SVG/BNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-pHN-dHN_2000bp_midpoint-MAX80_combined_treeview_label.svg F6/e/
+cp $LIBRARY/PlusOneDyad_SORT-pHN-dHN_2000bp/SVG/MNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-pHN-dHN_2000bp_midpoint-MAX80_combined_treeview_label.svg F6/e/
+cp $LIBRARY/PlusOneDyad_SORT-pHN-dHN_2000bp/SVG/BNase-ChIP_H3K9ac_merge_hg19_PlusOneDyad_SORT-pHN-dHN_2000bp_midpoint-MAX80_combined_treeview_label.svg F6/e/
+cp $LIBRARY/PlusOneDyad_SORT-pHN-dHN_2000bp/SVG/BNase-ChIP_H3K27ac_merge_hg19_PlusOneDyad_SORT-pHN-dHN_2000bp_midpoint-MAX80_combined_treeview_label.svg F6/e/
+
+[ -d F6/f ] || mkdir F6/f
+cp $LIBRARY/PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_2000bp/Composites/CoPRO_-_merge_hg19_PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_2000bp_5read2.out F6/f/
+cp $LIBRARY/PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_2000bp/Composites/CoPRO_-_merge_hg19_PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_2000bp_5read1.out F6/f/
+cp $LIBRARY/PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_2000bp/Composites/MNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_2000bp_midpoint-MAX80_combined.out F6/f/
+cp $LIBRARY/PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_2000bp/Composites/BNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_2000bp_midpoint-MAX80_combined.out F6/f/
+cp $LIBRARY/PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_2000bp/Composites/CoPRO_-_merge_hg19_PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_2000bp_5read2.out F6/f/
+cp $LIBRARY/PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_2000bp/Composites/CoPRO_-_merge_hg19_PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_2000bp_5read1.out F6/f/
+cp $LIBRARY/PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_2000bp/Composites/MNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_2000bp_midpoint-MAX80_combined.out F6/f/
+cp $LIBRARY/PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_2000bp/Composites/BNase-ChIP_H3K4me3_merge_hg19_PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_2000bp_midpoint-MAX80_combined.out F6/f/
 
 
 # ===============================================================================================================================
