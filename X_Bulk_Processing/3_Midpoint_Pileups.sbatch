@@ -82,8 +82,10 @@ DIR=$OUTDIR/$BED
 echo "Run Nucleosome mid pileup (All fragments)"
 BASE=$BAM\_$BED\_midpoint
 
-[[ $MIN =~ "NaN" ]] || BASE=$BASE\-MIN$MIN || PARAMS="-n $MIN"
-[[ $MAX =~ "NaN" ]] || BASE=$BASE\-MAX$MAX || PARAMS=$PARAMS" -x $MAX"
+[[ $MIN =~ "NaN" ]] || BASE=$BASE\-MIN$MIN
+[[ $MIN =~ "NaN" ]] || PARAMS="-n $MIN"
+[[ $MAX =~ "NaN" ]] || BASE=$BASE\-MAX$MAX
+[[ $MAX =~ "NaN" ]] || PARAMS=$PARAMS" -x $MAX"
 
 # Pileup (mid)
 java -jar $SCRIPTMANAGER read-analysis tag-pileup $BEDFILE $BAMFILE --cpu $THREADS -m -p $PARAMS --combined -z -o $DIR/Composites/$BASE\_combined.out -M $DIR/CDT/$BASE

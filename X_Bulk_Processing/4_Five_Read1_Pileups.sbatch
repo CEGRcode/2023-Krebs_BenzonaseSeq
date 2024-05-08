@@ -82,8 +82,10 @@ DIR=$OUTDIR/$BED
 echo "Run pileup (5' end, Read 1, combined)"
 BASE=$BAM\_$BED\_5read1
 
-[[ $MIN =~ "NaN" ]] || BASE=$BASE\-MIN$MIN || PARAMS="-n $MIN"
-[[ $MAX =~ "NaN" ]] || BASE=$BASE\-MAX$MAX || PARAMS=$PARAMS" -x $MAX"
+[[ $MIN =~ "NaN" ]] || BASE=$BASE\-MIN$MIN
+[[ $MIN =~ "NaN" ]] || PARAMS="-n $MIN"
+[[ $MAX =~ "NaN" ]] || BASE=$BASE\-MAX$MAX
+[[ $MAX =~ "NaN" ]] || PARAMS=$PARAMS" -x $MAX"
 
 # Pileup (5read1)
 java -jar $SCRIPTMANAGER read-analysis tag-pileup $BEDFILE $BAMFILE --cpu $THREADS -5 -1 -p $PARAMS --combined -z -o $DIR/Composites/$BASE\_combined.out -M $DIR/CDT/$BASE
