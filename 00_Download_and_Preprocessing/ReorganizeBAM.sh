@@ -7,10 +7,18 @@
 #====Copy BED====
 DIR=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/230720_plus1_minus1/02_NFR_output_231128/
 cp $DIR/K562_trueNFR.bed ../data/RefPT-Krebs/NFR_K562.bed
+DIR=/storage/group/bfp2/default/wkl2-WillLai/NucleosomeAtlas_Project/figures/fig1_atTSS_CpGsort/bedfiles/
+cp $DIR/UCSCgb_hg19_CpGislands_230426.bed ../data/RefPT-Other/CpG_Islands.bed
 
 #====Copy BAM====
 
 BAMDIR=../data/BAM
+
+# CoPRO
+MERGED=/storage/group/bfp2/default/wkl2-WillLai/MEP_Project/01_BAM/CoPRO/
+cp $MERGED/CoPRO_K562_MERGE.bam $BAMDIR/CoPRO_-_merge_hg19.bam
+cp $MERGED/CoPRO_K562_Capped_SORT.bam $BAMDIR/CoPRO_Capped_merge_hg19.bam
+cp $MERGED/CoPRO_K562_Uncapped_SORT.bam $BAMDIR/CoPRO_Uncapped_merge_hg19.bam
 
 # XO
 MERGED=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/230810_ChIPs/MERGED_datasets/

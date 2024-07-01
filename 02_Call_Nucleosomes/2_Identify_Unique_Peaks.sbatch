@@ -8,6 +8,7 @@
 
 # Match sub-nucleosome sized peaks to nucleosome sized ones
 # see 02_Genetrack/05_Genetrack_bedfiles.sh
+# see 02_Genetrack/06_Genetrack_bedfiles.sh (partial - assign unique ids)
 
 ### CHANGE ME
 WRK=/path/to/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes

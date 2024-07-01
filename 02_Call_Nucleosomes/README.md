@@ -7,6 +7,21 @@ Perform peak-calling on Benzonase-seq data to infer nucleosomes and build RefPT 
 ```
 data
   |--RefPT-Krebs
+    |--MinusOneDyad_SORT-DistToExpressedTSS.bed
+    |--MinusOneDyad_SORT-DistToUnexpressedTSS.bed
+    |--MinusOneDyad_SORT-Expression.bed
+    |--NFR_SORT-NFRLength.bed
+    |--PlusOneDyad_SORT-DistToExpressedTSS.bed
+    |--PlusOneDyad_SORT-DistToUnexpressedTSS.bed
+    |--PlusOneDyad_SORT-Expression.bed
+    |--PlusOneDyad_SORT-Expression_GROUP-Nuc-Dyad.bed
+    |--PlusOneDyad_SORT-Expression_WithUnexpressed.bed
+    |--TSS_GROUP-All_SORT-CappedExpression.bed
+    |--TSS_GROUP-Expressed_SORT-CpG.bed
+    |--TSS_GROUP-Expressed_SORT-Expression.bed
+    |--TSS_GROUP-Unexpressed.bed
+  |--RefPT-Other
+    |--CpG_Islands.bed
 02_Call_Nucleosomes
   |--Merged_Redundant_Nucleosome-Particles.bed
   |--AllParticles
@@ -24,6 +39,68 @@ data
     |--Nucleosome_uHex_uTetra.bed
     |--Nucleosome_uHex_uTetra_uSubtetra.bed
     |--Merged_Nonredundant_particles.bed
+  |--Intersect
+    |--Nucleosomes_intersect_redundantHex.bed
+    |--Nucleosomes_intersect_redundantTetra.bed
+    |--Nucleosomes_intersect_redundantSubtetra.bed
+    |--Nucleosomes_intersect_redundantSupraoct.bed
+    |--uHex_intersect_redundantTetra.bed
+    |--uHex_intersect_redundantSubtetra.bed
+    |--uHex_intersect_redundantSupraoct.bed
+    |--uTetra_intersect_redundantSubtetra.bed
+    |--uTetra_intersect_redundantSupraoct.bed
+    |--uSubtetra_intersect_redundantSupraoct.bed
+  |--MakeTSS
+    |--CappedExpression.out
+    |--Capped_READ2_anti.cdt
+    |--Capped_READ2_sense.cdt
+    |--Capped_READ2_TSS_200bp_anti.cdt
+    |--Capped_READ2_TSS_200bp_sense.cdt
+    |--hg19.knownCanonicalPep.id-transcripts.gtf
+    |--hg19_knownCanonicalPep-TSS_200bp.bed
+    |--hg19_knownCanonicalPep-TSS.bed
+    |--hg19.knownGene.id-transcripts.gtf
+    |--hg19.knownGene.transcripts.gtf
+    |--hg19.knownGene.transcripts.ids
+    |--knownCanonical.ids
+    |--knownCanonicalPep.ids
+    |--knownCanonicalPep-NoNames.txt
+    |--knownGenePep.ids
+    |--knownToLynx_FILTER-RemoveMalacards.txt
+    |--knownToLynx.txt
+    |--knownToMalacards.ids
+    |--knownToMalacards-wLynx.txt
+    |--knownTo_NameMap.txt
+    |--maxPeak.bed
+    |--TSS_200bp.bed
+    |--TSS.bed
+    |--TSS_CpG.cdt
+    |--TSS_CpG_SORTED.cdt
+    |--TSS_SCORE-CappedExpression.bed
+  |--MakePlusMinus
+    |--MatchedDyads_SORT-RankExpression.tsv
+    |--MatchedDyads_SORT-RankExpression_WithNFRInfo.tsv
+    |--Matched-MinusOneDyad_SORT-DistToExpressedTSS.tsv
+    |--Matched-MinusOneDyad_SORT-RankExpression.tsv
+    |--Matched-PlusOneDyad_SORT-DistToExpressedTSS.tsv
+    |--Matched-PlusOneDyad_SORT-RankExpression.tsv
+    |--MinusOneDyad_SORT-DistToExpressedTSS.tsv
+    |--MinusOneDyad_SORT-DistToUnexpressedTSS.tsv
+    |--Nuc-Dyad.ids
+    |--Nucleosomes.bed
+    |--PlusOneDyad_SORT-DistToExpressedTSS.tsv
+    |--PlusOneDyad_SORT-DistToUnexpressedTSS.tsv
+    |--Shared_RankIDs.ids
+    |--TSS_downstream_Octomers.bed
+    |--TSS_SORT-Genomic.bed
+    |--TSS_SORT-RankExpression_1bp.bed
+    |--TSS_SORT-RankExpression.bed
+    |--TSS_upstream_Octomers.bed
+    |--uTSS_downstream_Octomers.bed
+    |--uTSS_SORT-Genomic.bed
+    |--uTSS_SORT-RankSort_1bp.bed
+    |--uTSS_SORT-RankSort.bed
+    |--uTSS_upstream_Octomers.bed
   |--SCIDX
     |--sub.tab
     |--tet.tab
@@ -96,4 +173,22 @@ sbatch 1b_Check_Shift.sbatch
 Create a non-redundant set of non-overlapping (complete overlap) particle peaks (favoring peaks from larger fragments).
 ```
 sbatch 2_Identify_Unique_Peaks.sbatch
+```
+
+### 3_Aggregate_Nucleosome_Peaks.sbatch
+
+```
+sbatch 3_Aggregate_Nucleosome_Peaks.sbatch
+```
+
+### 4_Build_TSS_RefPT.sbatch
+Call TSS reference points, trued up by CoPRO mode signal.
+```
+sbatch 4_Build_TSS_RefPT.sbatch
+```
+
+
+### 5_Determine_PlusOne-MinusOne-Dyads.sh
+```
+sh 5_Determine_PlusOne-MinusOne-Dyads.sh
 ```
