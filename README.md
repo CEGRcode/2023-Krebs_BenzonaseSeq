@@ -1,15 +1,44 @@
+# Translational and rotational setting of nucleosomes across a human genome
 
-Make sure you also check the [Publication Checklist](https://github.com/CEGRcode/labtutorial/blob/master/docs/PublicationChecklist.md) for other todo items and considerations as you make your publication-specific repository.
+### Jordan E. Krebs <sup>1,2</sup>, Haining Chen <sup>2</sup>, Olivia W. Lang <sup>2</sup>, William K.M. Lai <sup>2</sup>, B. Franklin Pugh <sup>2</sup>
 
-## Step 1: Create a Repository using this template
+<sup>1</sup>MD/PhD Medical Scientist Training Program, Penn State College of Medicine, Hershey, PA, USA
+<sup>2</sup>Department of Molecular Biology and Genetics, Cornell University, Ithaca, New York, 14853, USA
 
-Github has [instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) for using templates.
+### Correspondence: fp265@cornell.edu
 
-### IMPORTANT!! Github repo naming consistency
-Please make sure you follow the `Year-LastName_Journal` format in naming.
+### PMID : [XXXXXXXX](https://pubmed.ncbi.nlm.nih.gov/XXXXXXXX/)
+### GEO ID : [GSE266547](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE266547)
 
-## Step 2: Replace this `README.md` with `README_template.md`
-Update information in the template with manuscript information and replace this file with it. You should also append setup instructions at the end of this file (after abstract).
+## Abstract
+Eukaryotic DNA is wrapped around a complex of histones, such that one side of the helix is accessible, and the other is buried. Sliding and rotating DNA by 5 bp in either direction reverses this polarity. This has substantial ramifications for regulating transcription factor (TF) binding. Yet, there does not exist a means to measure the rotational setting of DNA on nucleosomes in vivo and on a genomic scale. We developed Benzonase-seq, where Benzonase cleaves and marks the accessible rotationally exposed DNA surface in addition to marking linker regions between nucleosomes. Further, Benzonase readily maps nucleosomes in CpG-rich mammalian promoters, which tend to be more resistant to A/T24 biased micrococcal nuclease (MNase). When Benzonase cleavages are analyzed in the context of TF binding sites, we determine whether the TF motif has a preferred rotational setting on the nucleosome surface. When coupled to chromatin immunoprecipitation (ChIP-exo) of histones, histone variants, and modifications, we find evidence for transcription-linked subnucleosomal structures. Together, this study reveals the translational and rotational setting of nucleosomes in K562 cells, along with altered or subnucleosomal structures.
 
-## Step 3: Happy Coding!
-Build out your scripts keep your files organized! We included a suggested file structure to help you get started but you may need to adjust based on the needs of your analysis. Just make sure that your directories include descriptive READMEs about the contents of each directory.
+## Directions
+To recreate the figures for this manuscript, please execute the scripts in each directory in numerical order. Each directory's README includes more specific details on execution. To be more explicit, run the scripts in each directory in the following order: `00_Download_and_Preprocessing`, `01_Run_GenoPipe`, `02_Call_Nucleosomes`, `03_Call_Motifs`, `X_Bulk_Processing`, and then finally `Z_Figures`. 
+
+
+## Table of Contents
+
+### 00_Download_and_Preprocessing
+Perform the preprocessing steps including alignment of raw sequencing data from both novel and previously published data
+
+### 01_Run_GenoPipe
+Perform quality control for genetic background on these data by running GenoPipe on the aligned BAMs.
+
+### 02_Call_Nucleosomes
+Call nucleosome positions and identify TSS and +1 nucleosome reference points with different sorts.
+
+### 03_Call_Motifs
+Build the sequence-specific transcription factor (ssTF) motif reference points.
+
+### X_Bulk_Processing
+With the BAM and BED files built from the scripts in the above directories, perform bulk read pileups for heatmaps and composites.
+
+### Z_Figures
+Organize these results into figure-specific directories along with any straggling one-off analyses.
+
+### data
+Stores and organizes BAM and BED files with large storage footprints used in these analyses.
+
+### bin
+General scripts for global access by each of the numbered directories.
