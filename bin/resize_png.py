@@ -1,6 +1,5 @@
 import getopt, sys
 import cv2
-#import numpy as np
 
 ############################################################################
 ### python resize_png.py -i input.png -o output.png -r 200 -c 600
@@ -47,7 +46,7 @@ if __name__ == '__main__':
 					row_num = int(opt[1])
 			elif opt[0] == "-c":
 					col_num = int(opt[1])
-	
+
 	if row_num < 1:
 		print("Invalid Row Number!!! Must be positive")
 		sys.exit(usage)

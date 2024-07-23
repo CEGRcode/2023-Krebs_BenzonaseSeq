@@ -10,7 +10,7 @@ Get 0/1 matrix (CDT format) of dinucleotides
 ============
 """, formatter_class = argparse.RawTextHelpFormatter)
 
-	parser.add_argument('-i','--input', metavar='fasta_fn', required=True, help='the FAStA file to analyze')
+	parser.add_argument('-i','--input', metavar='fasta_fn', required=True, help='the FASTA file to analyze')
 	parser.add_argument('-s','--seq', metavar='dinucleotides_str', required=True, help='the \"-\" delimited set of dinucleotides to check for')
 	parser.add_argument('-o','--output', metavar='tsv_fn', required=True, help='the output CDT formatted 0/1 matrix of dinucleotide matches')
 

@@ -95,7 +95,7 @@ if __name__ == "__main__":
 		plt.xlabel(args.xlabel)
 	# Label y-axis
 	if (args.ylabel!=None):
-		plt.xlabel(args.ylabel)
+		plt.ylabel(args.ylabel)
 
 	# Output...
 	if(args.output_svg==None):
