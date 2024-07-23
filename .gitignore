@@ -1,6 +1,13 @@
 **.DS_Store
 data/BAM/*.bam
 data/BAM/*.bai
+00_Download_and_Preprocessing/Trimmomatic-0.36*
+00_Download_and_Preprocessing/CUTRUN/*/*.fastq.gz
+00_Download_and_Preprocessing/CUTRUN/*/*.fastq
+00_Download_and_Preprocessing/CUTRUN/*/*.bam
+00_Download_and_Preprocessing/CUTRUN/*/*.metrics
+00_Download_and_Preprocessing/CUTRUN/*/temp.txt
 X_Bulk_Processing/Library*
+Z_Figures/F*
 
 z-archive

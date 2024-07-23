@@ -25,3 +25,10 @@ Describe how to calculate normalization factors for your aligned data.
 # To check status, type
 # qstat -u <myusername> -t
 ```
+
+#### TruSeq3-PE.fa
+
+```
+wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.36.zip
+unzip Trimmomatic-0.36.zip
+```
