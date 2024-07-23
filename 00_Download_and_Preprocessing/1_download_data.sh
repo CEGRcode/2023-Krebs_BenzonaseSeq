@@ -3,8 +3,8 @@
 #  otherwise call the python script yourself by editing this script directly
 
 ### CHANGE ME
-MYSAMPLES=/path/to/20XX-LastName_Journal/00_Download_and_Preprocessing/mysamples.txt
-BAMDIR=/path/to/20XX-LastName_Journal/data/BAM
+MYSAMPLES=/path/to/2023-Krebs_BenzonaseSeq/00_Download_and_Preprocessing/mysamples.txt
+BAMDIR=/path/to/2023-Krebs_BenzonaseSeq/data/BAM
 ###
 
 cd $BAMDIR

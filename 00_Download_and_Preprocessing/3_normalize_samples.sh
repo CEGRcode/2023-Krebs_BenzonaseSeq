@@ -10,7 +10,7 @@
 # Calculate normalization factor for every *.bam file in a directory
 
 ### CHANGE ME
-WRK=/path/to/20XX-LastName_Journal/
+WRK=/path/to/2023-Krebs_BenzonaseSeq
 BAMDIR=$WRK/data/BAM
 BEDDIR=$WRK/data/BED
 FDIR=$WRK/data/NormalizationFactors

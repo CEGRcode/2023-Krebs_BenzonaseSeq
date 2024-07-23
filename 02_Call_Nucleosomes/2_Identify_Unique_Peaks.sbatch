@@ -12,7 +12,8 @@
 
 ### CHANGE ME
 WRK=/path/to/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes
-WRK=/storage/home/owl5022/scratch/2023-Krebs_Benzonase-seq/02_Call_Nucleosomes
+WRK=/storage/home/owl5022/scratch/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes
+WRK=/ocean/projects/see180003p/owlang/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes
 ###
 
 # Dependencies

@@ -8,6 +8,7 @@
 
 # Download external dataset (raw FASTQ files)
 
+WRK=/path/to/2023-Krebs_BenzonaseSeq
 # OUTPUT=/gpfs/group/bfp2/default/pughlab-members/wkl2-WillLai/NucleosomeAtlas_Project/230810_MNase_DNase/fastq_files
 OUTPUT=../data/FASTQ
 
