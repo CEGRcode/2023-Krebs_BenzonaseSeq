@@ -10,6 +10,7 @@ THREADS=4
 ###
 
 # Dependencies
+# - bedtools
 # - java
 # - python
 
@@ -20,7 +21,7 @@ source activate bx
 
 # Inputs and outputs
 BAMFILE=$WRK/../data/BAM/BNase-ChIP_H3K4me3_merge_hg19.bam
-KREBS=$WRK/../data/RefPT-Krebs/
+KREBS=$WRK/../data/RefPT-Krebs
 GENOME=$WRK/../data/hg19_files/hg19.fa.fai
 
 # Script shortcuts

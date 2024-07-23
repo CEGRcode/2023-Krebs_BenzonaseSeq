@@ -18,7 +18,6 @@ WRK=/storage/home/owl5022/scratch/2023-Krebs_Benzonase-seq/02_Call_Nucleosomes
 
 # Dependencies
 # - bedtools
-# - java
 
 set -exo
 module load anaconda3
@@ -40,9 +39,6 @@ USUB=$UNIQUE/uSubtetra.bed
 UTET=$UNIQUE/uTetra.bed
 UHEX=$UNIQUE/uHex.bed
 USUP=$UNIQUE/uSupraoct.bed
-
-# Script shortcuts
-SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
 
 # Create output directories if they don't exist
 [ -d logs ] || mkdir logs

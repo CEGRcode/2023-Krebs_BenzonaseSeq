@@ -6,7 +6,7 @@
 #SBATCH -o logs/5_Determine_PlusOne-MinusOne-Dyads.log.out
 #SBATCH -e logs/5_Determine_PlusOne-MinusOne-Dyads.log.err
 
-# Determine cloest inferrred nucleosome to CoPRO-determined TSS
+# Determine closest inferred nucleosome to CoPRO-determined TSS
 # see 03_NucCalls/01a_NucCall_expressed_TSS.sh
 # see 03_NucCalls/01b_NucCall_unexpressed_TSS.sh
 # see 03_NucCalls/02_NFR.sh
@@ -18,6 +18,7 @@ WRK=/storage/home/owl5022/scratch/2023-Krebs_Benzonase-seq/02_Call_Nucleosomes
 
 # Dependencies
 # - java
+# - perl
 # - python
 
 set -exo

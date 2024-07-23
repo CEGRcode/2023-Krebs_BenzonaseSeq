@@ -23,6 +23,7 @@ THREADS=4
 # Dependencies
 # - java
 # - opencv
+# - perl
 # - python
 
 set -exo

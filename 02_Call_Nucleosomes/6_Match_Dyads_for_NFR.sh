@@ -16,11 +16,11 @@ WRK=/storage/home/owl5022/scratch/2023-Krebs_Benzonase-seq/02_Call_Nucleosomes
 
 # Dependencies
 # - java
+# - perl
 # - python
 
 set -exo
 module load anaconda3
-module load bedtools
 source activate bx
 
 # Inputs and outputs

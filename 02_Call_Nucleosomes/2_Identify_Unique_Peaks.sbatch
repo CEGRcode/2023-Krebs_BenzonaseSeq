@@ -17,7 +17,6 @@ WRK=/storage/home/owl5022/scratch/2023-Krebs_Benzonase-seq/02_Call_Nucleosomes
 
 # Dependencies
 # - bedtools
-# - java
 # - python
 
 set -exo
@@ -39,7 +38,6 @@ SUPRAOCTASOMES=AllParticles/Supraoct.bed
 
 # Script shortcuts
 GENETRACK=../bin/genetrack_v2.py
-SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
 
 # Create output directories if they don't exist
 [ -d logs ] || mkdir logs

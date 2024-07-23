@@ -1,6 +1,9 @@
 #!/bin/bash
 
-# Make Fig. 1c, 1e, and 1f showing PE insert size histogram of BNase-seq vs MNase-seq vs DNase-seq.
+# Make PE insert size histogram of...
+# (1c) BNase-seq
+# (1e) MNase-seq
+# (1f) DNase-seq
 # see 04_Figures/Fig_1c.sh
 # see 04_Figures/Fig_1e_f.sh
 
@@ -11,6 +14,7 @@ WRK=/storage/home/owl5022/scratch/2023-Krebs_Benzonase-seq/Z_Figures
 
 # Dependencies
 # - java
+# - pandas
 # - python
 # - seaborn
 

@@ -58,7 +58,7 @@ java -jar $SCRIPTMANAGER read-analysis aggregate-data --sum -m -o $TEMP/H3K9ac-H
 java -jar $SCRIPTMANAGER read-analysis aggregate-data --sum -m -o $TEMP/H3K27ac-H3_Proximal.tab $TEMP/H3K27ac_Proximal.cdt $TEMP/H3_Proximal.cdt
 java -jar $SCRIPTMANAGER read-analysis aggregate-data --sum -m -o $TEMP/H3K27ac-H3_Distal.tab   $TEMP/H3K27ac_Distal.cdt   $TEMP/H3_Distal.cdt
 
-# Calculate log2 density at each coordinatee given the pair of values
+# Calculate log2 density at each coordinate given the pair of values
 sed '1d' $TEMP/H2AZ-H2B_Proximal.tab   | awk 'BEGIN {OFS="\t"}{z = (log(($2+1)/($3+1))/log(2)); print $1,z,"H2AZ-H2B_Proximal"}'   > $TEMP/H2AZ-H2B_Proximal.density
 sed '1d' $TEMP/H2AZ-H2B_Distal.tab     | awk 'BEGIN {OFS="\t"}{z = (log(($2+1)/($3+1))/log(2)); print $1,z,"H2AZ-H2B_Distal"}'     > $TEMP/H2AZ-H2B_Distal.density
 sed '1d' $TEMP/H3K4me3-H3_Proximal.tab | awk 'BEGIN {OFS="\t"}{z = (log(($2+1)/($3+1))/log(2)); print $1,z,"H3K4me3-H3_Proximal"}' > $TEMP/H3K4me3-H3_Proximal.density
