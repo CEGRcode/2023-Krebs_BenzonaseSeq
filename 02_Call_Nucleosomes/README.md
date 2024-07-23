@@ -187,8 +187,28 @@ Call TSS reference points, trued up by CoPRO mode signal.
 sbatch 4_Build_TSS_RefPT.sbatch
 ```
 
+```
+../data/RefPT-Krebs/TSS_Sort-CpG.bed
+../data/RefPT-Krebs/2000bp/TSS_Sort-CpG_2000bp.bed
+```
+
 
 ### 5_Determine_PlusOne-MinusOne-Dyads.sh
 ```
 sh 5_Determine_PlusOne-MinusOne-Dyads.sh
+```
+
+### 6_Match_Dyads_for_NFR.sh
+```
+sh 6_Match_Dyads_for_NFR.sh
+```
+
+### 7_SortDyad_pHex-dHex.sh
+```
+sh 7_SortDyad_pHex-dHex.sh
+```
+
+### 8_SortDyad_pHN-dHN.sh
+```
+sh 8_SortDyad_pHN-dHN.sh
 ```
