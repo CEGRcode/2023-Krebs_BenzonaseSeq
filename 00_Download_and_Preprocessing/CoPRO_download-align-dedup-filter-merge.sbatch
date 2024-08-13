@@ -10,7 +10,7 @@
 # see /storage/group/bfp2/default/wkl2-WillLai/NucleosomeAtlas_Project/referenceDATA_Will/CoPRO/
 
 # data/BAM
-#   |--CoPRO_Capped_merge_hg19.bam
+#   |--CoPRO_Capped_merge_hg38.bam
 
 ### CHANGE ME
 WRK=/path/to/2023-Krebs_BenzonaseSeq/00_Download_and_Preprocessing
@@ -29,7 +29,7 @@ module load samtools
 source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/align
 
 # Inputs and outputs
-GENOME=$WRK/../data/hg19_files/hg19.fa
+GENOME=$WRK/../data/hg38_files/hg38.fa
 BAMDIR=$WRK/../data/BAM
 
 # Script shortcuts
@@ -119,11 +119,11 @@ do
 			--very-sensitive -X 1000 --no-mixed --no-discordant --no-unal \
 			-1 FQ/${NAME}_trim_R1.fastq -2 FQ/${NAME}_trim_R2.fastq \
 			| samtools sort -@ $THREADS - \
-			> BAM/${NAME}_sorted.bam
+			> BAM/${NAME}_unsorted.bam
 
 		# Mark and remove duplicates for technical replicates pairs and single (non-technical sequencing) replciates
 		# Optional arguments: VALIDATION_STRINGENCY='LENIENT' QUIET=true VERBOSITY=ERROR
-		java -jar $PICARD MarkDuplicates INPUT=BAM/${NAME}_sorted.bam OUTPUT=BAM/${NAME}_markdup.bam METRICS_FILE=BAM/${NAME}_metrics.txt \
+		java -jar $PICARD MarkDuplicates INPUT=BAM/${NAME}_unsorted.bam OUTPUT=BAM/${NAME}_markdup.bam METRICS_FILE=BAM/${NAME}_metrics.txt \
 			REMOVE_DUPLICATES='true' ASSUME_SORTED='true' DUPLICATE_SCORING_STRATEGY='SUM_OF_BASE_QUALITIES' \
 			READ_NAME_REGEX='[a-zA-Z0-9]+:[0-9]:([0-9]+):([0-9]+):([0-9]+).*.' OPTICAL_DUPLICATE_PIXEL_DISTANCE='100'
 
@@ -137,6 +137,6 @@ do
 done
 
 # Merge BAM files
-java -jar $PICARD MergeSamFiles -O $BAMDIR/CoPRO_Capped_merge_hg19.bam \
-	-I BAM/SRR7458410_BC8_R1.bam -I BAM/SRR7458411_BC8_R1.bam \
-	-I BAM/SRR7441419_BC3_R1.bam -I BAM/SRR7458419_BC3_R1.bam
+java -jar $PICARD MergeSamFiles -O $BAMDIR/CoPRO_Capped_merge_hg38.bam \
+	-I BAM/SRR7458410_BC8.bam -I BAM/SRR7458411_BC8.bam \
+	-I BAM/SRR7458419_BC3.bam -I BAM/SRR7458420_BC3.bam
