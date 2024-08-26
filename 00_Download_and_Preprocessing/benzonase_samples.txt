@@ -1,0 +1,30 @@
+28385	28385_50U-3min_1-1	Benzonase-seq	super	50U-3min	no	-	-	1	1
+28386	28386_50U-3min_2-1	Benzonase-seq	super	50U-3min	no	-	-	2	1
+28393	28393_50U-30min_1-1	Benzonase-seq	super	50U-30min	no	-	-	1	1
+28394	28394_50U-30min_2-1	Benzonase-seq	super	50U-30min	no	-	-	2	1
+25769	25769_50U-10min_1-1	Benzonase-seq	super	50U-10min	no	-	-	1	1
+25976	25976_50U-10min_2-1	Benzonase-seq	super	50U-10min	no	-	-	2	1
+28326	28326_50U-10min_3-1	Benzonase-seq	super	50U-10min	no	-	-	3	1
+28389	28389_50U-10min_4-1	Benzonase-seq	super	50U-10min	no	-	-	4	1
+28390	28390_50U-10min_5-1	Benzonase-seq	super	50U-10min	no	-	-	5	1
+28468	28468_50U-10min_6-1	Benzonase-seq	total (purified DNA)	50U-10min	no	-	-	6	1
+28469	28469_50U-10min_7-1	Benzonase-seq	pellet (purified DNA)	50U-10min	no	-	-	7	1
+28471	28471_50U-10min_8-1	Benzonase-seq	super (purified DNA)	50U-10min	no	-	-	8	1
+28472	28472_50U-10min_9-1	Benzonase-seq	super	50U-10min	no	-	-	9	1
+28473	28473_50U-10min_10-1	Benzonase-seq	super	50U-10min	no	-	-	10	1
+28820	28820_50U-10min_11-1	Benzonase-seq	super	50U-10min	no	-	-	11	1
+33023	33023_50U-10min_12-1	Benzonase-seq	total	50U-10min	no	-	-	12	1
+33159	33159_50U-10min_12-2	Benzonase-seq	total	50U-10min	no	-	-	12	2
+33024	33024_50U-10min_13-1	Benzonase-seq	total	50U-10min	no	-	-	13	1
+33160	33160_50U-10min_13-2	Benzonase-seq	total	50U-10min	no	-	-	13	2
+33025	33025_50U-10min_14-1	Benzonase-seq	super	50U-10min	no	-	-	14	1
+33161	33161_50U-10min_14-2	Benzonase-seq	super	50U-10min	no	-	-	14	2
+33026	33026_50U-10min_15-1	Benzonase-seq	super	50U-10min	no	-	-	15	1
+33162	33162_50U-10min_15-2	Benzonase-seq	super	50U-10min	no	-	-	15	2
+33027	33027_50U-10min_16-1	Benzonase-seq	pellet	50U-10min	no	-	-	16	1
+33163	33163_50U-10min_16-2	Benzonase-seq	pellet	50U-10min	no	-	-	16	2
+33028	33028_50U-10min_17-1	Benzonase-seq	pellet	50U-10min	no	-	-	17	1
+33164	33164_50U-10min_17-2	Benzonase-seq	pellet	50U-10min	no	-	-	17	2
+33646	33646_50U-10min_18-1	Benzonase-seq	super	50U-10min	no	-	-	18	1
+33647	33647_50U-10min_19-1	Benzonase-seq	super	50U-10min	no	-	-	19	1
+33648	33648_50U-10min_20-1	Benzonase-seq	super	50U-10min	no	-	-	20	1
