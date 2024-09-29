@@ -17,7 +17,7 @@ THREADS=4
 set -exo
 module load anaconda3
 module load bedtools
-source activate bx
+source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
 
 # Inputs and outputs
 BAMFILE=$WRK/../data/BAM/BNase-ChIP_H3K4me3_merge_hg19.bam

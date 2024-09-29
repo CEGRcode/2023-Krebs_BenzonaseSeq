@@ -13,7 +13,7 @@ WRK=/storage/home/owl5022/scratch/2023-Krebs_BenzonaseSeq/X_Bulk_Processing
 
 set -exo
 module load anaconda
-conda activate bx
+source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
 
 # Fill in placeholder constants with your directories
 PWM=$WRK/../data/JASPAR

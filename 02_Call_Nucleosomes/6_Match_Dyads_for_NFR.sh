@@ -22,7 +22,8 @@ WRK=/storage/home/owl5022/scratch/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes
 
 set -exo
 module load anaconda3
-source activate bx
+module load bedtools
+source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
 
 # Inputs and outputs
 KREBS=$WRK/../data/RefPT-Krebs/

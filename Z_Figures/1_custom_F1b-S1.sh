@@ -15,7 +15,7 @@ THREADS=4
 
 set -exo
 module load anaconda
-conda activate bx
+source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
 
 # Set up output directories
 [ -d F1/b ] || mkdir -p F1/b

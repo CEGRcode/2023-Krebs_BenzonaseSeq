@@ -27,8 +27,8 @@ WRK=/storage/home/owl5022/scratch/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes
 set -exo
 module load anaconda3
 module load bedtools
-# conda create -n genetrack -c conda-forge -c bioconda python=2.7 numpy
-source activate genetrack
+# conda create -p /storage/group/bfp2/default/owl5022-OliviaLang/conda/genetrack -c conda-forge -c bioconda python=2.7 numpy
+source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/genetrack
 
 # Inputs and outputs
 BAMFILE=../data/BAM/BNase-seq_50U_merge_hg19.bam

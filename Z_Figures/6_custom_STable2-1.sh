@@ -14,7 +14,7 @@
 # only on full-length nucleosomes.
 
 module load anaconda
-source activate bx
+source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
 
 PLUSONE=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/230720_plus1_minus1/output_v2_NonRed_Oct_Hex_Tet_230825/K562_Plus1_SORTbyRNAexp_nonRedOct_Hex_Tet.bed
 OTABLE=STable2.tsv

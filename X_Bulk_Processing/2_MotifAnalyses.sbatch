@@ -29,7 +29,7 @@ THREADS=4
 
 set -exo
 module load anaconda
-conda activate bx
+source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
 
 # Script shortcuts
 SCRIPTMANAGER=../bin/ScriptManager-v0.14.jar
