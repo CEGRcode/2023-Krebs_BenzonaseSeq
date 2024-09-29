@@ -1,11 +1,15 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --mem=48gb
-#SBATCH -t 3:00:00
+#SBATCH --mem=14gb
+#SBATCH -t 00:10:00
 #SBATCH -A open
 #SBATCH -o logs/get_scaling_factors.log.out-%a
-#SBATCH -e logs/get_scaling_factors.log.err-%
-#SBATCH --array 1-78
+#SBATCH -e logs/get_scaling_factors.log.err-%a
+#SBATCH --array 1-NSAMPLES
+
+# NSAMPLES should be replaced with `ls ../data/BAM/*.bam | wc -l`
+
+# SLURM_ARRAY_TASK_ID=2
 
 # Calculate normalization factor for every *.bam file in a directory
 
@@ -23,17 +27,17 @@ WRK=/storage/home/owl5022/scratch/2023-Krebs_BenzonaseSeq/00_Download_and_Prepro
 set -exo
 module load samtools
 module load anaconda3
-source activate bx
+source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
 
 # Inputs and outputs
 BAMDIR=$WRK/../data/BAM
 FDIR=$WRK/../data/BAM/NormalizationFactors
-BLACKLIST=$WRK/../data/hg19_files/hg19_Blacklist.bed
+BLACKLIST=$WRK/../data/hg38_files/hg38_exclude.bed
 # BLACKLIST=$WRK/../data/hg19_files/hg19_exclude.bed
 
 # Setup ScriptManager for job array
-ORIGINAL_SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
-SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14-$SLURM_ARRAY_TASK_ID.jar
+ORIGINAL_SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15.jar
+SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15-$SLURM_ARRAY_TASK_ID.jar
 cp $ORIGINAL_SCRIPTMANAGER $SCRIPTMANAGER
 
 # Script shortcuts
