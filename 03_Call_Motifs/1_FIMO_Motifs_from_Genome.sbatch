@@ -12,8 +12,8 @@
 ### CHANGE ME
 METADATA=TF_JASPAR_ENCODE_config.txt
 WRK=/path/to/2023-Krebs_BenzonaseSeq/03_Call_Motifs
-WRK=/storage/home/owl5022/scratch/2023-Krebs_BenzonaseSeq/03_Call_Motifs
 WRK=/ocean/projects/see180003p/owlang/2023-Krebs_BenzonaseSeq/03_Call_Motifs
+WRK=/storage/home/owl5022/scratch/2023-Krebs_BenzonaseSeq/03_Call_Motifs
 ###
 
 # Dependencies

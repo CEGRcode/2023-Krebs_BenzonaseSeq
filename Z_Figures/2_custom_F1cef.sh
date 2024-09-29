@@ -9,8 +9,8 @@
 
 ### CHANGE ME
 WRK=/path/to/2023-Krebs_BenzonaseSeq/Z_Figures
-WRK=/storage/home/owl5022/scratch/2023-Krebs_BenzonaseSeq/Z_Figures
 WRK=/ocean/projects/see180003p/owlang/2023-Krebs_BenzonaseSeq/Z_Figures
+WRK=/storage/home/owl5022/scratch/2023-Krebs_BenzonaseSeq/Z_Figures
 ###
 
 # Dependencies
