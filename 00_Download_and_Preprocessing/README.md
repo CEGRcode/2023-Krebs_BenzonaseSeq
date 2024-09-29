@@ -26,6 +26,15 @@ Previously worked with hg19 build. This build file is kept here for records:
 sh 0_Setup_hg19_reffiles.sh
 ```
 
+## TruSeq3-PE.fa
+
+Before running the preprocessing scripts (CoPRO), TruSeq3 needs to be set-up.
+
+```
+wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.36.zip
+unzip Trimmomatic-0.36.zip
+```
+
 ## Internal/Novel data processing
 
 Download FASTQ/BAM files from PEGR using the [EGC_utility_scripts](https://github.com/CEGRcode/EGC_utility_scripts) repo's `generate_BAM_file_from_PEGR.py`. You may modify this to also include other data downloaded from public repositories.
@@ -57,21 +66,15 @@ sbatch MNase-seq-ENCODE_download-align-filter-merge.sbatch
 sbatch MNase-seq-Titrations_download-align-dedup-filter.sbatch
 ```
 
-### 3_normalize_samples.sh
-Describe how to calculate normalization factors for your aligned data.
+## X_get_scaling_factors.sbatch
+
+Total tag normalization was performed to get appropriate scaling factors for the data.
 
 ```
 # ^change the number of BAM files samples (PBS -t)
 # To execute, type
-# qsub 3_normalize_samples.sh
+# sbatch X_get_scaling_factors.sbatch
 ##
 # To check status, type
-# qstat -u <myusername> -t
-```
-
-#### TruSeq3-PE.fa
-
-```
-wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.36.zip
-unzip Trimmomatic-0.36.zip
+# squeue -u <myusername> -t
 ```
