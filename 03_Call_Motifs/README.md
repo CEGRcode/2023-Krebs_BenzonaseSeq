@@ -99,10 +99,10 @@ sh 3_Filter-ATF7_PromoterProximal.sh
 ../data/RefPT-Motif/1000bp/ATF7_NotPromoterProximal_1000bp.bed
 ```
 
-### 4_Re-MEME_ZKSCAN1_LowlyBoundMotif.sh
+### 4_Re-MEME_ZKSCAN1_LowlyBoundMotif.sbatch
 Re-MEME the lowly bound motif instances to get an extended motif and tally the bound motif instances (full set vs lowly bound half) for how many contain the extended motif.
 ```
-sh 4_Re-MEME_ZKSCAN1_LowlyBoundMotif.sh
+sbatch 4_Re-MEME_ZKSCAN1_LowlyBoundMotif.sbatch
 ```
 
 ```

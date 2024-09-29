@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --mem=14gb
+#SBATCH --mem=24gb
 #SBATCH -t 01:00:00
 #SBATCH -A open
 #SBATCH -o logs/4_Re-MEME_ZKSCAN1_LowlyBoundMotif.log.out
