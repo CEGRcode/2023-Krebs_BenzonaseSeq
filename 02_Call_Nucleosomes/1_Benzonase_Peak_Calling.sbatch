@@ -31,8 +31,8 @@ module load bedtools
 source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/genetrack
 
 # Inputs and outputs
-BAMFILE=../data/BAM/BNase-seq_50U_merge_hg19.bam
-BLACKLIST=../data/hg19_files/hg19_exclude.bed
+BAMFILE=$WRK/../data/BAM/BNase-seq_50U-10min_merge_hg38.bam
+BLACKLIST=$WRK/../data/hg38_files/ENCFF356LFX_hg38_exclude.bed
 
 # Script shortcuts
 GENETRACK=../bin/genetrack_v2.py

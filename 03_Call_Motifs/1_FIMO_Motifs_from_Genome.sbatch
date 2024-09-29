@@ -27,8 +27,8 @@ module load bedtools
 source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
 
 # Inputs and outputs
-GENOME=$WRK/../data/hg19_files/hg19.fa
-BLACKLIST=$WRK/../data/hg19_files/hg19_exclude.bed
+GENOME=$WRK/../data/hg38_files/hg38.fa
+BLACKLIST=$WRK/../data/hg38_files/ENCFF356LFX_hg38_exclude.bed
 
 # Script shortcuts
 DEDUP=$WRK/../bin/dedup_coord_by_ID.py

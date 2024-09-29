@@ -24,9 +24,9 @@ module load anaconda3
 source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
 
 # Inputs and outputs
-GENOME=$WRK/../data/hg19_files/hg19.fa
-BLACKLIST=$WRK/../data/hg19_files/hg19_exclude.bed
-BAMFILE=../data/BAM/BNase-seq_50U_merge_hg19.bam
+GENOME=$WRK/../data/hg38_files/hg38.fa
+BAMFILE=$WRK/../data/BAM/BNase-seq_50U-10min_merge_hg38.bam
+BLACKLIST=$WRK/../data/hg38_files/ENCFF356LFX_hg38_exclude.bed
 ODIR=ShiftCheck
 
 # Script shortcuts

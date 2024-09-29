@@ -20,9 +20,9 @@ module load bedtools
 source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
 
 # Inputs and outputs
-BAMFILE=$WRK/../data/BAM/BNase-ChIP_H3K4me3_merge_hg19.bam
+BAMFILE=$WRK/../data/BAM/BNase-ChIP_H3K4me3_merge_hg38.bam
+GENOME=$WRK/../data/hg38_files/hg38.fa.fai
 KREBS=$WRK/../data/RefPT-Krebs
-GENOME=$WRK/../data/hg19_files/hg19.fa.fai
 
 # Script shortcuts
 SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar

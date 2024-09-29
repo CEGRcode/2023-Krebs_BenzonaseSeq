@@ -32,7 +32,7 @@ OTHER=$WRK/../data/RefPT-Other/
 KREBS=$WRK/../data/RefPT-Krebs/
 UNIQUE=UniqueParticles
 NUCLEOSOME=$UNIQUE/Nucleosome_uHex_uTetra.bed
-GENOME=$WRK/../data/hg19_files/hg19.fa.fai
+GENOME=$WRK/../data/hg38_files/hg38.fa.fai
 EXPRESSED=$KREBS/TSS_GROUP-Expressed_SORT-Expression.bed
 UNEXPRESSED=$KREBS/TSS_GROUP-Unexpressed.bed
 

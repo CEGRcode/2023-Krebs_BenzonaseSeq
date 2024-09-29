@@ -16,6 +16,10 @@ wget https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz
 mv hg38.fa.gz $GENOME.gz
 gzip -d $GENOME.gz
 
+# Download hg38 Blacklist from ENCODE
+wget -O ../data/data/hg38_files/ENCFF356LFX_hg38_exclude.bed.gz https://www.encodeproject.org/files/ENCFF356LFX/@@download/ENCFF356LFX.bed.gz
+gzip -d ../data/data/hg38_files/ENCFF356LFX_hg38_exclude.bed.gz
+
 # Create genome indexes
 samtools faidx $GENOME
 bowtie2-build $GENOME $GENOME
