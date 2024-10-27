@@ -37,7 +37,7 @@ EXPRESSED=$KREBS/TSS_GROUP-Expressed_SORT-Expression.bed
 UNEXPRESSED=$KREBS/TSS_GROUP-Unexpressed.bed
 
 # Script shortcuts
-SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
+SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15.jar
 FILTERL=../bin/filter_BED_by_list_ColumnSelect.pl
 
 TEMP=MakePlusMinus

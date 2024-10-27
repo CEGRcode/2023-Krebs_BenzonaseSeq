@@ -25,7 +25,7 @@ GENOME=$WRK/../data/hg38_files/hg38.fa.fai
 KREBS=$WRK/../data/RefPT-Krebs
 
 # Script shortcuts
-SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
+SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15.jar
 
 TEMP=Make_pHN-dHN
 [ -d $TEMP ] || mkdir $TEMP

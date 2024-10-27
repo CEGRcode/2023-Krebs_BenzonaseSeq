@@ -45,8 +45,8 @@ OUTDIR=$WRK/Library
 BAMFILE=$BAMDIR/CoPRO_-_merge_hg19.bam
 
 # Setup ScriptManager for job array
-ORIGINAL_SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
-SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14-$SLURM_ARRAY_TASK_ID.jar
+ORIGINAL_SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15.jar
+SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15-$SLURM_ARRAY_TASK_ID.jar
 cp $ORIGINAL_SCRIPTMANAGER $SCRIPTMANAGER
 
 # Script shortcuts

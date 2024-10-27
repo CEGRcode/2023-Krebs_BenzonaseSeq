@@ -26,7 +26,7 @@ BAMFILE=Merged_BX_H3K4me3.bam
 BAM=`basename $BAMFILE ".bam"`
 
 SUMROW=../bin/sum_Row_CDT.pl
-SCRIPTMANAGER=../bin/ScriptManager-v0.14.jar
+SCRIPTMANAGER=../bin/ScriptManager-v0.15.jar
 
 TEMP=temp-STable2-FullLength
 [ -d $TEMP ] || mkdir $TEMP

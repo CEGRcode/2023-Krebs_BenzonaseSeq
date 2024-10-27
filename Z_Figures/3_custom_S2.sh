@@ -23,7 +23,7 @@ source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
 BAMDIR=$WRK/../data/BAM
 
 # Script shortcuts
-SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
+SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15.jar
 HISTOGRAM=$WRK/../bin/make_fragment_histograms-MOD.py
 HISTOGRAM2=$WRK/../bin/make_fragment_histograms-MOD2.py
 

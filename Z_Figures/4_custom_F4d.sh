@@ -26,7 +26,7 @@ FDIR=../data/BAM/NormalizationFactors
 TEMP=temp-F4d
 
 # Script shortcuts
-SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
+SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15.jar
 VIOLIN=$WRK/../bin/make_violin_plot.py
 
 [ -d F4/d ] || mkdir -p F4/d

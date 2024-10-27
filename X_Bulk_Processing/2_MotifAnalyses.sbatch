@@ -31,8 +31,12 @@ set -exo
 module load anaconda
 source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
 
+# Setup ScriptManager for job array
+ORIGINAL_SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15.jar
+SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15-$SLURM_ARRAY_TASK_ID.jar
+cp $ORIGINAL_SCRIPTMANAGER $SCRIPTMANAGER
+
 # Script shortcuts
-SCRIPTMANAGER=../bin/ScriptManager-v0.14.jar
 RESIZE=../bin/resize_png.py
 DINUCLEOTIDE=../bin/dinucleotide_CDT_from_FASTA.py
 COMPOSITE=../bin/sum_Col_CDT.pl

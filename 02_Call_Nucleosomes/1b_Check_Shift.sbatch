@@ -30,7 +30,7 @@ BLACKLIST=$WRK/../data/hg38_files/ENCFF356LFX_hg38_exclude.bed
 ODIR=ShiftCheck
 
 # Script shortcuts
-SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
+SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15.jar
 
 [ -d ShiftCheck ] || mkdir ShiftCheck
 

@@ -26,7 +26,7 @@ PEAK=$WRK/../data/RefPT-Other/CpG_Islands.bed
 BAMFILE=$WRK/../data/BAM/MNase-seq_ENCODE_merge_hg19.bam
 
 # Script shortcuts
-SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
+SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15.jar
 COMPOSITE=$WRK/../bin/sum_Col_CDT.pl
 
 BED=`basename $REFPT ".bed"`

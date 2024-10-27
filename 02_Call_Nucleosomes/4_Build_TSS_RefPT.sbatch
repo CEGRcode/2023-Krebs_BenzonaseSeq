@@ -35,7 +35,7 @@ CPG=../data/RefPT-Other/CpG_Islands.bed
 KREBS=../data/RefPT-Krebs
 
 # Script shortcuts
-SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
+SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15.jar
 GENETRACK=../bin/genetrack_v2.py
 UNION=../bin/union_peak_by_ID.py
 FILTERL=../bin/filter_BED_by_list_ColumnSelect.pl

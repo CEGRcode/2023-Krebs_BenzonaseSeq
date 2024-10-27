@@ -27,7 +27,7 @@ source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
 # Inputs and outputs
 MOTIF=$WRK/../data/RefPT-Motif
 NFR_BEDFILE=$WRK/../data/RefPT-Krebs/NFR_SORT-NFRLength.bed
-SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
+SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15.jar
 
 TF=ATF7
 JASPAR=MA0834-1

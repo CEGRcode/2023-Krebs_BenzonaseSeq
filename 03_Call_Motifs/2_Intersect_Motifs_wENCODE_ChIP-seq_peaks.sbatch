@@ -31,8 +31,8 @@ BLACKLIST=$WRK/../data/hg38_files/ENCFF356LFX_hg38_exclude.bed
 
 # Script shortcuts
 DEDUP=$WRK/../bin/dedup_coord_by_ID.py
-ORIGINAL_SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
-SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14-$SLURM_ARRAY_TASK_ID.jar
+ORIGINAL_SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15.jar
+SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15-$SLURM_ARRAY_TASK_ID.jar
 cp $ORIGINAL_SCRIPTMANAGER $SCRIPTMANAGER
 
 # Determine TF name, JASPAR motif name, and ENCODE peak file name

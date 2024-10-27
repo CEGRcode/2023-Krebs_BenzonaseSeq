@@ -36,7 +36,7 @@ BLACKLIST=$WRK/../data/hg38_files/ENCFF356LFX_hg38_exclude.bed
 
 # Script shortcuts
 GENETRACK=../bin/genetrack_v2.py
-SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.14.jar
+SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15.jar
 
 # Create output directories if they don't exist
 [ -d logs ] || mkdir logs
