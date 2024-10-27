@@ -26,15 +26,6 @@ Previously worked with hg19 build. This build file is kept here for records:
 sh 0_Setup_hg19_reffiles.sh
 ```
 
-## TruSeq3-PE.fa
-
-Before running the preprocessing scripts (CoPRO), TruSeq3 needs to be set-up.
-
-```
-wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.36.zip
-unzip Trimmomatic-0.36.zip
-```
-
 ## Internal/Novel data processing
 
 Download FASTQ/BAM files from PEGR using the [EGC_utility_scripts](https://github.com/CEGRcode/EGC_utility_scripts) repo's `generate_BAM_file_from_PEGR.py`. You may modify this to also include other data downloaded from public repositories.
@@ -59,7 +50,7 @@ Describe how to align data or use scripts saved here to align data.
 
 ```
 sbatch CUTRUN_download-align-dedup-merge.sbatch
-sbatch CoPRO_download-align-dedup-filter-merge.sbatch
+sbatch CoPRO_download-ENCODE.sbatch
 sbatch DNase-seq_download.sbatch
 sbatch MNase-ChIP_download-align-dedup-filter-merge.sbatch
 sbatch MNase-seq-ENCODE_download-align-filter-merge.sbatch
