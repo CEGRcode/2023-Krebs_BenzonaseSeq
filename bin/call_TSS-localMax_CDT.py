@@ -10,6 +10,7 @@ def getParams():
 	parser.add_argument('-r','--reference', metavar='bed_fn', required=True, help='A BED-formatted file that the pileup was generated off of (assumes unique ID col-4)')
 	parser.add_argument('-o','--output', metavar='outfile', required=True, help='a BED file of max signal position within reference BED intervals')
 
+	parser.add_argument('--tag-count', action='store_true', help='Replace score column with max tag count if flagged')
 	parser.add_argument('-s','--smoothing', metavar='num_bp', default=1, type=int, help='The smoothing window size for determining max position, must be odd. (default=1)')
 	parser.add_argument('-t','--threshold', metavar='tag_count', default=5, type=float, help='The threshold data signal value minimum for calling a max. (default=5)')
 	#parser.add_argument('-t','--title', metavar='figure_title', dest='title', required=True, help='')
@@ -70,6 +71,13 @@ if __name__ == "__main__":
 			continue
 		# Get index of maximum
 		max_index = smoothed_values.index(max(smoothed_values))
+		max_val = smoothed_values[max_index]
+
+		# Filter by threshold
+		if (args.threshold > max_val):
+			c_index += 1
+			continue
+
 		# Create new coordinate adjusted to max signal
 		new_coord = coords[c_index][1]
 		# Only modify coordinate if non-zero tally
@@ -79,6 +87,10 @@ if __name__ == "__main__":
 			else:
 				new_coord[1] = str(int(new_coord[1]) + max_index)
 			new_coord[2] = new_coord[1]
+
+		# Update score column with tag count if flagged
+		if (args.tag_count):
+			new_coord[4] = str(max_val)
 
 		# Write new coordinate to BED file output
 		writer.write("\t".join(new_coord) + "\n")
