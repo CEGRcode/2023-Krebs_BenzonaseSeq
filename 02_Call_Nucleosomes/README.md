@@ -157,6 +157,16 @@ data
 
 </details>
 
+### 0_Download_CpG_reffile.sh
+Download CpG reference file and format into BED.
+```
+sh 0_Download_CpG_reffile.sh
+```
+
+You can download the reference file from [here](https://genome.ucsc.edu/cgi-bin/hgTables) with the following options selected:
+
+![hgTables-img](/img/hgTables-CpG-download.png)
+
 ### 1_Benzonase_Peak_Calling.sbatch
 Write scIDX formatted pileups of merged Benzonase-seq data filtered by various sub-nucleosome sized fragments. Format as a BED file expanded to the corresponding particle size and with a uniqueID.
 ```
