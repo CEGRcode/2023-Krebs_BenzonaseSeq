@@ -3,6 +3,18 @@
 # Calculate pHN/dHN ratio across full-dyad +1 Nucleosomes and sort. Slice Top/Bottom 2,500 RefPTs (skip over very bottom ~500 sites).
 # see 04_Figures/Fig_5c_d.sh
 
+# data/RefPT-Krebs
+#   |--PlusOneDyad_SORT-pHN-dHN.bed
+#   |--PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500.bed
+#   |--PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500.bed
+#   |--400bp
+#     |--PlusOneDyad_SORT-pHN-dHN_400bp.bed
+#     |--PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_400bp.bed
+#     |--PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_400bp.bed
+#   |--1000bp
+#     |--PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_1000bp.bed
+#     |--PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_1000bp.bed
+
 ### CHANGE ME
 WRK=/path/to/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes
 WRK=/ocean/projects/see180003p/owlang/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes

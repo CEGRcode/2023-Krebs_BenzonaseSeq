@@ -13,6 +13,9 @@
 # see 02_Genetrack/04_Genetrack_bedfiles.sh (partial)
 # see 02_Genetrack/06_Genetrack_bedfiles.sh (partial - assign unique ids)
 
+# data/RefPT-Krebs
+#   |--BNase-Nucleosomes.bed
+
 ### CHANGE ME
 WRK=/path/to/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes
 WRK=/ocean/projects/see180003p/owlang/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes

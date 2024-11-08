@@ -9,6 +9,17 @@
 # Call TSS using UCSC knownGene download shifted to mode CoPRO signal and
 # renamed to a human-readable gene name.
 
+# data/RefPT-Krebs
+#   |--TSS_GROUP-All_SORT-CappedExpression.bed
+#   |--TSS_GROUP-Expressed_SORT-Expression.bed
+#   |--TSS_GROUP-Unexpressed.bed
+#   |--TSS_GROUP-Expressed_SORT-CpG.bed
+#   |--2000bp
+#     |--TSS_GROUP-All_SORT-CappedExpression_2000bp.bed
+#     |--TSS_GROUP-Expressed_SORT-Expression_2000bp.bed
+#     |--TSS_GROUP-Unexpressed_2000bp.bed
+#     |--TSS_GROUP-Expressed_SORT-CpG_2000bp.bed
+
 ### CHANGE ME
 WRK=/path/to/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes
 WRK=/ocean/projects/see180003p/owlang/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes

@@ -11,6 +11,19 @@
 # see 03_NucCalls/01b_NucCall_unexpressed_TSS.sh
 # see 03_NucCalls/02_NFR.sh
 
+# data/RefPT-Krebs
+#   |--MinusOneDyad_SORT-DistToExpressedTSS.bed
+#   |--PlusOneDyad_SORT-DistToExpressedTSS.bed
+#   |--MinusOneDyad_SORT-DistToUnexpressedTSS.bed
+#   |--PlusOneDyad_SORT-DistToUnexpressedTSS.bed
+#   |--MinusOneDyad_SORT-Expression.bed
+#   |--PlusOneDyad_SORT-Expression.bed
+#   |--PlusOneDyad_SORT-Expression_WithUnexpressed.bed
+#   |--2000bp
+#     |--PlusOneDyad_SORT-Expression_2000bp.bed
+#     |--PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp.bed
+
+
 ### CHANGE ME
 WRK=/path/to/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes
 WRK=/ocean/projects/see180003p/owlang/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes

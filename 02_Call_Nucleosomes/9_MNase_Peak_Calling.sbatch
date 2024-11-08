@@ -10,6 +10,9 @@
 # see New_scripts_JEK_240731/01b_shift_scIDX_240709_v1_MNase.sh
 # see New_scripts_JEK_240731/04_MNase_peaks__240710.sh
 
+# data/RefPT-Krebs
+#   |--MNase-Nucleosomes.bed
+
 ### CHANGE ME
 WRK=/path/to/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes
 WRK=/ocean/projects/see180003p/owlang/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes

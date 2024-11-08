@@ -3,6 +3,16 @@
 # Calculate pHex/dHex ratio across full-dyad +1 Nucleosomes and sort. Slice Top/Bottom 1K RefPTs.
 # see 04_Figures/Fig_5c_d.sh
 
+# data/RefPT-Krebs
+#   |--PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad.bed
+#   |--PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-TOP-1K.bed
+#   |--PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-BOTTOM-1K.bed
+#   |--200bp
+#     |--PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_200bp.bed
+#   |--500bp
+#     |--PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-TOP-1K_500bp.bed
+#     |--PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-BOTTOM-1K_500bp.bed
+
 ### CHANGE ME
 WRK=/path/to/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes
 WRK=/ocean/projects/see180003p/owlang/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes

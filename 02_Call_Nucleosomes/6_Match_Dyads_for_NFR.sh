@@ -9,6 +9,9 @@
 # Determine NFRs based on +1 and -1 Nuc calls from previous script.
 # see 03_NucCalls/02_NFR.sh
 
+# data/RefPT-Krebs
+#   |--NFR_SORT-NFRLength.bed
+
 ### CHANGE ME
 WRK=/path/to/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes
 WRK=/ocean/projects/see180003p/owlang/2023-Krebs_BenzonaseSeq/02_Call_Nucleosomes
