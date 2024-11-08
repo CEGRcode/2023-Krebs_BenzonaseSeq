@@ -6,10 +6,10 @@
 # `../data/` directory.
 
 ### CHANGE ME
-METADATA=$WRK/TF_JASPAR_ENCODE_config.txt
 WRK=/path/to/2023-Krebs_BenzonaseSeq/03_Call_Motifs
 WRK=/ocean/projects/see180003p/owlang/2023-Krebs_BenzonaseSeq/03_Call_Motifs
 WRK=/storage/home/owl5022/scratch/2023-Krebs_BenzonaseSeq/03_Call_Motifs
+METADATA=TF_JASPAR_ENCODE_config.txt
 ###
 
 # Dependencies
@@ -25,11 +25,10 @@ while read line; do
 	# Format input variables
 	TF=`echo $line | awk '{print $1}'`
 	JASPAR=`echo $line | awk '{print $2}'`
-	FJASPAR=`echo $JASPAR | sed -e 's/\./-/g'`
 	ENCFF=`echo $line | awk '{print $3}'`
 
 	# Download JASPAR motif
-	wget -c -O $JDIR/$TF\_$FJASPAR.meme https://jaspar.elixir.no/api/v1/matrix/$JASPAR.meme
+	wget -c -O $JDIR/$TF\_$JASPAR.meme https://jaspar.elixir.no/api/v1/matrix/$JASPAR.meme
 
 	# Download ENCODE peaks
 	wget -c -O narrowPeaks/$TF\_$ENCFF.bed.gz https://www.encodeproject.org/files/$ENCFF/@@download/$ENCFF.bed.gz

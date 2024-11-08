@@ -19,6 +19,17 @@ Download the appropriate binary for your OS from UCSC.
 wget https://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bigBedToBed
 ```
 
+### calculate_BED_ScoreRatio.pl
+
+Calculate a ratio between the score columns of two different BED files to create a new BED file with the ratio for the score.
+
+```
+usage:		perl calculate_BED_ScoreRatio.pl	Numerator_BED_File	Denominator_BED_File	Output_BED
+Example:	perl calculate_BED_ScoreRatio.pl numerator.bed denominator.bed ratio.bed
+	BED information inherited from numerator BED file
+```
+
+
 ### dinucleotide_CDT_from_FASTA.py
 Scan a FASTA file for positional dinucleotide content
 ```
