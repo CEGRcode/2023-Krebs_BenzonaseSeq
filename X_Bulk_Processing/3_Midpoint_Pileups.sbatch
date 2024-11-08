@@ -7,8 +7,6 @@
 #SBATCH -e logs/3_Midpoint_Pileups.log.err-%a
 #SBATCH --array 1-53
 
-# SLURM_ARRAY_TASK_ID=2
-
 # Pileup midpoint (heatmaps) and composites for a custom
 # combination of BAM x BED files with RGB info.
 # No scaling, 95% heatmap color contrast threshold
@@ -64,6 +62,8 @@ BED=`basename $BEDFILE ".bed"`
 NSITES=`wc -l $BEDFILE | awk '{print $1}'`
 
 # Set window labels
+RLABEL="R"
+LLABEL="L"
 WINDOW=`echo $BED | rev | cut -d"_" -f1 | rev`
 [ $WINDOW == "2000bp" ] && LLABEL="-1" && RLABEL="+1"
 [ $WINDOW == "1000bp" ] && LLABEL="-500" && RLABEL="+500"
@@ -93,10 +93,10 @@ java -jar $SCRIPTMANAGER read-analysis tag-pileup $BEDFILE $BAMFILE --cpu $THREA
 # No scaling
 
 # Two-color heatmap
-java -jar $SCRIPTMANAGER figure-generation heatmap -p .95 --color $RGB $DIR/CDT/$BASE\_combined.cdt.gz -o $DIR/PNG/$BASE\_combined_treeview.png
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation heatmap -p .95 --color $RGB $DIR/CDT/$BASE\_combined.cdt.gz -o $DIR/PNG/$BASE\_combined_treeview.png
 
 # Label heatmap
-java -jar $SCRIPTMANAGER figure-generation label-heatmap $DIR/PNG/$BASE\_combined_treeview.png \
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation label-heatmap $DIR/PNG/$BASE\_combined_treeview.png \
 	-l $LLABEL -m "0" -r $RLABEL -w 2 -f 18 \
 	-x $BED -y "$BED occurences (${NSITES} sites)" \
 	-o $DIR/SVG/$BASE\_combined_treeview_label.svg

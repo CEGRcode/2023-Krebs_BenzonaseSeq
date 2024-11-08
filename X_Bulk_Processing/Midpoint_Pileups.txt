@@ -1,5 +1,9 @@
-FF00FF	NaN	NaN	../data/BAM/BNase-seq_50U_merge_hg19.bam	../data/RefPT-Krebs/2000bp/TSS_GROUP-Expressed_SORT-CpG_2000bp.bed
-00FF1E	NaN	NaN	../data/BAM/DNase-seq_-_rep1_hg19.bam	../data/RefPT-Krebs/2000bp/TSS_GROUP-Expressed_SORT-CpG_2000bp.bed
+FF00FF	NaN	NaN	../data/BAM/BNase-seq_50U-10min_merge_hg38.bam	../data/RefPT-Krebs/2000bp/TSS_GROUP-Expressed_SORT-CpG_2000bp.bed
+00FF1E	NaN	NaN	../data/BAM/DNase-seq_ENCFF518XTC_rep1_hg38.bam	../data/RefPT-Krebs/2000bp/TSS_GROUP-Expressed_SORT-CpG_2000bp.bed
+000000	NaN	NaN	../data/BAM/BNase-seq_50U-10min_merge_hg38.bam	../data/RefPT-Krebs/PlusOneDyad_SORT-DistToExpressedTSS_GROUP-CpGIsland-NoOverlap.bed
+000000	NaN	NaN	../data/BAM/BNase-seq_50U-10min_merge_hg38.bam	../data/RefPT-Krebs/PlusOneDyad_SORT-DistToExpressedTSS_GROUP-CpGIsland-Overlap.bed
+000000	NaN	NaN	../data/BAM/MNase-seq_ENCODE_merge_hg38.bam	../data/RefPT-Krebs/PlusOneDyad_SORT-DistToExpressedTSS_GROUP-CpGIsland-NoOverlap.bed
+000000	NaN	NaN	../data/BAM/MNase-seq_ENCODE_merge_hg38.bam	../data/RefPT-Krebs/PlusOneDyad_SORT-DistToExpressedTSS_GROUP-CpGIsland-Overlap.bed
 000000	NaN	NaN	../data/BAM/MNase-seq_5U_rep1_hg19.bam	../data/RefPT-Krebs/2000bp/TSS_GROUP-Expressed_SORT-CpG_2000bp.bed
 000000	NaN	NaN	../data/BAM/MNase-seq_21U_rep1_hg19.bam	../data/RefPT-Krebs/2000bp/TSS_GROUP-Expressed_SORT-CpG_2000bp.bed
 000000	NaN	NaN	../data/BAM/MNase-seq_79U_rep1_hg19.bam	../data/RefPT-Krebs/2000bp/TSS_GROUP-Expressed_SORT-CpG_2000bp.bed

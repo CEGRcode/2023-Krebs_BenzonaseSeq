@@ -19,6 +19,8 @@
 #   |--MinusOneDyad_SORT-Expression.bed
 #   |--PlusOneDyad_SORT-Expression.bed
 #   |--PlusOneDyad_SORT-Expression_WithUnexpressed.bed
+#   |--PlusOneDyad_SORT-DistToExpressedTSS_GROUP-CpGIsland-NoOverlap.bed
+#   |--PlusOneDyad_SORT-DistToExpressedTSS_GROUP-CpGIsland-Overlap.bed
 #   |--2000bp
 #     |--PlusOneDyad_SORT-Expression_2000bp.bed
 #     |--PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp.bed
@@ -45,6 +47,7 @@ OTHER=$WRK/../data/RefPT-Other/
 KREBS=$WRK/../data/RefPT-Krebs/
 NUCLEOSOME=$KREBS/BNase-Nucleosomes.bed
 GENOME=$WRK/../data/hg38_files/hg38.fa.fai
+CPG=../data/RefPT-Other/CpGIslands.bed
 EXPRESSED=$KREBS/TSS_GROUP-Expressed_SORT-Expression.bed
 UNEXPRESSED=$KREBS/TSS_GROUP-Unexpressed.bed
 
@@ -124,3 +127,16 @@ java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/Minus
 java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-Expression.bed -o $KREBS/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
 java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/MinusOneDyad_SORT-Expression.bed -o $KREBS/2000bp/MinusOneDyad_SORT-Expression_2000bp.bed
 java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-Expression_WithUnexpressed.bed -o $KREBS/2000bp/PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp.bed
+
+
+## =====Group PlusOne Dyad by CpG island overlap=====
+
+# Intersect CpG Islands with PlusOne
+bedtools intersect    -wa -a $KREBS/PlusOneDyad_SORT-DistToExpressedTSS.bed -b $CPG > $KREBS/PlusOneDyad_SORT-DistToExpressedTSS_GROUP-CpGIsland-Overlap.bed
+bedtools intersect -v -wa -a $KREBS/PlusOneDyad_SORT-DistToExpressedTSS.bed -b $CPG > $KREBS/PlusOneDyad_SORT-DistToExpressedTSS_GROUP-CpGIsland-NoOverlap.bed
+
+# Sort by CpGIsland length and dedup PlusOne
+sort -rnk11,11 $TEMP/PlusOne-CpGIsland_Intersect.tsv | sort -uk4,4 | sort -rnk11,11 > $KREBS/TSS_GROUP-Expressed_SORT-CpG.bed
+
+# Expand 2000bp
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/TSS_GROUP-Expressed_SORT-CpG.bed -o $KREBS/2000bp/TSS_GROUP-Expressed_SORT-CpG_2000bp.bed
