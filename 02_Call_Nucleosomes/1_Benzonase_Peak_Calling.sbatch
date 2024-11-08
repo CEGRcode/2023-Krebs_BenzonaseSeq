@@ -128,5 +128,14 @@ echo "Elapsed Time (sub): $(($time2-$time1)) seconds"
 # 41 sec
 
 # Merge all labeled nucleosome particles
-cat AllParticles/*.bed | bedtools sort -i - > Merged_Redundant_Nucleosome-Particles.bed #K562_redundant_master_nucleosomal_particles.bed
-wc -l Merged_Redundant_Nucleosome-Particles.bed
+cat AllParticles/Supraoct.bed AllParticles/Nucleosome.bed \
+	AllParticles/Hex.bed AllParticles/Subtetra.bed \
+	AllParticles/Tetra.bed | bedtools sort -i \
+	> AllParticles/Merged_Redundant_Nucleosome-Particles.bed #K562_redundant_master_nucleosomal_particles.bed
+wc -l AllParticles/Merged_Redundant_Nucleosome-Particles.bed
+
+# Create a peak file for just the full-length nucleosomes
+KREBS=../data/RefPT-Krebs
+[ -d $KREBS ] || mkdir $KREBS
+bedtools sort -i AllParticles/Nucleosome.bed > $KREBS/BNase-Nucleosomes.bed
+wc -l $KREBS/BNase-Nucleosomes.bed

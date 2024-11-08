@@ -30,8 +30,7 @@ source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
 # Inputs and outputs
 OTHER=$WRK/../data/RefPT-Other/
 KREBS=$WRK/../data/RefPT-Krebs/
-UNIQUE=UniqueParticles
-NUCLEOSOME=$UNIQUE/Nucleosome_uHex_uTetra.bed
+NUCLEOSOME=$KREBS/BNase-Nucleosomes.bed
 GENOME=$WRK/../data/hg38_files/hg38.fa.fai
 EXPRESSED=$KREBS/TSS_GROUP-Expressed_SORT-Expression.bed
 UNEXPRESSED=$KREBS/TSS_GROUP-Unexpressed.bed
@@ -105,11 +104,10 @@ perl $FILTERL $KREBS/PlusOneDyad_SORT-Expression.bed $TEMP/Nuc-Dyad.ids 3 keep $
 cat $KREBS/PlusOneDyad_SORT-Expression.bed $KREBS/PlusOneDyad_SORT-DistToUnexpressedTSS.bed > $KREBS/PlusOneDyad_SORT-Expression_WithUnexpressed.bed
 
 # Expand 2000bp
-# java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-DistToExpressedTSS.bed -o $KREBS/2000bp/PlusOneDyad_SORT-DistToExpressedTSS_2000bp.bed
-# java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/MinusOneDyad_SORT-DistToExpressedTSS.bed -o $KREBS/2000bp/MinusOneDyad_SORT-DistToExpressedTSS_2000bp.bed
-# java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-DistToUnexpressedTSS.bed -o $KREBS/2000bp/PlusOneDyad_SORT-DistToUnexpressedTSS_2000bp.bed
-# java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/MinusOneDyad_SORT-DistToUnexpressedTSS.bed -o $KREBS/2000bp/MinusOneDyad_SORT-DistToUnexpressedTSS_2000bp.bed
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-DistToExpressedTSS.bed -o $KREBS/2000bp/PlusOneDyad_SORT-DistToExpressedTSS_2000bp.bed
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/MinusOneDyad_SORT-DistToExpressedTSS.bed -o $KREBS/2000bp/MinusOneDyad_SORT-DistToExpressedTSS_2000bp.bed
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-DistToUnexpressedTSS.bed -o $KREBS/2000bp/PlusOneDyad_SORT-DistToUnexpressedTSS_2000bp.bed
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/MinusOneDyad_SORT-DistToUnexpressedTSS.bed -o $KREBS/2000bp/MinusOneDyad_SORT-DistToUnexpressedTSS_2000bp.bed
 java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-Expression.bed -o $KREBS/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
-# java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/MinusOneDyad_SORT-Expression.bed -o $KREBS/2000bp/MinusOneDyad_SORT-Expression_2000bp.bed
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-Expression_GROUP-Nuc-Dyad.bed -o $KREBS/2000bp/PlusOneDyad_SORT-Expression_GROUP-Nuc-Dyad_2000bp.bed
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/MinusOneDyad_SORT-Expression.bed -o $KREBS/2000bp/MinusOneDyad_SORT-Expression_2000bp.bed
 java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-Expression_WithUnexpressed.bed -o $KREBS/2000bp/PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp.bed
