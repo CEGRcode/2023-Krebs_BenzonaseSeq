@@ -89,7 +89,7 @@ BASE=$BAM\_$BED\_5read1
 [[ $MAX =~ "NaN" ]] || PARAMS=$PARAMS" -x $MAX"
 
 # Pileup (5read1)
-java -jar -Djava.awt.headless=true $SCRIPTMANAGER read-analysis tag-pileup $BEDFILE $BAMFILE --cpu $THREADS -5 -1 -p $PARAMS --combined -z -o $DIR/Composites/$BASE\_combined.out -M $DIR/CDT/$BASE
+java -jar $SCRIPTMANAGER read-analysis tag-pileup $BEDFILE $BAMFILE --cpu $THREADS -5 -1 -p $PARAMS --combined -z -o $DIR/Composites/$BASE\_combined.out -M $DIR/CDT/$BASE
 # No scaling
 
 # Two-color heatmap
