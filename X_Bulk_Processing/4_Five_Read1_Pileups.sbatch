@@ -7,8 +7,6 @@
 #SBATCH -e logs/4_Five_Read1_Pileups.log.err-%a
 #SBATCH --array 1-17
 
-# SLURM_ARRAY_TASK_ID=2
-
 # Pileup 5' R1 (heatmaps) and composites for a custom combination of BAM x BED
 # files with RGB info and custom insert size filters.
 # Primarily ChIP data with some CUT&RUN.
@@ -64,6 +62,8 @@ BED=`basename $BEDFILE ".bed"`
 NSITES=`wc -l $BEDFILE | awk '{print $1}'`
 
 # Set window labels
+RLABEL="R"
+LLABEL="L"
 WINDOW=`echo $BED | rev | cut -d"_" -f1 | rev`
 [ $WINDOW == "2000bp" ] && LLABEL="-1" && RLABEL="+1"
 [ $WINDOW == "1000bp" ] && LLABEL="-500" && RLABEL="+500"
@@ -89,14 +89,14 @@ BASE=$BAM\_$BED\_5read1
 [[ $MAX =~ "NaN" ]] || PARAMS=$PARAMS" -x $MAX"
 
 # Pileup (5read1)
-java -jar $SCRIPTMANAGER read-analysis tag-pileup $BEDFILE $BAMFILE --cpu $THREADS -5 -1 -p $PARAMS --combined -z -o $DIR/Composites/$BASE\_combined.out -M $DIR/CDT/$BASE
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER read-analysis tag-pileup $BEDFILE $BAMFILE --cpu $THREADS -5 -1 -p $PARAMS --combined -z -o $DIR/Composites/$BASE\_combined.out -M $DIR/CDT/$BASE
 # No scaling
 
 # Two-color heatmap
-java -jar $SCRIPTMANAGER figure-generation heatmap -p .95 --color $RGB $DIR/CDT/$BASE\_combined.cdt.gz -o $DIR/PNG/$BASE\_combined_treeview.png
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation heatmap -p .95 --color $RGB $DIR/CDT/$BASE\_combined.cdt.gz -o $DIR/PNG/$BASE\_combined_treeview.png
 
 # Label heatmap
-java -jar $SCRIPTMANAGER figure-generation label-heatmap $DIR/PNG/$BASE\_combined_treeview.png \
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation label-heatmap $DIR/PNG/$BASE\_combined_treeview.png \
 	-l $LLABEL -m "0" -r $RLABEL -w 2 -f 18 \
 	-x $BED -y "$BED occurences (${NSITES} sites)" \
 	-o $DIR/SVG/$BASE\_combined_treeview_label.svg
@@ -114,12 +114,12 @@ java -jar $SCRIPTMANAGER read-analysis tag-pileup $BEDFILE $BAMFILE --cpu $THREA
 # No scaling
 
 # Two-color heatmap
-java -jar $SCRIPTMANAGER figure-generation heatmap --blue -p .95 $DIR/CDT/$BASE\_sense.cdt.gz -o $DIR/PNG/Strand/$BASE\_sense_treeview.png
-java -jar $SCRIPTMANAGER figure-generation heatmap --red  -p .95 $DIR/CDT/$BASE\_anti.cdt.gz  -o $DIR/PNG/Strand/$BASE\_anti_treeview.png
-java -jar $SCRIPTMANAGER figure-generation merge-heatmap $DIR/PNG/Strand/$BASE\_sense_treeview.png $DIR/PNG/Strand/$BASE\_anti_treeview.png -o $DIR/PNG/$BASE\_merge_treeview.png
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation heatmap --blue -p .95 $DIR/CDT/$BASE\_sense.cdt.gz -o $DIR/PNG/Strand/$BASE\_sense_treeview.png
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation heatmap --red  -p .95 $DIR/CDT/$BASE\_anti.cdt.gz  -o $DIR/PNG/Strand/$BASE\_anti_treeview.png
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation merge-heatmap $DIR/PNG/Strand/$BASE\_sense_treeview.png $DIR/PNG/Strand/$BASE\_anti_treeview.png -o $DIR/PNG/$BASE\_merge_treeview.png
 
 # Label heatmap
-java -jar $SCRIPTMANAGER figure-generation label-heatmap $DIR/PNG/$BASE\_merge_treeview.png \
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation label-heatmap $DIR/PNG/$BASE\_merge_treeview.png \
 	-l $LLABEL -m "0" -r $RLABEL -w 2 -f 18 \
 	-x $BED -y "$BED occurences (${NSITES} sites)" \
 	-o $DIR/SVG/$BASE\_merge_treeview_label.svg
