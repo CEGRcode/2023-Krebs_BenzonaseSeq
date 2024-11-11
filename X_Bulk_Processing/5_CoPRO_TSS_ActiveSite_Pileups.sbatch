@@ -1,13 +1,11 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --mem=14gb
+#SBATCH --mem=24gb
 #SBATCH -t 00:15:00
 #SBATCH -A open
 #SBATCH -o logs/5_CoPRO_TSS_ActiveSite_Pileups.log.out-%a
 #SBATCH -e logs/5_CoPRO_TSS_ActiveSite_Pileups.log.err-%a
-#SBATCH --array 1-8
-
-# SLURM_ARRAY_TASK_ID=2
+#SBATCH --array 1-5
 
 # Pileup 5' R1 and R2 (heatmaps) and composites for a list of BED files using
 # the CoPRO BAM file and TSS/Active site heatmap colors.
@@ -22,14 +20,11 @@ THREADS=4
 ###
 
 LIST=(
+	"../data/RefPT-Krebs/400bp/PlusOneDyad_SORT-pHN-dHN_400bp.bed"
+	"../data/RefPT-Krebs/400bp/PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_400bp.bed"
+	"../data/RefPT-Krebs/400bp/PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_400bp.bed"
 	"../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp.bed"
 	"../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed"
-	"../data/RefPT-Krebs/200bp/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_200bp.bed"
-	"../data/RefPT-Krebs/500bp/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-TOP-1K_500bp.bed"
-	"../data/RefPT-Krebs/500bp/PlusOneDyad_SORT-pHex-dHex_GROUP-Nuc-Dyad_GROUP-BOTTOM-1K_500bp.bed"
-	"../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-pHN-dHN_2000bp.bed"
-	"../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_2000bp.bed"
-	"../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_2000bp.bed"
 )
 
 # Dependencies
@@ -42,7 +37,7 @@ module load samtools
 # Fill in placeholder constants with your directories
 BAMDIR=$WRK/../data/BAM
 OUTDIR=$WRK/Library
-BAMFILE=$BAMDIR/CoPRO_-_merge_hg19.bam
+BAMFILE=$BAMDIR/CoPRO_Capped_merge_hg38.bam
 
 # Setup ScriptManager for job array
 ORIGINAL_SCRIPTMANAGER=$WRK/../bin/ScriptManager-v0.15.jar
@@ -69,10 +64,13 @@ BED=`basename $BEDFILE ".bed"`
 NSITES=`wc -l $BEDFILE | awk '{print $1}'`
 
 # Set window labels
+RLABEL="R"
+LLABEL="L"
 WINDOW=`echo $BED | rev | cut -d"_" -f1 | rev`
 [ $WINDOW == "2000bp" ] && LLABEL="-1" && RLABEL="+1"
 [ $WINDOW == "1000bp" ] && LLABEL="-500" && RLABEL="+500"
 [ $WINDOW == "200bp" ] && LLABEL="-100" && RLABEL="+100"
+[ $WINDOW == "400bp" ] && LLABEL="-200" && RLABEL="+200"
 
 echo "(${SLURM_ARRAY_TASK_ID}) ${BEDFILE} "x" ${BAMFILE} "
 
@@ -93,12 +91,12 @@ java -jar $SCRIPTMANAGER read-analysis tag-pileup $BEDFILE $BAMFILE --cpu $THREA
 # No scaling
 
 # Two-color heatmap -a 0.4
-java -jar $SCRIPTMANAGER figure-generation heatmap -a 1 -c 7F00FF $RGB $DIR/CDT/$BASE\_sense.cdt.gz -o $DIR/PNG/Strand/$BASE\_sense_treeview.png
-java -jar $SCRIPTMANAGER figure-generation heatmap -a 1 -c 0099FF $RGB $DIR/CDT/$BASE\_anti.cdt.gz -o $DIR/PNG/Strand/$BASE\_anti_treeview.png
-java -jar $SCRIPTMANAGER figure-generation merge-heatmap $DIR/PNG/Strand/$BASE\_sense_treeview.png $DIR/PNG/Strand/$BASE\_anti_treeview.png -o $DIR/PNG/$BASE\_merge_treeview.png
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation heatmap -a 1 -c 7F00FF $RGB $DIR/CDT/$BASE\_sense.cdt.gz -o $DIR/PNG/Strand/$BASE\_sense_treeview.png
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation heatmap -a 1 -c 0099FF $RGB $DIR/CDT/$BASE\_anti.cdt.gz -o $DIR/PNG/Strand/$BASE\_anti_treeview.png
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation merge-heatmap $DIR/PNG/Strand/$BASE\_sense_treeview.png $DIR/PNG/Strand/$BASE\_anti_treeview.png -o $DIR/PNG/$BASE\_merge_treeview.png
 
 # Label heatmap
-java -jar $SCRIPTMANAGER figure-generation label-heatmap $DIR/PNG/$BASE\_merge_treeview.png \
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation label-heatmap $DIR/PNG/$BASE\_merge_treeview.png \
 	-l $LLABEL -m "0" -r $RLABEL -w 2 -f 18 \
 	-x $BED -y "$BED occurences (${NSITES} sites)" \
 	-o $DIR/SVG/$BASE\_merge_treeview_label.svg
@@ -113,12 +111,12 @@ java -jar $SCRIPTMANAGER read-analysis tag-pileup $BEDFILE $BAMFILE --cpu $THREA
 # No scaling
 
 # Two-color heatmap (?) -a 0.6
-java -jar $SCRIPTMANAGER figure-generation heatmap -a 1 -c FF0000 $RGB $DIR/CDT/$BASE\_sense.cdt.gz -o $DIR/PNG/Strand/$BASE\_sense_treeview.png
-java -jar $SCRIPTMANAGER figure-generation heatmap -a 1 -c 0000FF $RGB $DIR/CDT/$BASE\_anti.cdt.gz -o $DIR/PNG/Strand/$BASE\_anti_treeview.png
-java -jar $SCRIPTMANAGER figure-generation merge-heatmap $DIR/PNG/Strand/$BASE\_sense_treeview.png $DIR/PNG/Strand/$BASE\_anti_treeview.png -o $DIR/PNG/$BASE\_merge_treeview.png
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation heatmap -a 1 -c FF0000 $RGB $DIR/CDT/$BASE\_sense.cdt.gz -o $DIR/PNG/Strand/$BASE\_sense_treeview.png
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation heatmap -a 1 -c 0000FF $RGB $DIR/CDT/$BASE\_anti.cdt.gz -o $DIR/PNG/Strand/$BASE\_anti_treeview.png
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation merge-heatmap $DIR/PNG/Strand/$BASE\_sense_treeview.png $DIR/PNG/Strand/$BASE\_anti_treeview.png -o $DIR/PNG/$BASE\_merge_treeview.png
 
 # Label heatmap
-java -jar $SCRIPTMANAGER figure-generation label-heatmap $DIR/PNG/$BASE\_merge_treeview.png \
+java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation label-heatmap $DIR/PNG/$BASE\_merge_treeview.png \
 	-l $LLABEL -m "0" -r $RLABEL -w 2 -f 18 \
 	-x $BED -y "$BED occurences (${NSITES} sites)" \
 	-o $DIR/SVG/$BASE\_merge_treeview_label.svg

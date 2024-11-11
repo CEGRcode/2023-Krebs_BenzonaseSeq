@@ -73,9 +73,15 @@ paste $KREBS/PlusOneDyad_SORT-Expression.bed <(sed '1d' $TEMP/pHN-dHN_combined.t
 head -n 2500 $KREBS/PlusOneDyad_SORT-pHN-dHN.bed > $KREBS/PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500.bed
 head -n -573 $KREBS/PlusOneDyad_SORT-pHN-dHN.bed | tail -n 2500 > $KREBS/PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500.bed
 
-[ -d $KREBS/2000bp ] || mkdir $KREBS/2000bp
+[ -d $KREBS/400bp ] || mkdir $KREBS/400bp
 
-# Expand 2000bp
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-pHN-dHN.bed -o $KREBS/2000bp/PlusOneDyad_SORT-pHN-dHN_2000bp.bed
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500.bed -o $KREBS/2000bp/PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_2000bp.bed
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 2000 $KREBS/PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500.bed -o $KREBS/2000bp/PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_2000bp.bed
+# Expand 400bp
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 400 $KREBS/PlusOneDyad_SORT-pHN-dHN.bed -o $KREBS/400bp/PlusOneDyad_SORT-pHN-dHN_400bp.bed
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 400 $KREBS/PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500.bed -o $KREBS/400bp/PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_400bp.bed
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 400 $KREBS/PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500.bed -o $KREBS/400bp/PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_400bp.bed
+
+[ -d $KREBS/1000bp ] || mkdir $KREBS/1000bp
+
+# Expand 1000bp
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 1000 $KREBS/PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500.bed -o $KREBS/1000bp/PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_1000bp.bed
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c 1000 $KREBS/PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500.bed -o $KREBS/1000bp/PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_1000bp.bed
