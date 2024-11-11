@@ -36,6 +36,9 @@ FF9900	128	164	../data/BAM/CUTRUN_H3K4me3_merge_hg38.bam	../data/RefPT-Krebs/200
 000000	128	164	../data/BAM/CUTRUN_IgG_merge_hg38.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
 FF00FF	128	164	../data/BAM/BNase-seq_50U-10min_merge_hg38.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_2000bp.bed
 FF00FF	NaN	NaN	../data/BAM/BNase-seq_50U-10min_merge_hg38.bam	../data/RefPT-Krebs/2000bp/PlusOneDyad_SORT-Expression_WithUnexpressed_2000bp.bed
+9900FF	NaN	80	../data/BAM/BNase-seq_50U-10min_merge_hg38.bam	../data/RefPT-Krebs/1000bp/PlusOneDyad_SORT-pHN-dHN_GROUP-TOP-2500_1000bp.bed
+FF9900	NaN	80	../data/BAM/BNase-seq_50U-10min_merge_hg38.bam	../data/RefPT-Krebs/1000bp/PlusOneDyad_SORT-pHN-dHN_GROUP-BOTTOM-2500_1000bp.bed
+
 000000	NaN	NaN	../data/BAM/MNase-seq_5U_rep1_hg19.bam	../data/RefPT-Krebs/2000bp/TSS_GROUP-Expressed_SORT-CpG_2000bp.bed
 000000	NaN	NaN	../data/BAM/MNase-seq_21U_rep1_hg19.bam	../data/RefPT-Krebs/2000bp/TSS_GROUP-Expressed_SORT-CpG_2000bp.bed
 000000	NaN	NaN	../data/BAM/MNase-seq_79U_rep1_hg19.bam	../data/RefPT-Krebs/2000bp/TSS_GROUP-Expressed_SORT-CpG_2000bp.bed
