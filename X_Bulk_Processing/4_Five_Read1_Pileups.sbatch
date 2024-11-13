@@ -14,7 +14,7 @@
 ### CHANGE ME
 WRK=/path/to/2023-Krebs_BenzonaseSeq/X_Bulk_Processing
 WRK=/ocean/projects/see180003p/owlang/2023-Krebs_BenzonaseSeq/X_Bulk_Processing
-WRK=/storage/home/owl5022/scratch/2023-Krebs_BenzonaseSeq/X_Bulk_Processing
+WRK=/storage/group/bfp2/default/owl5022-OliviaLang/2023-Krebs_BenzonaseSeq/X_Bulk_Processing
 METADATA=Five_Read1_Pileups.txt
 THREADS=4
 ###
