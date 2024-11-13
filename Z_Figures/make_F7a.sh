@@ -102,21 +102,28 @@ java -jar -Djava.awt.headless=true $SCRIPTMANAGER figure-generation label-heatma
 
 echo "Copy heatmaps over from X_Bulk_Processing/Library"
 
-DATAFILE=F7/a/violin_data.txt
+MNASE_BAMFILE=../data/BAM/MNase-seq_ENCODE_merge_hg38.bam
+BNASE_BAMFILE=../data/BAM/BNase-seq_50U-10min_merge_hg38.bam
 
+DATAFILE=F7/a/violin_data.txt
 [ -f $DATAFILE ] && rm $DATAFILE
 
-for BED in "PlusOneDyad_SORT-DistToExpressedTSS_GROUP-CpGIsland-NoOverlap" "PlusOneDyad_SORT-DistToExpressedTSS_GROUP-CpGIsland-Overlap";
+for GROUP in "NoOverlap" "Overlap";
 do
-	GROUP=`echo $BED |awk -F"-" '{print $4}'`
+	BEDFILE=../data/RefPT-Krebs/PlusOneDyad_SORT-DistToExpressedTSS_GROUP-CpGIsland-$GROUP.bed
+
+	# Tag pileup BNase-seq and MNase-seq
+	java -jar $SCRIPTMANAGER read-analysis tag-pileup -1 -5 --combined --shift 80 $BEDFILE $MNASE_BAMFILE -M F7/a/MNase_$GROUP\_5read1-SHIFT80
+	java -jar $SCRIPTMANAGER read-analysis tag-pileup -m -p --combined            $BEDFILE $BNASE_BAMFILE -M F7/a/BNase_$GROUP\_midpoint
+	# java -jar $SCRIPTMANAGER read-analysis tag-pileup -1 -5 --combined --shift 80 $BEDFILE $BNASE_BAMFILE -M F7/a/BNase_$GROUP\_5read1-SHIFT80
 
 	# Aggregate data into violin data file
-	java -jar $SCRIPTMANAGER read-analysis aggregate-data -m $LIBRARY/$BED/CDT/BNase-seq_50U-10min_merge_hg38_$BED\_midpoint_combined.cdt -o F7/a/BNase_$BED.out
-	java -jar $SCRIPTMANAGER read-analysis aggregate-data -m $LIBRARY/$BED/CDT/MNase-seq_ENCODE_merge_hg38_$BED\_midpoint_combined.cdt -o F7/a/MNase_$BED.out
+	java -jar $SCRIPTMANAGER read-analysis aggregate-data -m F7/a/MNase_$GROUP\_5read1-SHIFT80_combined.cdt -o F7/a/BNase_$GROUP.out
+	java -jar $SCRIPTMANAGER read-analysis aggregate-data -m F7/a/BNase_$GROUP\_midpoint_combined.cdt       -o F7/a/MNase_$GROUP.out
 
 	# Append aggregated data into a merged violin data file
-	sed '1d' F7/a/BNase_$BED.out | awk -v GROUP=$GROUP 'BEGIN{OFS="\t";FS="\t"}{print $2,"BNase-"GROUP}' >> $DATAFILE
-	sed '1d' F7/a/MNase_$BED.out | awk -v GROUP=$GROUP 'BEGIN{OFS="\t";FS="\t"}{print $2,"MNase-"GROUP}' >> $DATAFILE
+	sed '1d' F7/a/BNase_$GROUP.out | awk -v GROUP=$GROUP 'BEGIN{OFS="\t";FS="\t"}{print $2,"BNase-"GROUP}' >> $DATAFILE
+	sed '1d' F7/a/MNase_$GROUP.out | awk -v GROUP=$GROUP 'BEGIN{OFS="\t";FS="\t"}{print $2,"MNase-"GROUP}' >> $DATAFILE
 done
 
 # Violins
