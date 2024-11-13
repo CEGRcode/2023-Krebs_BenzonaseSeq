@@ -5,7 +5,7 @@
 #SBATCH -A open
 #SBATCH -o logs/4_Five_Read1_Pileups.log.out-%a
 #SBATCH -e logs/4_Five_Read1_Pileups.log.err-%a
-#SBATCH --array 1-17
+#SBATCH --array 1-18
 
 # Pileup 5' R1 (heatmaps) and composites for a custom combination of BAM x BED
 # files with RGB info and custom insert size filters.

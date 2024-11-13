@@ -5,7 +5,7 @@
 #SBATCH -A open
 #SBATCH -o logs/3_Midpoint_Pileups.log.out-%a
 #SBATCH -e logs/3_Midpoint_Pileups.log.err-%a
-#SBATCH --array 1-53
+#SBATCH --array 1-39
 
 # Pileup midpoint (heatmaps) and composites for a custom
 # combination of BAM x BED files with RGB info.
