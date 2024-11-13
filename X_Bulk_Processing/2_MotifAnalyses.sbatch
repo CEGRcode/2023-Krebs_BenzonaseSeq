@@ -5,7 +5,7 @@
 #SBATCH -A open
 #SBATCH -o logs/2_MotifAnalyses.log.out-%a
 #SBATCH -e logs/2_MotifAnalyses.log.err-%a
-#SBATCH --array 1-13
+#SBATCH --array 1-344
 
 # Loop through each BEDFILE in data/RefPT-Motif/1000bp and perform motif analyses:
 # - Four color plots (QC)
@@ -42,15 +42,15 @@ DINUCLEOTIDE=../bin/dinucleotide_CDT_from_FASTA.py
 COMPOSITE=../bin/sum_Col_CDT.pl
 
 # Inputs and outputs
-GENOME=$WRK/../data/hg19_files/hg19.fa
-MOTIF=$WRK/../data/RefPT-Motif
+GENOME=$WRK/../data/hg38_files/hg38.fa
+MOTIF=$WRK/../data/RefPT-JASPAR
 OUTDIR=Library
 
 # Set up output directories
 [ -d logs ] || mkdir logs
 [ -d $OUTDIR ] || mkdir $OUTDIR
 
-BAMFILE=$WRK/../data/BAM/BNase-seq_50U_merge_hg19.bam
+BAMFILE=$WRK/../data/BAM/BNase-seq_50U-10min_merge_hg38.bam
 BAM=`basename $BAMFILE ".bam"`
 
 # Determine BED file for the current job array index
@@ -68,6 +68,7 @@ DIR=$OUTDIR/$BED
 [[ -d $DIR/Composites ]] || mkdir $DIR/Composites
 [[ -d $DIR/FASTA ]] || mkdir $DIR/FASTA
 [[ -d $DIR/FourColor ]] || mkdir $DIR/FourColor
+[[ -d $DIR/Dinucleotide ]] || mkdir $DIR/Dinucleotide
 [[ -d $DIR/PNG/Strand ]] || mkdir -p $DIR/PNG/Strand
 [[ -d $DIR/SVG ]] || mkdir $DIR/SVG
 
@@ -110,8 +111,8 @@ java -jar $SCRIPTMANAGER sequence-analysis dna-shape-bed --all $GENOME $BEDFILE 
 
 # CDT to composite
 perl $COMPOSITE $DIR/CDT/$BED\_DNAShape_HelT.cdt  $DIR/Composites/DNAShape-HelT_$BED.out
-perl $COMPOSITE $DIR/CDT/$BED\_DNAShape_MGW.cdt  $DIR/Composites/DNAShape-MGW_$BED.out
-perl $COMPOSITE $DIR/CDT/$BED\_DNAShape_PropT.cdt  $DIR/Composites/DNAShape-PropT_$BED.out
+perl $COMPOSITE $DIR/CDT/$BED\_DNAShape_MGW.cdt   $DIR/Composites/DNAShape-MGW_$BED.out
+perl $COMPOSITE $DIR/CDT/$BED\_DNAShape_PropT.cdt $DIR/Composites/DNAShape-PropT_$BED.out
 perl $COMPOSITE $DIR/CDT/$BED\_DNAShape_Roll.cdt  $DIR/Composites/DNAShape-Roll_$BED.out
 
 # ===============================================================================================================================
@@ -119,13 +120,19 @@ perl $COMPOSITE $DIR/CDT/$BED\_DNAShape_Roll.cdt  $DIR/Composites/DNAShape-Roll_
 echo "Run Dinucleotide analysis"
 
 # Extract sequence
-java -jar $SCRIPTMANAGER sequence-analysis fasta-extract $GENOME $BEDFILE -o $DIR/FASTA/$BED.fa
+java -jar $SCRIPTMANAGER sequence-analysis fasta-extract $GENOME $BEDFILE -o $DIR/Dinucleotide/$BED.fa
 
-for SEQ in "AA-AT-TA-TT" "CC-CG-GC-GG" "AC-CA-TG-GT" "AG-GA-TC-CT";
+# Count BED sites and calculate 1/N scaling factor
+FACTOR=`wc -l $BEDFILE | awk '{print 1/$1}'`
+
+OLIST=""
+# for SEQ in "AA-AT-TA-TT" "CC-CG-GC-GG" "AC-CA-TG-GT" "AG-GA-TC-CT";
+for SEQ in "AA" "AT" "AC" "AG" "TA" "TT" "TC" "TG" "CA" "CT" "CC" "CG" "GA" "GT" "GC" "GG";
 do
 	# Dinucleotide analysis
-	python $DINUCLEOTIDE -i $DIR/FASTA/$BED.fa --seq $SEQ -o $DIR/CDT/Dinucleotide-$SEQ\_$BED.cdt
+	python $DINUCLEOTIDE -i $DIR/Dinucleotide/${BED}.fa --seq $SEQ -o $DIR/Dinucleotide/${SEQ}_${BED}.cdt
 
 	# CDT to composite
-	perl $COMPOSITE $DIR/CDT/Dinucleotide-$SEQ\_$BED.cdt  $DIR/Composites/Dinucleotide-$SEQ\_$BED.out
+	perl $COMPOSITE $DIR/Dinucleotide/${SEQ}_${BED}.cdt $DIR/Dinucleotide/${SEQ}_${BED}.out
+
 done
