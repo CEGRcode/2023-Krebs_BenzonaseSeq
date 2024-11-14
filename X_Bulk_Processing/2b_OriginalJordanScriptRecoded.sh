@@ -71,81 +71,60 @@ CONCAT=../bin/concatenate_v3_241011.py
 
 # ===============================================================================================================================
 
+RUNID=${TARGET}_${JASPAR}
+MOTIF=../data/RefPT-JASPAR
 
 #set output file names
-fileID=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_NucOccupancy_settings_pipeline_v13_241011"}')
-BEDFILE_a=$(echo "$BEDFILE" | rev | cut -d"/" -f1 | rev | sed 's/_final_1000bp.bed//g' | awk '{print $1}')
-ENCODE_BEDFILE_unzipped=$(echo $ENCODE_BEDFILE | rev | cut -d"/" -f1 | rev | awk -F. '{print $1".bed"}')
-ENCODE_BEDFILE_shuffled=$(echo $ENCODE_BEDFILE_unzipped | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_shuffled.bed"}')
-BEDFILE_shuffled=$(echo $BEDFILE | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_shuffled.bed"}')
-ENCODE_BEDFILE_1000bp=$(echo $ENCODE_BEDFILE_shuffled | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_1000bp.bed"}')
-BEDFILE_20bp=$(echo $BEDFILE_shuffled | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_20bp.bed"}')
-TARGET_INTERSECT_wDUP=$(echo $BEDFILE | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_intersected_wDUP.bed"}')
-TARGET_noINTERSECT_wDUP=$(echo $BEDFILE | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_NOTintersected_wDUP.bed"}')
-TARGET_Bound=$(echo $BEDFILE | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_intersected.bed"}')
-TARGET_noINTERSECT=$(echo $BEDFILE | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_NOTintersected.bed"}')
-TARGET_Bound_164bp=$(echo $TARGET_Bound  | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_164bp.bed"}')
-BAM1a=$(echo $BAM1 | rev | cut -d"/" -f1 | rev | awk -F. '{print $1}')
-OUT1=$(echo "$BAM1a""_""$TARGET_Bound_164bp" | awk -F. '{print $1"_midpoint.out"}')
-CDT1=$(echo "$BAM1a""_""$TARGET_Bound_164bp" | awk -F. '{print $1}')
-CDT1b=$(echo "$BAM1a""_""$TARGET_Bound_164bp" | awk -F. '{print $1"_combined.cdt.gz"}')
-CDT1c=$(echo "$BAM1a""_""$TARGET_Bound_164bp" | awk -F. '{print $1"_combined.cdt"}')
-CDT1_sum=$(echo "$BAM1a""_""$TARGET_Bound_164bp" | awk -F. '{print $1"_combined_sum.tsv"}')
-CDT1_sum_noHeader=$(echo "$BAM1a""_""$TARGET_Bound_164bp" | awk -F. '{print $1"_combined_sum_noHeader.tsv"}')
-TSV_ratio=$(echo $TARGET_Bound | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_ratio.TSV"}')
-NUMBER=$(echo "$TARGET_Bound" | awk -F. '{print $1"_rowsNumber.tab"}')
-NUMBER2=$(echo "$TARGET_Bound" | awk -F. '{print $1"_rowsNumber2.tab"}')
-NUMBER3=$(echo "$TARGET_Bound" | awk -F. '{print $1"_rowsNumber3.tab"}')
-BEDFILE_category1=$(echo $TARGET_Bound_164bp | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category1.bed"}')
-BEDFILE_category2=$(echo $TARGET_Bound_164bp | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category2.bed"}')
-BEDFILE_category3=$(echo $TARGET_Bound_164bp | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category3.bed"}')
-BEDFILE_category4=$(echo $TARGET_Bound_164bp | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category4.bed"}')
-NUMBER_category1=$(echo "$TARGET_Bound_164bp" | awk -F. '{print $1"_category1_rowsNumber.tab"}')
-NUMBER_category2=$(echo "$TARGET_Bound_164bp" | awk -F. '{print $1"_category2_rowsNumber.tab"}')
-NUMBER_category3=$(echo "$TARGET_Bound_164bp" | awk -F. '{print $1"_category3_rowsNumber.tab"}')
-NUMBER_category4=$(echo "$TARGET_Bound_164bp" | awk -F. '{print $1"_category4_rowsNumber.tab"}')
-TAB=$(echo "$TARGET_Bound_164bp" | awk -F. '{print $1"_all_rows_values.tab"}')
-BEDFILE_category1_1000bp=$(echo $BEDFILE_category1 | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_1000bp.bed"}')
-BEDFILE_category2_1000bp=$(echo $BEDFILE_category2 | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_1000bp.bed"}')
-BEDFILE_category3_1000bp=$(echo $BEDFILE_category3 | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_1000bp.bed"}')
-BEDFILE_category4_1000bp=$(echo $BEDFILE_category4 | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_1000bp.bed"}')
-BAM1a=$(echo $BAM1 | rev | cut -d"/" -f1 | rev | awk -F. '{print $1}')
-OUT2=$(echo "$BAM1a""_""$BEDFILE_category1_1000bp" | awk -F. '{print $1"_allReads.out"}')
-CDT2=$(echo "$BAM1a""_""$BEDFILE_category1_1000bp" | awk -F. '{print $1"_allReads"}')
-CDT2_sense_gz=$(echo "$BAM1a""_""$BEDFILE_category1_1000bp" | awk -F. '{print $1"_allReads_sense.cdt.gz"}')
-CDT2_anti_gz=$(echo "$BAM1a""_""$BEDFILE_category1_1000bp" | awk -F. '{print $1"_allReads_anti.cdt.gz"}')
-CDT2_sense=$(echo "$BAM1a""_""$BEDFILE_category1_1000bp" | awk -F. '{print $1"_allReads_sense.cdt"}')
-CDT2_anti=$(echo "$BAM1a""_""$BEDFILE_category1_1000bp" | awk -F. '{print $1"_allReads_anti.cdt"}')
-OUT2_sense=$(echo "$BAM1a""_""$BEDFILE_category1_1000bp" | awk -F. '{print $1"_ForComposite_allReads_sense.tab"}')
-OUT2_anti=$(echo "$BAM1a""_""$BEDFILE_category1_1000bp" | awk -F. '{print $1"_ForComposite_allReads_anti.tab"}')
-OUT2_final=$(echo "01_""$BAM1a""_""$BEDFILE_category1_1000bp" | awk -F. '{print $1"_ForComposite_final.tab"}')
-OUT3=$(echo "$BAM1a""_""$BEDFILE_category2_1000bp" | awk -F. '{print $1"_allReads.out"}')
-CDT3=$(echo "$BAM1a""_""$BEDFILE_category2_1000bp" | awk -F. '{print $1"_allReads"}')
-CDT3_sense_gz=$(echo "$BAM1a""_""$BEDFILE_category2_1000bp" | awk -F. '{print $1"_allReads_sense.cdt.gz"}')
-CDT3_anti_gz=$(echo "$BAM1a""_""$BEDFILE_category2_1000bp" | awk -F. '{print $1"_allReads_anti.cdt.gz"}')
-CDT3_sense=$(echo "$BAM1a""_""$BEDFILE_category2_1000bp" | awk -F. '{print $1"_allReads_sense.cdt"}')
-CDT3_anti=$(echo "$BAM1a""_""$BEDFILE_category2_1000bp" | awk -F. '{print $1"_allReads_anti.cdt"}')
-OUT3_sense=$(echo "$BAM1a""_""$BEDFILE_category2_1000bp" | awk -F. '{print $1"_ForComposite_allReads_sense.tab"}')
-OUT3_anti=$(echo "$BAM1a""_""$BEDFILE_category2_1000bp" | awk -F. '{print $1"_ForComposite_allReads_anti.tab"}')
-OUT3_final=$(echo "02_""$BAM1a""_""$BEDFILE_category2_1000bp" | awk -F. '{print $1"_ForComposite_final.tab"}')
-OUT4=$(echo "$BAM1a""_""$BEDFILE_category3_1000bp" | awk -F. '{print $1"_allReads.out"}')
-CDT4=$(echo "$BAM1a""_""$BEDFILE_category3_1000bp" | awk -F. '{print $1"_allReads"}')
-CDT4_sense_gz=$(echo "$BAM1a""_""$BEDFILE_category3_1000bp" | awk -F. '{print $1"_allReads_sense.cdt.gz"}')
-CDT4_anti_gz=$(echo "$BAM1a""_""$BEDFILE_category3_1000bp" | awk -F. '{print $1"_allReads_anti.cdt.gz"}')
-CDT4_sense=$(echo "$BAM1a""_""$BEDFILE_category3_1000bp" | awk -F. '{print $1"_allReads_sense.cdt"}')
-CDT4_anti=$(echo "$BAM1a""_""$BEDFILE_category3_1000bp" | awk -F. '{print $1"_allReads_anti.cdt"}')
-OUT4_sense=$(echo "$BAM1a""_""$BEDFILE_category3_1000bp" | awk -F. '{print $1"_ForComposite_allReads_sense.tab"}')
-OUT4_anti=$(echo "$BAM1a""_""$BEDFILE_category3_1000bp" | awk -F. '{print $1"_ForComposite_allReads_anti.tab"}')
-OUT4_final=$(echo "03_""$BAM1a""_""$BEDFILE_category3_1000bp" | awk -F. '{print $1"_ForComposite_final.tab"}')
-OUT5=$(echo "$BAM1a""_""$BEDFILE_category4_1000bp" | awk -F. '{print $1"_allReads.out"}')
-CDT5=$(echo "$BAM1a""_""$BEDFILE_category4_1000bp" | awk -F. '{print $1"_allReads"}')
-CDT5_sense_gz=$(echo "$BAM1a""_""$BEDFILE_category4_1000bp" | awk -F. '{print $1"_allReads_sense.cdt.gz"}')
-CDT5_anti_gz=$(echo "$BAM1a""_""$BEDFILE_category4_1000bp" | awk -F. '{print $1"_allReads_anti.cdt.gz"}')
-CDT5_sense=$(echo "$BAM1a""_""$BEDFILE_category4_1000bp" | awk -F. '{print $1"_allReads_sense.cdt"}')
-CDT5_anti=$(echo "$BAM1a""_""$BEDFILE_category4_1000bp" | awk -F. '{print $1"_allReads_anti.cdt"}')
-OUT5_sense=$(echo "$BAM1a""_""$BEDFILE_category4_1000bp" | awk -F. '{print $1"_ForComposite_allReads_sense.tab"}')
-OUT5_anti=$(echo "$BAM1a""_""$BEDFILE_category4_1000bp" | awk -F. '{print $1"_ForComposite_allReads_anti.tab"}')
-OUT5_final=$(echo "04_""$BAM1a""_""$BEDFILE_category4_1000bp" | awk -F. '{print $1"_ForComposite_final.tab"}')
+BEDFILE_category1=${RUNID}_SORT-TFnucRatio_GROUP-Quartile1
+BEDFILE_category2=${RUNID}_SORT-TFnucRatio_GROUP-Quartile2
+BEDFILE_category3=${RUNID}_SORT-TFnucRatio_GROUP-Quartile3
+BEDFILE_category4=${RUNID}_SORT-TFnucRatio_GROUP-Quartile4
+BEDFILE_category1_1000bp=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile1_1000bp.bed
+BEDFILE_category2_1000bp=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile2_1000bp.bed
+BEDFILE_category3_1000bp=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile3_1000bp.bed
+BEDFILE_category4_1000bp=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile4_1000bp.bed
+BAM1a=BNase-seq_50U-10min_merge_hg38
+
+OUT2=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_1000bp_allReads.out
+CDT2=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_1000bp_allReads
+CDT2_sense_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_1000bp_allReads
+CDT2_anti_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_allReads_anti.cdt.gz
+CDT2_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_allReads_sense.cdt
+CDT2_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_allReads_anti.cdt
+OUT2_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_sense.tab
+OUT2_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_anti.tab
+OUT2_final=01_BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_final.tab
+
+OUT3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_allReads.out
+CDT3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_allReads
+CDT3_sense_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_allReads_sense.cdt.gz
+CDT3_anti_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_allReads_anti.cdt.gz
+CDT3_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_allReads_sense.cdt
+CDT3_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_allReads_anti.cdt
+OUT3_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_sense.tab
+OUT3_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_anti.tab
+OUT3_final=02_BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_final.tab
+
+OUT4=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_allReads.out
+CDT4=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_allReads
+CDT4_sense_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_allReads_sense.cdt.gz
+CDT4_anti_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_allReads_anti.cdt.gz
+CDT4_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_allReads_sense.cdt
+CDT4_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_allReads_anti.cdt
+OUT4_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_sense.tab
+OUT4_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_anti.tab
+OUT4_final=03_BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_final.tab
+
+OUT5=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_allReads.out
+CDT5=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_allReads
+CDT5_sense_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_allReads_sense.cdt.gz
+CDT5_anti_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_allReads_anti.cdt.gz
+CDT5_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_allReads_sense.cdt
+CDT5_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_allReads_anti.cdt
+OUT5_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_sense.tab
+OUT5_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_anti.tab
+OUT5_final=04_BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_final.tab
+
 NT_count=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_NT_count.tab"}')
 MASKED_region=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_masked.tab"}')
 category1_sense_smoothed_3=$(echo $OUT2_sense | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_3bp.tab"}')
@@ -202,61 +181,8 @@ category2_anti_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F
 category3_anti_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category3_anti_smoothed_3_final.tab"}')
 category4_anti_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category4_anti_smoothed_3_final.tab"}')
 
-sampleID=$fileID\.slurm
-rm -f $sampleID
-$JOBSTATS
-#set output
-cd $OUTPUT
-#unzip files
-gunzip -c $ENCODE_BEDFILE > $ENCODE_BEDFILE_unzipped
-#shuffle bedfiles
-shuf $ENCODE_BEDFILE_unzipped > $ENCODE_BEDFILE_shuffled
-shuf $BEDFILE > $BEDFILE_shuffled
-#expand befiles
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=1000 $ENCODE_BEDFILE_shuffled -o=$OUTPUT/$ENCODE_BEDFILE_1000bp
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=20 $BEDFILE_shuffled -o=$OUTPUT/$BEDFILE_20bp
-# Intersect peaks with motifs - filter to keep overlap - move ENCODE ChIP value ("signal value") to score col - sort by ID, then score
-bedtools intersect -loj -a $BEDFILE_20bp -b $ENCODE_BEDFILE_1000bp | awk '{OFS="\t"}{FS="\t"}{if($8>0) print $1,$2,$3,$4,$13,$6}' | sort -rnk4,5 > $TARGET_INTERSECT_wDUP
-bedtools intersect -loj -a $BEDFILE_20bp -b $ENCODE_BEDFILE_1000bp | awk '{OFS="\t"}{FS="\t"}{if($8==-1) print $1,$2,$3,$4,$13,$6}' > $TARGET_noINTERSECT_wDUP
-#Deduplicate bound motifs by keeping first instance (larger ENCODE score based on previous command sort)
-python $DEDUP -i $TARGET_INTERSECT_wDUP -o $TARGET_Bound
-#Deduplicate of unbound motifs does  NOT work as each sites seems to have its own unique 4th column
-#get number of rows from intersected bedfile
-#expand intersected bedfile
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=164 $TARGET_Bound -o=$OUTPUT/$TARGET_Bound_164bp
-#do initial tag-pileUp (output is input directory). Settings: midpoint(m) OR 5 prime end (-5) with read 1 (-1), Gizp output cdt (z), No smoothing (N), required proper PEs (p), load blacklist **total tag option (-t) removed**
-java -jar $SCRIPTMANAGER read-analysis tag-pileup -m -z --output-matrix=$CDT1 -N -p --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT1 $TARGET_Bound_164bp $BAM1
-#unzip cdt files
-gunzip -c $CDT1b > $CDT1c
-#no need to scale here as everything is relative to Benzonase data
-#sum the number of tags by each row
-java -jar $SCRIPTMANAGER read-analysis aggregate-data --sum -m -l=3 -o=$CDT1_sum -r=1 $CDT1c
-#remove header from CDT1_sum file
-cat $CDT1_sum | sed '1d' > $CDT1_sum_noHeader
-#paste bedfile and CTD1_sum_noHeader, make sure all rows match first, avoid any rows with 0 in TF signal (column 5) or nucleosome occupancy (column 8) then divide encode TF signal to nucleosome occupancy (ratio) in column 7 and sort
-paste $TARGET_Bound_164bp $CDT1_sum_noHeader | awk '{OFS="\t"}{FS="\t"}{if ($12=$7 && $5!=0 && $8!=0) print $1,$2,$3,$4,$5,$6,($5/$8)}' | sort -k7,7n > $TSV_ratio
-#get number of rows from intersected bedfile
-cat $TARGET_Bound | wc -l | awk '{printf "%.f\n", $1 * 0.25}' > $NUMBER
-cat $TARGET_Bound | wc -l | awk '{printf "%.f\n", $1 * 0.5}' > $NUMBER2
-cat $TARGET_Bound | wc -l | awk '{printf "%.f\n", $1 * 0.75}' > $NUMBER3
-#take sorted sites and split into quartiles
-#take above motif dedup bedfile that is sorted by TSV.
-cat $TSV_ratio | head -$(cat $NUMBER)  | awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6}' > $BEDFILE_category1
-cat $TSV_ratio | head -$(cat $NUMBER2)  | tail -$(cat $NUMBER) | awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6}' > $BEDFILE_category2
-cat $TSV_ratio | head -$(cat $NUMBER3)  | tail -$(cat $NUMBER) | awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6}' > $BEDFILE_category3
-cat $TSV_ratio | tail -$(cat $NUMBER) | awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6}' > $BEDFILE_category4
-#get the number of sites / category
-cat $BEDFILE_category1 | wc -l > $NUMBER_category1
-cat $BEDFILE_category2 | wc -l > $NUMBER_category2
-cat $BEDFILE_category3 | wc -l > $NUMBER_category3
-cat $BEDFILE_category4 | wc -l > $NUMBER_category4
-#make rows of CSV values of rows / category
-echo | awk -v V1="$BEDFILE_a" -v V2=$(cat $BEDFILE_category1 | wc -l) -v V3=$(cat $BEDFILE_category2 | wc -l) -v V4=$(cat $BEDFILE_category3 | wc -l) -v V5=$(cat $BEDFILE_category4 | wc -l) 'BEGIN {print "motif_number\tcategory_1\tcategory_2\tcategory_3\tcategory_4\n"V1"\t"V2"\t"V3"\t"V4"\t"V5}' > $TAB
-#expand bedfiles
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=1000 $BEDFILE_category1 -o=$BEDFILE_category1_1000bp
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=1000 $BEDFILE_category2 -o=$BEDFILE_category2_1000bp
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=1000 $BEDFILE_category3 -o=$BEDFILE_category3_1000bp
-java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=1000 $BEDFILE_category4 -o=$BEDFILE_category4_1000bp
+# See 03_Call_Motifs for generating initial motifs split into quartiles
+
 #do initial tag-pileUp (output is input directory). Settings: midpoint(m) OR 5 prime end (-5) with read 1 (-1), Gizp output cdt (z), No smoothing (N), required proper PEs (p), load blacklist **total tag option (-t) removed**
 java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -z --output-matrix=$CDT2 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT2 $BEDFILE_category1_1000bp $BAM1
 java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -z --output-matrix=$CDT3 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT3 $BEDFILE_category2_1000bp $BAM1
@@ -285,6 +211,8 @@ cat $OUT2_sense $OUT2_anti | awk 'NR==1;NR==2;NR==4' > $OUT2_final
 cat $OUT3_sense $OUT3_anti | awk 'NR==1;NR==2;NR==4' > $OUT3_final
 cat $OUT4_sense $OUT4_anti | awk 'NR==1;NR==2;NR==4' > $OUT4_final
 cat $OUT5_sense $OUT5_anti | awk 'NR==1;NR==2;NR==4' > $OUT5_final
+
+
 #extract number of NTs from MEME file
 python $EXTRACT $MEME $NT_count
 #determine the 5' and 3' boundaries of the motif masked region relative to the center column of tab files at column 501
