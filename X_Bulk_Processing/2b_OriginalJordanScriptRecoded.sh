@@ -93,20 +93,6 @@ category2_anti_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_Fo
 category3_anti_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_anti_smooth3.tab
 category4_anti_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_anti_smooth3.tab
 
-category1_sense_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_sense_smooth20.tab
-category2_sense_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_sense_smooth20.tab
-category3_sense_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_sense_smooth20.tab
-category4_sense_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_sense_smooth20.tab
-category1_anti_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_anti_smooth20.tab
-category2_anti_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_anti_smooth20.tab
-category3_anti_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_anti_smooth20.tab
-category4_anti_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_anti_smooth20.tab
-
-category1_sense_max=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_sense_smooth20_max.tab
-category2_sense_max=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_sense_smooth20_max.tab
-category3_sense_max=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_sense_smooth20_max.tab
-category4_sense_max=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_sense_smooth20_max.tab
-
 scale_values=${RUNID}_scale_values.tab
 
 translational_category1_sense=${RUNID}_GROUP-Quartile1_sense_translational_setting.tab
@@ -167,11 +153,25 @@ do
 	python $SMOOTH 3 ${BASE}_anti.tab ${BASE}_anti_smooth3.tab		#category1_anti_smoothed_3
 
 	# Apply smoothing (20) to sense and anti
-	python $SMOOTH 20 ${BASE}_sense.tab ${BASE}_sense_smooth20.tab	#category1_sense_smoothed_20
-	python $SMOOTH 20 ${BASE}_anti.tab ${BASE}_anti_smooth20.tab	#category1_anti_smoothed_20
+	python $SMOOTH 20 ${BASE}_sense.tab ${BASE}_sense_smooth20.tab
+	python $SMOOTH 20 ${BASE}_anti.tab ${BASE}_anti_smooth20.tab
 
 	# Get max positions (for later scaling) of sense strand from column 276 (bp -225) - 326 (bp-175) AND determine the bp of the max position. OUTPUT file is name, max value, position of max value
 	python $MAX ${BASE}_sense_smooth20.tab ${BASE}_sense_smooth20_max.tab
+
+	# === Check translational setting ===
+
+	RBASE=${RUNID}_GROUP-Quartile${QUARTILE}
+
+	#get max range (max-min) from -350 to -150 bp for motif strand
+	python $TRANSLATIONAL sense ${BASE}_sense_smooth20.tab ${RBASE}_sense_translational_setting.tab #translational_category1_sense
+
+	#get max range (max-min) from +150 to +350 bp for opposite strand
+	python $TRANSLATIONAL anti ${BASE}_sense_smooth20.tab ${RBASE}_anti_translational_setting.tab #translational_category1_anti
+
+	#get average of range of translational magnitude from both strands
+	python $TRANSLATIONAL_average ${RBASE}_sense_translational_setting.tab ${RBASE}_anti_translational_setting.tab ${RBASE}_translational_setting.tab #translational_category1
+
 
 done
 
@@ -192,26 +192,11 @@ cat ${Q1}_sense_smooth20_max.tab \
 #get scaling value for all categories
 python $SCALE ${RUNID}_all_max_values.tab $scale_values
 
-
-#get max range (max-min) from -350 to -150 bp for motif strand
-python $TRANSLATIONAL sense $category1_sense_smoothed_20 $translational_category1_sense
-python $TRANSLATIONAL sense $category2_sense_smoothed_20 $translational_category2_sense
-python $TRANSLATIONAL sense $category3_sense_smoothed_20 $translational_category3_sense
-python $TRANSLATIONAL sense $category4_sense_smoothed_20 $translational_category4_sense
-#get max range (max-min) from +150 to +350 bp for opposite strand
-python $TRANSLATIONAL anti $category1_anti_smoothed_20 $translational_category1_anti
-python $TRANSLATIONAL anti $category2_anti_smoothed_20 $translational_category2_anti
-python $TRANSLATIONAL anti $category3_anti_smoothed_20 $translational_category3_anti
-python $TRANSLATIONAL anti $category4_anti_smoothed_20 $translational_category4_anti
-#get average of range of translational magnitude from both strands
-python $TRANSLATIONAL_average $translational_category1_sense $translational_category1_anti $translational_category1
-python $TRANSLATIONAL_average $translational_category2_sense $translational_category2_anti $translational_category2
-python $TRANSLATIONAL_average $translational_category3_sense $translational_category3_anti $translational_category3
-python $TRANSLATIONAL_average $translational_category4_sense $translational_category4_anti $translational_category4
-
-
 #combine all above tab files (and add first column of quartile info and header). Output is average of peaks from either strand
-cat $translational_category1 $translational_category2 $translational_category3 $translational_category4 \
+cat ${RUNID}_GROUP-Quartile1_translational_setting.tab \
+	${RUNID}_GROUP-Quartile2_translational_setting.tab \
+	${RUNID}_GROUP-Quartile3_translational_setting.tab \
+	${RUNID}_GROUP-Quartile4_translational_setting.tab \
 	| awk 'BEGIN{print "Average_Translational_Magnitude"}1' \
 	| awk 'BEGIN{quartile[1]="Quartile"; for(i=2;i<=5;i++) quartile[i]=i-1} {print quartile[NR]"\t"$0} NR>5' \
 	> $translational_values
