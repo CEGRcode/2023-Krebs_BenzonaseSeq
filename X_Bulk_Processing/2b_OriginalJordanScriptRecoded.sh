@@ -80,16 +80,6 @@ BEDFILE_category1_1000bp=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile1_
 BEDFILE_category2_1000bp=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile2_1000bp.bed
 BEDFILE_category3_1000bp=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile3_1000bp.bed
 BEDFILE_category4_1000bp=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile4_1000bp.bed
-BAM1a=BNase-seq_50U-10min_merge_hg38
-
-OUT2_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_sense.tab
-OUT2_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_anti.tab
-OUT3_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_sense.tab
-OUT3_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_anti.tab
-OUT4_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_sense.tab
-OUT4_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_anti.tab
-OUT5_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_sense.tab
-OUT5_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_anti.tab
 
 NT_count=${RUNID}_NT_count.tab
 MASKED_region=${RUNID}_masked.tab
@@ -117,7 +107,6 @@ category2_sense_max=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForCompo
 category3_sense_max=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_sense_smooth20_max.tab
 category4_sense_max=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_sense_smooth20_max.tab
 
-all_max_values=${RUNID}_all_max_values.tab
 scale_values=${RUNID}_scale_values.tab
 
 translational_category1_sense=${RUNID}_GROUP-Quartile1_sense_translational_setting.tab
@@ -153,6 +142,11 @@ category4_anti_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F
 
 # See 03_Call_Motifs for generating initial motifs split into quartiles
 
+#extract number of NTs from MEME file
+python $EXTRACT $MEMEFILE $NT_count
+#determine the 5' and 3' boundaries of the motif masked region relative to the center column of tab files at column 501
+python $MASKED $NT_count $MASKED_region
+
 for QUARTILE in {1..4};
 do
 	CATEGORY=${RUNID}_SORT-TFnucRatio_GROUP-Quartile${QUARTILE}
@@ -168,47 +162,35 @@ do
 	awk 'NR==1;NR==2' $OUT_COMPOSITE > ${BASE}_sense.tab
 	awk 'NR==1;NR==3' $OUT_COMPOSITE > ${BASE}_anti.tab
 
+	# Apply smoothing (3) to sense and anti
+	python $SMOOTH 3 ${BASE}_sense.tab ${BASE}_sense_smooth3.tab	#category1_sense_smoothed_3
+	python $SMOOTH 3 ${BASE}_anti.tab ${BASE}_anti_smooth3.tab		#category1_anti_smoothed_3
+
+	# Apply smoothing (20) to sense and anti
+	python $SMOOTH 20 ${BASE}_sense.tab ${BASE}_sense_smooth20.tab	#category1_sense_smoothed_20
+	python $SMOOTH 20 ${BASE}_anti.tab ${BASE}_anti_smooth20.tab	#category1_anti_smoothed_20
+
+	# Get max positions (for later scaling) of sense strand from column 276 (bp -225) - 326 (bp-175) AND determine the bp of the max position. OUTPUT file is name, max value, position of max value
+	python $MAX ${BASE}_sense_smooth20.tab ${BASE}_sense_smooth20_max.tab
+
 done
 
-#extract number of NTs from MEME file
-python $EXTRACT $MEMEFILE $NT_count
-#determine the 5' and 3' boundaries of the motif masked region relative to the center column of tab files at column 501
-python $MASKED $NT_count $MASKED_region
 
-#apply 3 bp smoothing
-python $SMOOTH 3 $OUT2_sense $category1_sense_smoothed_3
-python $SMOOTH 3 $OUT3_sense $category2_sense_smoothed_3
-python $SMOOTH 3 $OUT4_sense $category3_sense_smoothed_3
-python $SMOOTH 3 $OUT5_sense $category4_sense_smoothed_3
-python $SMOOTH 3 $OUT2_anti $category1_anti_smoothed_3
-python $SMOOTH 3 $OUT3_anti $category2_anti_smoothed_3
-python $SMOOTH 3 $OUT4_anti $category3_anti_smoothed_3
-python $SMOOTH 3 $OUT5_anti $category4_anti_smoothed_3
-#apply 20 bp smoothing
-python $SMOOTH 20 $OUT2_sense $category1_sense_smoothed_20
-python $SMOOTH 20 $OUT3_sense $category2_sense_smoothed_20
-python $SMOOTH 20 $OUT4_sense $category3_sense_smoothed_20
-python $SMOOTH 20 $OUT5_sense $category4_sense_smoothed_20
-python $SMOOTH 20 $OUT2_anti $category1_anti_smoothed_20
-python $SMOOTH 20 $OUT3_anti $category2_anti_smoothed_20
-python $SMOOTH 20 $OUT4_anti $category3_anti_smoothed_20
-python $SMOOTH 20 $OUT5_anti $category4_anti_smoothed_20
-
-
-#get max positions (for later scaling) of sense strand from column 276 (bp -225) - 326 (bp-175) AND determine the bp of the max position. OUTPUT file is name, max value, position of max value
-python $MAX $category1_sense_smoothed_20 $category1_sense_max
-python $MAX $category2_sense_smoothed_20 $category2_sense_max
-python $MAX $category3_sense_smoothed_20 $category3_sense_max
-python $MAX $category4_sense_smoothed_20 $category4_sense_max
+Q1=BNase-seq_50U-10min_merge_hg38_${RUNID}_SORT-TFnucRatio_GROUP-Quartile1_ForComposite_allReads
+Q2=BNase-seq_50U-10min_merge_hg38_${RUNID}_SORT-TFnucRatio_GROUP-Quartile2_ForComposite_allReads
+Q3=BNase-seq_50U-10min_merge_hg38_${RUNID}_SORT-TFnucRatio_GROUP-Quartile3_ForComposite_allReads
+Q4=BNase-seq_50U-10min_merge_hg38_${RUNID}_SORT-TFnucRatio_GROUP-Quartile4_ForComposite_allReads
 
 #combine all above tab files (and remove headers of last 3)
-cat $category1_sense_max $category2_sense_max \
-	$category3_sense_max $category4_sense_max \
+cat ${Q1}_sense_smooth20_max.tab \
+	${Q2}_sense_smooth20_max.tab \
+	${Q3}_sense_smooth20_max.tab \
+	${Q4}_sense_smooth20_max.tab \
 	| awk 'NR==1;NR==2;NR==4;NR==6;NR==8' \
-	> $all_max_values
+	> ${RUNID}_all_max_values.tab
 
 #get scaling value for all categories
-python $SCALE $all_max_values $scale_values
+python $SCALE ${RUNID}_all_max_values.tab $scale_values
 
 
 #get max range (max-min) from -350 to -150 bp for motif strand
