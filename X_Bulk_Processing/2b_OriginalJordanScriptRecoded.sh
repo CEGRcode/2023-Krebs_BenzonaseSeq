@@ -1,81 +1,76 @@
-# purpose - intersect bedfile of all sites for a motif with encode-called peaks (Bed narrowPeak bedfile). v8 - intersection (and not intersection) based on Olivia's code. Rest of code from v6. v10 - take ratio, sort, then take quartiles. v11 - updated to hg38
-
-# usage
-# qq
-#
-# example
-# purpose - qq
-
-# usage
-# qq
-#
-# example
-#
-# 'qq'
-
-#set bedfiles and MEME file
-ENCODE_BEDFILE=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240830_TFBS/hg38_BED_narrowpeak_files/ENCFF660GHM.bed.gz
-BEDFILE=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240830_TFBS/final_bedfiles/MA1929_1_final_1000bp.bed
-MEME=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240830_TFBS/MEME_files_240904/MA1929.1.meme
-
-#output directory
-OUTPUT=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240909_TFBS/01_final_TF_pipeline_jobs_240913/CTCF_NucOccupancy_settings_pipeline_MA1929_1_v13_241011
-
-#set bam library file to DNase-seq SE file; add ENCODE TF BAM file
-BAM1=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240731_hg38_BAM_files/BNase-seq_50U-10min_merge_hg38.bam
-
-#set blacklist and .genome file
-BLACKLIST=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240830_TFBS/FILES/ENCFF356LFX.bed
-HG38_GENOME=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240830_TFBS/FILES/ENCFF667IGK.tsv
-
-#set scriptmanager and job
-SCRIPTMANAGER=/storage/group/bfp2/default/juk398-JordanKrebs/scriptmanager/build/libs/ScriptManager-v0.14.jar
-JOB=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/figures/fig1_atTSS_CpGsort/jobs/sum_Col_CDT.pl
-JOB_ROW=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/figures/fig6_Subnucleosomes/job/sum_Row_CDT.pl
-DEDUP=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240703_lowlyBound/jobs/dedup_coord_by_ID.py
-EXTRACT=TF_pipeline_jobs/extract_row_number_240817.py
-MASKED=TF_pipeline_jobs/masked_region_240817.py
-SMOOTH3=TF_pipeline_jobs/smoothing_240813.py
-SMOOTH20=TF_pipeline_jobs/smoothing_20_240820.py
-MAX=TF_pipeline_jobs/max_position_v3_240818.py
-SCALE=TF_pipeline_jobs/scaling_240814.py
-TRANSLATIONAL_sense=TF_pipeline_jobs/translational_range_sense_v2_240820.py
-TRANSLATIONAL_anti=TF_pipeline_jobs/translational_range_anti_v2_240820.py
-TRANSLATIONAL_average=TF_pipeline_jobs/translational_range_average_240820.py
-AUTO=TF_pipeline_jobs/autocorrelation_of_CDT_v2_240818.py
-PERIODICITY=TF_pipeline_jobs/periodicity_240818.py
-ROTATIONAL_sense=TF_pipeline_jobs/rotational_ratio_sense_v7f_240906.py
-MODE_sense=TF_pipeline_jobs/rotational_sense_mode_v2_240826.py
-MODE_sense_substitute=TF_pipeline_jobs/MODE_sense_substitute_241011.py
-PEAKS_shift=TF_pipeline_jobs/rotational_peaks_shift_v2_241011.py
-PEAKS_fill=TF_pipeline_jobs/rotational_peaks_shifted_columns_v3_240825.py
-ROTATIONAL_anti=TF_pipeline_jobs/rotational_ratio_anti_v7f_240906.py
-MODE_anti=TF_pipeline_jobs/rotational_anti_mode_v2_240826.py
-FILTER=TF_pipeline_jobs/rotational_peaks_filter_240826.py
-ROTATIONAL_magnitude=TF_pipeline_jobs/rotational_magnitude_v2_240826.py
-SENSE_count=TF_pipeline_jobs/rotational_sense_count_240826.py
-ANTI_count=TF_pipeline_jobs/rotational_anti_count_240826.py
-CONCAT=TF_pipeline_jobs/concatenate_v3_241011.py
-
-
-#------ CODE ------
-
-# stop on errors & undefined variables, print commands
-# defense against the dark arts
-set -eux
-echo "defense against the dark arts activated"
-
-mkdir -p $OUTPUT
-
-JOBSTATS="#!/bin/bash
+#!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks=4
 #SBATCH --mem=24GB
 #SBATCH --time=1:00:00
 #SBATCH --partition=open
+#SBATCH -o logs/2b_OriginalJordanScriptRecoded.log.out-%a
+#SBATCH -e logs/2b_OriginalJordanScriptRecoded.log.err-%a
+#SBATCH --array 1-89
 
-module load anaconda #configures shell to use conda activate
-conda activate plot"
+# purpose - intersect bedfile of all sites for a motif with encode-called peaks (Bed narrowPeak bedfile). v8 - intersection (and not intersection) based on Olivia's code. Rest of code from v6. v10 - take ratio, sort, then take quartiles. v11 - updated to hg38
+
+### CHANGE ME
+WRK=/path/to/2023-Krebs_BenzonaseSeq/X_Bulk_Processing
+WRK=/ocean/projects/see180003p/owlang/2023-Krebs_BenzonaseSeq/X_Bulk_Processing
+WRK=/storage/group/bfp2/default/owl5022-OliviaLang/2023-Krebs_BenzonaseSeq/X_Bulk_Processing
+METADATA=../03_Call_Motifs/TF_JASPAR_ENCODE_config.txt
+THREADS=4
+###
+
+# Dependencies
+# - java
+# - opencv
+# - perl
+# - python
+
+set -exo
+module load anaconda
+source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
+
+# Load configs
+TARGET=`sed "${SLURM_ARRAY_TASK_ID}q;d" $METADATA | awk '{print $1}'`
+JASPAR=`sed "${SLURM_ARRAY_TASK_ID}q;d" $METADATA | awk '{print $2}'`
+ENCODE=`sed "${SLURM_ARRAY_TASK_ID}q;d" $METADATA | awk '{print $3}'`
+
+# Inputs and outputs
+BAMFILE=../data/BAM/BNase-seq_50U-10min_merge_hg38.bam		#BAM1
+BLACKLIST=../data/hg38_files/ENCFF356LFX_hg38_exclude.bed.gz
+
+#output directory
+OUTPUT=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240909_TFBS/01_final_TF_pipeline_jobs_240913/CTCF_NucOccupancy_settings_pipeline_MA1929_1_v13_241011
+
+# Script shortcuts
+SCRIPTMANAGER=../bin/ScriptManager-v0.15.jar
+JOB=../bin/sum_Col_CDT.pl
+JOB_ROW=../bin/sum_Row_CDT.pl
+DEDUP=../bin/dedup_coord_by_ID.py
+EXTRACT=../bin/extract_row_number_240817.py
+MASKED=../bin/masked_region_240817.py
+SMOOTH3=../bin/smoothing_240813.py
+SMOOTH20=../bin/smoothing_20_240820.py
+MAX=../bin/max_position_v3_240818.py
+SCALE=../bin/scaling_240814.py
+TRANSLATIONAL_sense=../bin/translational_range_sense_v2_240820.py
+TRANSLATIONAL_anti=../bin/translational_range_anti_v2_240820.py
+TRANSLATIONAL_average=../bin/translational_range_average_240820.py
+AUTO=../bin/autocorrelation_of_CDT_v2_240818.py
+PERIODICITY=../bin/periodicity_240818.py
+ROTATIONAL_sense=../bin/rotational_ratio_sense_v7f_240906.py
+MODE_sense=../bin/rotational_sense_mode_v2_240826.py
+MODE_sense_substitute=../bin/MODE_sense_substitute_241011.py
+PEAKS_shift=../bin/rotational_peaks_shift_v2_241011.py
+PEAKS_fill=../bin/rotational_peaks_shifted_columns_v3_240825.py
+ROTATIONAL_anti=../bin/rotational_ratio_anti_v7f_240906.py
+MODE_anti=../bin/rotational_anti_mode_v2_240826.py
+FILTER=../bin/rotational_peaks_filter_240826.py
+ROTATIONAL_magnitude=../bin/rotational_magnitude_v2_240826.py
+SENSE_count=../bin/rotational_sense_count_240826.py
+ANTI_count=../bin/rotational_anti_count_240826.py
+CONCAT=../bin/concatenate_v3_241011.py
+
+# ===============================================================================================================================
+
 
 #set output file names
 fileID=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_NucOccupancy_settings_pipeline_v13_241011"}')

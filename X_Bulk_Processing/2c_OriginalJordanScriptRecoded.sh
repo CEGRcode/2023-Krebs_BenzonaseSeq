@@ -1,11 +1,41 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=4
+#SBATCH --mem=24GB
+#SBATCH --time=4:00:00
+#SBATCH --partition=open
+#SBATCH -o logs/2c_OriginalJordanScriptRecoded.log.out-%a
+#SBATCH -e logs/2c_OriginalJordanScriptRecoded.log.err-%a
+#SBATCH --array 1-89
+
+
 # purpose - track dinucleotide frequency for every single base pair. This uses 4 groups of 4 dinucleotides but with freq as log2(obs/exp). **LOWLY-BOUND bedfile is from 04_DNAshape output. **all code checked JEK 231207. One change made to set seed for random generation of bedfile. 231208 - edited bash function to +1 added to both num/denom if 0 instances of dinucleotides. v10 - log(2) code fixed. v11 - changed to WW, SS, YY, and RR groupings. v12 - use counts; not exp./obs. v13 - use all quartiles (remake bedfile); v14 - added py script for scaling of features (like used for DNA shape); v15 - normalized by sites in each bedfile
-##conda activate plot - we need a few python packages
-# usage
-# qq
-#
-# example
-#
-# 'qq'
+
+### CHANGE ME
+WRK=/path/to/2023-Krebs_BenzonaseSeq/X_Bulk_Processing
+WRK=/ocean/projects/see180003p/owlang/2023-Krebs_BenzonaseSeq/X_Bulk_Processing
+WRK=/storage/group/bfp2/default/owl5022-OliviaLang/2023-Krebs_BenzonaseSeq/X_Bulk_Processing
+METADATA=../03_Call_Motifs/TF_JASPAR_ENCODE_config.txt
+THREADS=4
+###
+
+# Dependencies
+# - java
+# - opencv
+# - perl
+# - python
+
+set -exo
+module load anaconda
+source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
+
+# Load configs
+TF=`sed "${SLURM_ARRAY_TASK_ID}q;d" $METADATA | awk '{print $1}'`
+JASPAR=`sed "${SLURM_ARRAY_TASK_ID}q;d" $METADATA | awk '{print $1}'`
+ENCODE=`sed "${SLURM_ARRAY_TASK_ID}q;d" $METADATA | awk '{print $1}'`
+
+# Inputs and outputs
+GENOME=../data/hg38_files/hg38.fa
 
 #set bedfiles
 QUARTILE4=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240909_TFBS/CTCF_NucOccupancy_settings_pipeline_MA1929_1_240910/MA1929_1_final_1000bp_intersected_164bp_category4_1000bp.bed
@@ -14,36 +44,13 @@ MEME=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/2408
 #output directory
 OUTPUT=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240909_TFBS/02_dinuc_freq_240923/CTCF_quartile4_dinuc_freq_4sets_v16_241005
 
-#set scriptmanager
-SCRIPTMANAGER=/storage/group/bfp2/default/juk398-JordanKrebs/scriptmanager/build/libs/ScriptManager-v0.14.jar
-NORMALIZATION=Dinuc_4sets_jobs/division_240923.py
-SMOOTH3=TF_pipeline_jobs/smoothing_240813.py
-EXTRACT=TF_pipeline_jobs/extract_row_number_240817.py
-MASKED=Dinuc_16_jobs/masked_region_dinuc_241003.py
-MAX=Dinuc_4sets_jobs/max_4sets_241005.py
-
-#set genome and human.hg38.genome file
-GENOME=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/hg38_genome/hg38.fa
-HG38_GENOME=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240830_TFBS/FILES/ENCFF667IGK.tsv
-
-#------ CODE ------
-
-# stop on errors & undefined variables, print commands
-# defense against the dark arts
-set -eux
-echo "defense against the dark arts activated"
-
-mkdir -p $OUTPUT
-
-JOBSTATS="#!/bin/bash
-#SBATCH --nodes=1
-#SBATCH --ntasks=4
-#SBATCH --mem=24GB
-#SBATCH --time=4:00:00
-#SBATCH --partition=open
-
-module load anaconda #configures shell to use conda activate
-conda activate bioinfo"
+# Script shortcuts
+SCRIPTMANAGER=../bin/ScriptManager-v0.15.jar
+NORMALIZATION=../bin/division_240923.py
+SMOOTH3=../bin/smoothing_240813.py
+EXTRACT=../bin/extract_row_number_240817.py
+MASKED=../bin/masked_region_dinuc_241003.py
+MAX=../bin/max_4sets_241005.py
 
 #set output file names
 QUARTILE4_510bp=$(echo "$QUARTILE4" | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_510bp.bed"}')
@@ -65,13 +72,10 @@ OUT_all_max=$(echo "$QUARTILE4_FASTA" | rev | cut -d"/" -f1 | rev | awk -F. '{pr
 NT_count=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_NT_count.tab"}')
 MASKED_region=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_masked.tab"}')
 
-#set directory
-cd $OUTPUT
-
 #expand bedfiles
 java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=510 $QUARTILE4 -o=$QUARTILE4_510bp
 
-#get fasta seq of each DNA fragment. 
+#get fasta seq of each DNA fragment.
 java -jar $SCRIPTMANAGER sequence-analysis fasta-extract $GENOME $QUARTILE4_510bp -o=$QUARTILE4_FASTA
 
 #obtain total # of sites per file

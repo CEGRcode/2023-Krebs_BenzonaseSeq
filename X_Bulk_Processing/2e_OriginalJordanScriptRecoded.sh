@@ -1,17 +1,40 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=4
+#SBATCH --mem=24GB
+#SBATCH --time=2:00:00
+#SBATCH --partition=open
+#SBATCH -o logs/2e_OriginalJordanScriptRecoded.log.out-%a
+#SBATCH -e logs/2e_OriginalJordanScriptRecoded.log.err-%a
+#SBATCH --array 1-89
+
 # purpose - iake bedfiles of all quartiles from TF/nuc ratio script -> make bedfiles of all quartiles -> runs DNA shape. v5 - 240922; v6 - more code
 
-# usage
-# qq
-#
-# example
-# purpose - qq
+### CHANGE ME
+WRK=/path/to/2023-Krebs_BenzonaseSeq/X_Bulk_Processing
+WRK=/ocean/projects/see180003p/owlang/2023-Krebs_BenzonaseSeq/X_Bulk_Processing
+WRK=/storage/group/bfp2/default/owl5022-OliviaLang/2023-Krebs_BenzonaseSeq/X_Bulk_Processing
+METADATA=../03_Call_Motifs/TF_JASPAR_ENCODE_config.txt
+THREADS=4
+###
 
-# usage
-# qq
-#
-# example
-#
-# 'qq'
+# Dependencies
+# - java
+# - opencv
+# - perl
+# - python
+
+set -exo
+module load anaconda
+source activate /storage/group/bfp2/default/owl5022-OliviaLang/conda/bx
+
+# Load configs
+TF=`sed "${SLURM_ARRAY_TASK_ID}q;d" $METADATA | awk '{print $1}'`
+JASPAR=`sed "${SLURM_ARRAY_TASK_ID}q;d" $METADATA | awk '{print $1}'`
+ENCODE=`sed "${SLURM_ARRAY_TASK_ID}q;d" $METADATA | awk '{print $1}'`
+
+# Inputs and outputs
+GENOME=../data/hg38_files/hg38.fa
 
 #set bedfiles
 QUARTILE4=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240909_TFBS/CTCF_NucOccupancy_settings_pipeline_MA1929_1_240910/MA1929_1_final_1000bp_intersected_164bp_category4_1000bp.bed
@@ -20,37 +43,14 @@ MEME=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/2408
 #output directory
 OUTPUT=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240909_TFBS/03_DNAshape_240922/CTCF_DNAshape_MA1929_1_Quartile4_v7_241006
 
-#set scriptmanager and other jobs
-SCRIPTMANAGER=/storage/group/bfp2/default/juk398-JordanKrebs/scriptmanager/build/libs/ScriptManager-v0.14.jar
-SMOOTH3=TF_pipeline_jobs/smoothing_240813.py
-EXTRACT=TF_pipeline_jobs/extract_row_number_240817.py
-MASKED=DNAshape_jobs/masked_region_DNAshape_241006.py
-MAX_MIN_SCALE=DNAshape_jobs/max_min_scale_v2_241006.py
-FORMAT=DNAshape_jobs/format_240922.py
-FINAL=DNAshape_jobs/final_240922.py
-
-#set genome and human.hg38.genome file
-GENOME=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/hg38_genome/hg38.fa
-HG38_GENOME=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240830_TFBS/FILES/ENCFF667IGK.tsv
-
-#------ CODE ------
-
-# stop on errors & undefined variables, print commands
-# defense against the dark arts
-set -eux
-echo "defense against the dark arts activated"
-
-mkdir -p $OUTPUT
-
-JOBSTATS="#!/bin/bash
-#SBATCH --nodes=1
-#SBATCH --ntasks=4
-#SBATCH --mem=24GB
-#SBATCH --time=2:00:00
-#SBATCH --partition=open
-
-module load anaconda #configures shell to use conda activate
-conda activate plot"
+# Script shortcuts
+SCRIPTMANAGER=../bin/ScriptManager-v0.15.jar
+SMOOTH3=../bin/smoothing_240813.py
+EXTRACT=../bin/extract_row_number_240817.py
+MASKED=../bin/masked_region_DNAshape_241006.py
+MAX_MIN_SCALE=../bin/max_min_scale_v2_241006.py
+FORMAT=../bin/format_240922.py
+FINAL=../bin/final_240922.py
 
 #set output file names
 DNAshape=$(echo "$QUARTILE4" | rev | cut -d"/" -f1 | rev | awk -F. '{print $1}')
