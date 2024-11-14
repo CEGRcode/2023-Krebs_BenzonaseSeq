@@ -46,8 +46,7 @@ SCRIPTMANAGER=../bin/ScriptManager-v0.15.jar
 DEDUP=../bin/dedup_coord_by_ID.py
 EXTRACT=../bin/extract_row_number_240817.py
 MASKED=../bin/masked_region_240817.py
-SMOOTH3=../bin/smoothing_240813.py
-SMOOTH20=../bin/smoothing_20_240820.py
+SMOOTH=../bin/smoothing_parameterize.py
 MAX=../bin/max_position_v3_240818.py
 SCALE=../bin/scaling_240814.py
 TRANSLATIONAL=../bin/translational_range_parameterize.py
@@ -193,23 +192,23 @@ python $EXTRACT $MEMEFILE $NT_count
 python $MASKED $NT_count $MASKED_region
 
 #apply 3 bp smoothing
-python $SMOOTH3 $OUT2_sense $category1_sense_smoothed_3
-python $SMOOTH3 $OUT3_sense $category2_sense_smoothed_3
-python $SMOOTH3 $OUT4_sense $category3_sense_smoothed_3
-python $SMOOTH3 $OUT5_sense $category4_sense_smoothed_3
-python $SMOOTH3 $OUT2_anti $category1_anti_smoothed_3
-python $SMOOTH3 $OUT3_anti $category2_anti_smoothed_3
-python $SMOOTH3 $OUT4_anti $category3_anti_smoothed_3
-python $SMOOTH3 $OUT5_anti $category4_anti_smoothed_3
+python $SMOOTH 3 $OUT2_sense $category1_sense_smoothed_3
+python $SMOOTH 3 $OUT3_sense $category2_sense_smoothed_3
+python $SMOOTH 3 $OUT4_sense $category3_sense_smoothed_3
+python $SMOOTH 3 $OUT5_sense $category4_sense_smoothed_3
+python $SMOOTH 3 $OUT2_anti $category1_anti_smoothed_3
+python $SMOOTH 3 $OUT3_anti $category2_anti_smoothed_3
+python $SMOOTH 3 $OUT4_anti $category3_anti_smoothed_3
+python $SMOOTH 3 $OUT5_anti $category4_anti_smoothed_3
 #apply 20 bp smoothing
-python $SMOOTH20 $OUT2_sense $category1_sense_smoothed_20
-python $SMOOTH20 $OUT3_sense $category2_sense_smoothed_20
-python $SMOOTH20 $OUT4_sense $category3_sense_smoothed_20
-python $SMOOTH20 $OUT5_sense $category4_sense_smoothed_20
-python $SMOOTH20 $OUT2_anti $category1_anti_smoothed_20
-python $SMOOTH20 $OUT3_anti $category2_anti_smoothed_20
-python $SMOOTH20 $OUT4_anti $category3_anti_smoothed_20
-python $SMOOTH20 $OUT5_anti $category4_anti_smoothed_20
+python $SMOOTH 20 $OUT2_sense $category1_sense_smoothed_20
+python $SMOOTH 20 $OUT3_sense $category2_sense_smoothed_20
+python $SMOOTH 20 $OUT4_sense $category3_sense_smoothed_20
+python $SMOOTH 20 $OUT5_sense $category4_sense_smoothed_20
+python $SMOOTH 20 $OUT2_anti $category1_anti_smoothed_20
+python $SMOOTH 20 $OUT3_anti $category2_anti_smoothed_20
+python $SMOOTH 20 $OUT4_anti $category3_anti_smoothed_20
+python $SMOOTH 20 $OUT5_anti $category4_anti_smoothed_20
 
 
 #get max positions (for later scaling) of sense strand from column 276 (bp -225) - 326 (bp-175) AND determine the bp of the max position. OUTPUT file is name, max value, position of max value

@@ -2,14 +2,15 @@ import pandas as pd
 import numpy as np
 import sys
 
-def smooth_data(data):
-    # Apply 20 bp smoothing using convolution
-    window = np.ones(20) / 20
+def smooth_data(data, window):
+    # Apply {window} bp sized smoothing using convolution
+    window = np.ones(window) / window
     return np.convolve(data, window, mode='same')
 
 # Get the input and output file paths from command line arguments
-input_file = sys.argv[1]
-output_file = sys.argv[2]
+window_size = int(sys.argv[1])
+input_file = sys.argv[2]
+output_file = sys.argv[3]
 
 # Load the tab-delimited file
 data = pd.read_csv(input_file, delimiter='\t', header=None)
@@ -20,7 +21,7 @@ first_column = data.iloc[1:, 0].values  # Get the first column values
 numeric_data = data.iloc[1, 1:].astype(float).values
 
 # Apply smoothing
-smoothed_data = smooth_data(numeric_data)
+smoothed_data = smooth_data(numeric_data, window_size)
 
 # Convert smoothed data back to a DataFrame
 smoothed_df = pd.DataFrame(smoothed_data.reshape(1, -1), columns=data.columns[1:])
