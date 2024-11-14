@@ -50,8 +50,7 @@ SMOOTH3=../bin/smoothing_240813.py
 SMOOTH20=../bin/smoothing_20_240820.py
 MAX=../bin/max_position_v3_240818.py
 SCALE=../bin/scaling_240814.py
-TRANSLATIONAL_sense=../bin/translational_range_sense_v2_240820.py
-TRANSLATIONAL_anti=../bin/translational_range_anti_v2_240820.py
+TRANSLATIONAL=../bin/translational_range_parameterize.py
 TRANSLATIONAL_average=../bin/translational_range_average_240820.py
 AUTO=../bin/autocorrelation_of_CDT_v2_240818.py
 PERIODICITY=../bin/periodicity_240818.py
@@ -230,15 +229,15 @@ python $SCALE $all_max_values $scale_values
 
 
 #get max range (max-min) from -350 to -150 bp for motif strand
-python $TRANSLATIONAL_sense $category1_sense_smoothed_20 $translational_category1_sense
-python $TRANSLATIONAL_sense $category2_sense_smoothed_20 $translational_category2_sense
-python $TRANSLATIONAL_sense $category3_sense_smoothed_20 $translational_category3_sense
-python $TRANSLATIONAL_sense $category4_sense_smoothed_20 $translational_category4_sense
+python $TRANSLATIONAL sense $category1_sense_smoothed_20 $translational_category1_sense
+python $TRANSLATIONAL sense $category2_sense_smoothed_20 $translational_category2_sense
+python $TRANSLATIONAL sense $category3_sense_smoothed_20 $translational_category3_sense
+python $TRANSLATIONAL sense $category4_sense_smoothed_20 $translational_category4_sense
 #get max range (max-min) from +150 to +350 bp for opposite strand
-python $TRANSLATIONAL_anti $category1_anti_smoothed_20 $translational_category1_anti
-python $TRANSLATIONAL_anti $category2_anti_smoothed_20 $translational_category2_anti
-python $TRANSLATIONAL_anti $category3_anti_smoothed_20 $translational_category3_anti
-python $TRANSLATIONAL_anti $category4_anti_smoothed_20 $translational_category4_anti
+python $TRANSLATIONAL anti $category1_anti_smoothed_20 $translational_category1_anti
+python $TRANSLATIONAL anti $category2_anti_smoothed_20 $translational_category2_anti
+python $TRANSLATIONAL anti $category3_anti_smoothed_20 $translational_category3_anti
+python $TRANSLATIONAL anti $category4_anti_smoothed_20 $translational_category4_anti
 #get average of range of translational magnitude from both strands
 python $TRANSLATIONAL_average $translational_category1_sense $translational_category1_anti $translational_category1
 python $TRANSLATIONAL_average $translational_category2_sense $translational_category2_anti $translational_category2
