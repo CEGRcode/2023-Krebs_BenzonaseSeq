@@ -87,8 +87,6 @@ BAM1a=BNase-seq_50U-10min_merge_hg38
 
 OUT2=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_1000bp_allReads.out
 CDT2=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_1000bp_allReads
-CDT2_sense_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_1000bp_allReads
-CDT2_anti_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_allReads_anti.cdt.gz
 CDT2_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_allReads_sense.cdt
 CDT2_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_allReads_anti.cdt
 OUT2_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_sense.tab
@@ -97,8 +95,6 @@ OUT2_final=01_BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_f
 
 OUT3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_allReads.out
 CDT3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_allReads
-CDT3_sense_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_allReads_sense.cdt.gz
-CDT3_anti_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_allReads_anti.cdt.gz
 CDT3_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_allReads_sense.cdt
 CDT3_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_allReads_anti.cdt
 OUT3_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_sense.tab
@@ -107,8 +103,6 @@ OUT3_final=02_BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_f
 
 OUT4=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_allReads.out
 CDT4=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_allReads
-CDT4_sense_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_allReads_sense.cdt.gz
-CDT4_anti_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_allReads_anti.cdt.gz
 CDT4_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_allReads_sense.cdt
 CDT4_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_allReads_anti.cdt
 OUT4_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_sense.tab
@@ -117,8 +111,6 @@ OUT4_final=03_BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_f
 
 OUT5=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_allReads.out
 CDT5=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_allReads
-CDT5_sense_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_allReads_sense.cdt.gz
-CDT5_anti_gz=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_allReads_anti.cdt.gz
 CDT5_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_allReads_sense.cdt
 CDT5_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_allReads_anti.cdt
 OUT5_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_sense.tab
@@ -184,19 +176,10 @@ category4_anti_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F
 # See 03_Call_Motifs for generating initial motifs split into quartiles
 
 #do initial tag-pileUp (output is input directory). Settings: midpoint(m) OR 5 prime end (-5) with read 1 (-1), Gizp output cdt (z), No smoothing (N), required proper PEs (p), load blacklist **total tag option (-t) removed**
-java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -z --output-matrix=$CDT2 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT2 $BEDFILE_category1_1000bp $BAM1
-java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -z --output-matrix=$CDT3 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT3 $BEDFILE_category2_1000bp $BAM1
-java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -z --output-matrix=$CDT4 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT4 $BEDFILE_category3_1000bp $BAM1
-java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -z --output-matrix=$CDT5 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT5 $BEDFILE_category4_1000bp $BAM1
-#unzip cdt files
-gunzip -c $CDT2_sense_gz > $CDT2_sense
-gunzip -c $CDT2_anti_gz > $CDT2_anti
-gunzip -c $CDT3_sense_gz > $CDT3_sense
-gunzip -c $CDT3_anti_gz > $CDT3_anti
-gunzip -c $CDT4_sense_gz > $CDT4_sense
-gunzip -c $CDT4_anti_gz > $CDT4_anti
-gunzip -c $CDT5_sense_gz > $CDT5_sense
-gunzip -c $CDT5_anti_gz > $CDT5_anti
+java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 --output-matrix=$CDT2 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT2 $BEDFILE_category1_1000bp $BAMFILE
+java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 --output-matrix=$CDT3 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT3 $BEDFILE_category2_1000bp $BAMFILE
+java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 --output-matrix=$CDT4 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT4 $BEDFILE_category3_1000bp $BAMFILE
+java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 --output-matrix=$CDT5 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT5 $BEDFILE_category4_1000bp $BAMFILE
 #make scaled OUT file for each strand
 perl $JOB $CDT2_sense $OUT2_sense
 perl $JOB $CDT2_anti $OUT2_anti
