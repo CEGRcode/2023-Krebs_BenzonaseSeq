@@ -104,17 +104,17 @@ PERIOD=${RUNID}_periodicity.tab
 correlation_results=${RUNID}_correlation_results
 
 
-rotational_values=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_rotational_values.tab"}')
-FINAL=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_final.tab"}')
+rotational_values=${RUNID}_rotational_values.tab
+FINAL=${RUNID}_final.tab
 
-category1_sense_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category1_sense_smoothed_3_final.tab"}')
-category2_sense_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category2_sense_smoothed_3_final.tab"}')
-category3_sense_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category3_sense_smoothed_3_final.tab"}')
-category4_sense_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category4_sense_smoothed_3_final.tab"}')
-category1_anti_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category1_anti_smoothed_3_final.tab"}')
-category2_anti_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category2_anti_smoothed_3_final.tab"}')
-category3_anti_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category3_anti_smoothed_3_final.tab"}')
-category4_anti_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category4_anti_smoothed_3_final.tab"}')
+category1_sense_smoothed_3_final=${RUNID}_category1_sense_smoothed_3_final.tab
+category2_sense_smoothed_3_final=${RUNID}_category2_sense_smoothed_3_final.tab
+category3_sense_smoothed_3_final=${RUNID}_category3_sense_smoothed_3_final.tab
+category4_sense_smoothed_3_final=${RUNID}_category4_sense_smoothed_3_final.tab
+category1_anti_smoothed_3_final=${RUNID}_category1_anti_smoothed_3_final.tab
+category2_anti_smoothed_3_final=${RUNID}_category2_anti_smoothed_3_final.tab
+category3_anti_smoothed_3_final=${RUNID}_category3_anti_smoothed_3_final.tab
+category4_anti_smoothed_3_final=${RUNID}_category4_anti_smoothed_3_final.tab
 
 # See 03_Call_Motifs for generating initial motifs split into quartiles
 
@@ -257,17 +257,13 @@ do
 	python $PEAKS_fill ${smoothed_base}_sense_smooth3.tab ${RUNID}_shifted_columns_sense.tab category${QUARTILE}_sense_smoothed_3_full.tab
 	python $PEAKS_fill ${smoothed_base}_anti_smooth3.tab ${RUNID}_shifted_columns_anti.tab category${QUARTILE}_anti_smoothed_3_full.tab
 
+	#remove rows whose max value (column 8) is within the masked motif region
+	python $FILTER category${QUARTILE}_sense_smoothed_3_full.tab $MASKED_region ${RUNID}_category${QUARTILE}_sense_smoothed_3_final.tab
+	python $FILTER category${QUARTILE}_anti_smoothed_3_full.tab $MASKED_region ${RUNID}_category${QUARTILE}_anti_smoothed_3_final.tab
+
+
 done
 
-#remove rows whose max value (column 8) is within the masked motif region
-python $FILTER category1_sense_smoothed_3_full.tab $MASKED_region $category1_sense_smoothed_3_final
-python $FILTER category2_sense_smoothed_3_full.tab $MASKED_region $category2_sense_smoothed_3_final
-python $FILTER category3_sense_smoothed_3_full.tab $MASKED_region $category3_sense_smoothed_3_final
-python $FILTER category4_sense_smoothed_3_full.tab $MASKED_region $category4_sense_smoothed_3_final
-python $FILTER category1_anti_smoothed_3_full.tab $MASKED_region $category1_anti_smoothed_3_final
-python $FILTER category2_anti_smoothed_3_full.tab $MASKED_region $category2_anti_smoothed_3_final
-python $FILTER category3_anti_smoothed_3_full.tab $MASKED_region $category3_anti_smoothed_3_final
-python $FILTER category4_anti_smoothed_3_full.tab $MASKED_region $category4_anti_smoothed_3_final
 #get average of all peaks 5' to motif (motif strand) and 5' to motif (opposite strand)
 #calculate average range (magnitude of rotational setting / category) of all peaks on either strand
 python $ROTATIONAL_magnitude $category1_sense_smoothed_3_final $category1_anti_smoothed_3_final category1_rotational_magnitude.tab
