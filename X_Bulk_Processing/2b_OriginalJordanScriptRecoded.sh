@@ -34,6 +34,7 @@ JASPAR=`sed "${SLURM_ARRAY_TASK_ID}q;d" $METADATA | awk '{print $2}'`
 ENCODE=`sed "${SLURM_ARRAY_TASK_ID}q;d" $METADATA | awk '{print $3}'`
 
 # Inputs and outputs
+MEMEFILE=../data/JASPAR/${TARGET}_${JASPAR}.meme
 BAMFILE=../data/BAM/BNase-seq_50U-10min_merge_hg38.bam		#BAM1
 BLACKLIST=../data/hg38_files/ENCFF356LFX_hg38_exclude.bed.gz
 
@@ -103,24 +104,27 @@ OUT5_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allR
 OUT5_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_anti.tab
 OUT5_final=04_BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_final.tab
 
-NT_count=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_NT_count.tab"}')
-MASKED_region=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_masked.tab"}')
-category1_sense_smoothed_3=$(echo $OUT2_sense | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_3bp.tab"}')
-category1_anti_smoothed_3=$(echo $OUT2_anti | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_3bp.tab"}')
-category2_sense_smoothed_3=$(echo $OUT3_sense | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_3bp.tab"}')
-category2_anti_smoothed_3=$(echo $OUT3_anti | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_3bp.tab"}')
-category3_sense_smoothed_3=$(echo $OUT4_sense | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_3bp.tab"}')
-category3_anti_smoothed_3=$(echo $OUT4_anti | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_3bp.tab"}')
-category4_sense_smoothed_3=$(echo $OUT5_sense | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_3bp.tab"}')
-category4_anti_smoothed_3=$(echo $OUT5_anti | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_3bp.tab"}')
-category1_sense_smoothed_20=$(echo $OUT2_sense | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_20bp.tab"}')
-category1_anti_smoothed_20=$(echo $OUT2_anti | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_20bp.tab"}')
-category2_sense_smoothed_20=$(echo $OUT3_sense | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_20bp.tab"}')
-category2_anti_smoothed_20=$(echo $OUT3_anti | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_20bp.tab"}')
-category3_sense_smoothed_20=$(echo $OUT4_sense | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_20bp.tab"}')
-category3_anti_smoothed_20=$(echo $OUT4_anti | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_20bp.tab"}')
-category4_sense_smoothed_20=$(echo $OUT5_sense | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_20bp.tab"}')
-category4_anti_smoothed_20=$(echo $OUT5_anti | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_smoothed_20bp.tab"}')
+NT_count=${RUNID}_NT_count.tab
+MASKED_region=${RUNID}_masked.tab
+
+category1_sense_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_sense_smooth3.tab
+category2_sense_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_sense_smooth3.tab
+category3_sense_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_sense_smooth3.tab
+category4_sense_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_sense_smooth3.tab
+category1_anti_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_anti_smooth3.tab
+category2_anti_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_anti_smooth3.tab
+category3_anti_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_anti_smooth3.tab
+category4_anti_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_anti_smooth3.tab
+
+category1_sense_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_sense_smooth20.tab
+category2_sense_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_sense_smooth20.tab
+category3_sense_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_sense_smooth20.tab
+category4_sense_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_sense_smooth20.tab
+category1_anti_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_anti_smooth20.tab
+category2_anti_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_anti_smooth20.tab
+category3_anti_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_anti_smooth20.tab
+category4_anti_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_anti_smooth20.tab
+
 category1_sense_max=$(echo $category1_sense_smoothed_20 | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_max.tab"}')
 category2_sense_max=$(echo $category2_sense_smoothed_20 | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_max.tab"}')
 category3_sense_max=$(echo $category3_sense_smoothed_20 | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_max.tab"}')
@@ -180,27 +184,30 @@ awk 'NR==1;NR==3' $OUT5_final > $OUT5_anti
 
 
 #extract number of NTs from MEME file
-python $EXTRACT $MEME $NT_count
+python $EXTRACT $MEMEFILE $NT_count
 #determine the 5' and 3' boundaries of the motif masked region relative to the center column of tab files at column 501
 python $MASKED $NT_count $MASKED_region
+
 #apply 3 bp smoothing
 python $SMOOTH3 $OUT2_sense $category1_sense_smoothed_3
-python $SMOOTH3 $OUT2_anti $category1_anti_smoothed_3
 python $SMOOTH3 $OUT3_sense $category2_sense_smoothed_3
-python $SMOOTH3 $OUT3_anti $category2_anti_smoothed_3
 python $SMOOTH3 $OUT4_sense $category3_sense_smoothed_3
-python $SMOOTH3 $OUT4_anti $category3_anti_smoothed_3
 python $SMOOTH3 $OUT5_sense $category4_sense_smoothed_3
+python $SMOOTH3 $OUT2_anti $category1_anti_smoothed_3
+python $SMOOTH3 $OUT3_anti $category2_anti_smoothed_3
+python $SMOOTH3 $OUT4_anti $category3_anti_smoothed_3
 python $SMOOTH3 $OUT5_anti $category4_anti_smoothed_3
 #apply 20 bp smoothing
 python $SMOOTH20 $OUT2_sense $category1_sense_smoothed_20
-python $SMOOTH20 $OUT2_anti $category1_anti_smoothed_20
 python $SMOOTH20 $OUT3_sense $category2_sense_smoothed_20
-python $SMOOTH20 $OUT3_anti $category2_anti_smoothed_20
 python $SMOOTH20 $OUT4_sense $category3_sense_smoothed_20
-python $SMOOTH20 $OUT4_anti $category3_anti_smoothed_20
 python $SMOOTH20 $OUT5_sense $category4_sense_smoothed_20
+python $SMOOTH20 $OUT2_anti $category1_anti_smoothed_20
+python $SMOOTH20 $OUT3_anti $category2_anti_smoothed_20
+python $SMOOTH20 $OUT4_anti $category3_anti_smoothed_20
 python $SMOOTH20 $OUT5_anti $category4_anti_smoothed_20
+
+
 #get max positions (for later scaling) of sense strand from column 276 (bp -225) - 326 (bp-175) AND determine the bp of the max position. OUTPUT file is name, max value, position of max value
 python $MAX $category1_sense_smoothed_20 $category1_sense_max
 python $MAX $category2_sense_smoothed_20 $category2_sense_max
