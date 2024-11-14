@@ -260,20 +260,25 @@ do
 	python $FILTER category${QUARTILE}_sense_smoothed_3_full.tab $MASKED_region ${RUNID}_category${QUARTILE}_sense_smoothed_3_final.tab
 	python $FILTER category${QUARTILE}_anti_smoothed_3_full.tab $MASKED_region ${RUNID}_category${QUARTILE}_anti_smoothed_3_final.tab
 
+	#get average of all peaks 5' to motif (motif strand) and 5' to motif (opposite strand)
+	#calculate average range (magnitude of rotational setting / category) of all peaks on either strand
+	python $ROTATIONAL_magnitude ${RUNID}_category${QUARTILE}_sense_smoothed_3_final.tab ${RUNID}_category${QUARTILE}_anti_smoothed_3_final.tab ${RUNID}_category${QUARTILE}_rotational_magnitude.tab
 
 done
 
-#get average of all peaks 5' to motif (motif strand) and 5' to motif (opposite strand)
-#calculate average range (magnitude of rotational setting / category) of all peaks on either strand
-python $ROTATIONAL_magnitude $category1_sense_smoothed_3_final $category1_anti_smoothed_3_final category1_rotational_magnitude.tab
-python $ROTATIONAL_magnitude $category2_sense_smoothed_3_final $category2_anti_smoothed_3_final category2_rotational_magnitude.tab
-python $ROTATIONAL_magnitude $category3_sense_smoothed_3_final $category3_anti_smoothed_3_final category3_rotational_magnitude.tab
-python $ROTATIONAL_magnitude $category4_sense_smoothed_3_final $category4_anti_smoothed_3_final category4_rotational_magnitude.tab
 #combine all above tab files (and add first column of quartile info and header). Output is average of peaks from either strand
-cat category1_rotational_magnitude.tab category2_rotational_magnitude.tab category3_rotational_magnitude.tab category4_rotational_magnitude.tab | awk 'NR % 2 == 0' | awk 'BEGIN{print "Average_Rotational_Magnitude"}1' | awk 'BEGIN{quartile[1]="Quartile"; for(i=2;i<=5;i++) quartile[i]=i-1} {print quartile[NR]"\t"$0} NR>5' > $rotational_values
-#calculate the # of unique, significant rotational peaks 5' to motif (from motif set of peaks).
-python $SENSE_count $category1_sense_smoothed_3_final SENSE_count.tab
+cat ${RUNID}_category1_rotational_magnitude.tab \
+	${RUNID}_category2_rotational_magnitude.tab \
+	${RUNID}_category3_rotational_magnitude.tab \
+	${RUNID}_category4_rotational_magnitude.tab \
+	| awk 'NR % 2 == 0' \
+	| awk 'BEGIN{print "Average_Rotational_Magnitude"}1' \
+	| awk 'BEGIN{quartile[1]="Quartile"; for(i=2;i<=5;i++) quartile[i]=i-1} {print quartile[NR]"\t"$0} NR>5' \
+	> $rotational_values
+
 #calculate the # of unique, significant rotational peaks 3' to motif (from motif set of peaks).
-python $ANTI_count $category1_anti_smoothed_3_final ANTI_count.tab
+python $SENSE_count ${RUNID}_category1_sense_smoothed_3_final.tab SENSE_count.tab
+python $ANTI_count ${RUNID}_category1_anti_smoothed_3_final.tab ANTI_count.tab
+
 #make final file with all key information for this TF
 python $CONCAT $scale_values $PERIOD $translational_values ${RUNID}_significant_peaks_sense_mode_substituted.tab ${RUNID}_significant_peaks_anti_mode.tab $rotational_values SENSE_count.tab ANTI_count.tab $FINAL
