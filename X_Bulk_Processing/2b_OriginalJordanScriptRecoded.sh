@@ -125,24 +125,29 @@ category2_anti_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_F
 category3_anti_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_anti_smooth20.tab
 category4_anti_smoothed_20=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_anti_smooth20.tab
 
-category1_sense_max=$(echo $category1_sense_smoothed_20 | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_max.tab"}')
-category2_sense_max=$(echo $category2_sense_smoothed_20 | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_max.tab"}')
-category3_sense_max=$(echo $category3_sense_smoothed_20 | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_max.tab"}')
-category4_sense_max=$(echo $category4_sense_smoothed_20 | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_max.tab"}')
-all_max_values=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_all_max_values.tab"}')
-scale_values=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_scale_values.tab"}')
-translational_category1_sense=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category1_sense_translational_setting.tab"}')
-translational_category2_sense=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category2_sense_translational_setting.tab"}')
-translational_category3_sense=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category3_sense_translational_setting.tab"}')
-translational_category4_sense=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category4_sense_translational_setting.tab"}')
-translational_category1_anti=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category1_anti_translational_setting.tab"}')
-translational_category2_anti=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category2_anti_translational_setting.tab"}')
-translational_category3_anti=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category3_anti_translational_setting.tab"}')
-translational_category4_anti=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category4_anti_translational_setting.tab"}')
-translational_category1=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category1_translational_setting.tab"}')
-translational_category2=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category2_translational_setting.tab"}')
-translational_category3=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category3_translational_setting.tab"}')
-translational_category4=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category4_translational_setting.tab"}')
+category1_sense_max=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_sense_smooth20_max.tab
+category2_sense_max=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_sense_smooth20_max.tab
+category3_sense_max=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_sense_smooth20_max.tab
+category4_sense_max=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_sense_smooth20_max.tab
+
+all_max_values=${RUNID}_all_max_values.tab
+scale_values=${RUNID}_scale_values.tab
+
+translational_category1_sense=${RUNID}_GROUP-Quartile1_sense_translational_setting.tab
+translational_category2_sense=${RUNID}_GROUP-Quartile2_sense_translational_setting.tab
+translational_category3_sense=${RUNID}_GROUP-Quartile3_sense_translational_setting.tab
+translational_category4_sense=${RUNID}_GROUP-Quartile4_sense_translational_setting.tab
+
+translational_category1_anti=${RUNID}_GROUP-Quartile1_anti_translational_setting.tab
+translational_category2_anti=${RUNID}_GROUP-Quartile2_anti_translational_setting.tab
+translational_category3_anti=${RUNID}_GROUP-Quartile3_anti_translational_setting.tab
+translational_category4_anti=${RUNID}_GROUP-Quartile4_anti_translational_setting.tab
+
+translational_category1=${RUNID}_GROUP-Quartile1_translational_setting.tab
+translational_category2=${RUNID}_GROUP-Quartile2_translational_setting.tab
+translational_category3=${RUNID}_GROUP-Quartile3_translational_setting.tab
+translational_category4=${RUNID}_GROUP-Quartile4_translational_setting.tab
+
 translational_values=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_translational_values.tab"}')
 PERIOD=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_periodicity.tab"}')
 correlation_results=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_correlation_results"}')
@@ -213,10 +218,17 @@ python $MAX $category1_sense_smoothed_20 $category1_sense_max
 python $MAX $category2_sense_smoothed_20 $category2_sense_max
 python $MAX $category3_sense_smoothed_20 $category3_sense_max
 python $MAX $category4_sense_smoothed_20 $category4_sense_max
+
 #combine all above tab files (and remove headers of last 3)
-cat $category1_sense_max $category2_sense_max $category3_sense_max $category4_sense_max | awk 'NR==1;NR==2;NR==4;NR==6;NR==8' > $all_max_values
+cat $category1_sense_max $category2_sense_max \
+	$category3_sense_max $category4_sense_max \
+	| awk 'NR==1;NR==2;NR==4;NR==6;NR==8' \
+	> $all_max_values
+
 #get scaling value for all categories
 python $SCALE $all_max_values $scale_values
+
+
 #get max range (max-min) from -350 to -150 bp for motif strand
 python $TRANSLATIONAL_sense $category1_sense_smoothed_20 $translational_category1_sense
 python $TRANSLATIONAL_sense $category2_sense_smoothed_20 $translational_category2_sense
@@ -232,6 +244,8 @@ python $TRANSLATIONAL_average $translational_category1_sense $translational_cate
 python $TRANSLATIONAL_average $translational_category2_sense $translational_category2_anti $translational_category2
 python $TRANSLATIONAL_average $translational_category3_sense $translational_category3_anti $translational_category3
 python $TRANSLATIONAL_average $translational_category4_sense $translational_category4_anti $translational_category4
+
+
 #combine all above tab files (and add first column of quartile info and header). Output is average of peaks from either strand
 cat $translational_category1 $translational_category2 $translational_category3 $translational_category4 | awk 'BEGIN{print "Average_Translational_Magnitude"}1' | awk 'BEGIN{quartile[1]="Quartile"; for(i=2;i<=5;i++) quartile[i]=i-1} {print quartile[NR]"\t"$0} NR>5' > $translational_values
 #perform autocorrelation to determine most likely periodicity
