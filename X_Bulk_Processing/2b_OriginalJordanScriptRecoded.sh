@@ -251,42 +251,73 @@ python $AUTO -i $category1_sense_smoothed_3 -o $correlation_results
 python $PERIODICITY $correlation_results.tsv $PERIOD
 
 #get significant peaks from category1 sense strand and use those respective bins to call peaks from sense strands of categories 2, 3, and 4
-python $ROTATIONAL_sense $category1_sense_smoothed_3 q1_nucleosome_region_sense.tab
-python $ROTATIONAL_sense $category2_sense_smoothed_3 q2_nucleosome_region_sense.tab
-python $ROTATIONAL_sense $category3_sense_smoothed_3 q3_nucleosome_region_sense.tab
-python $ROTATIONAL_sense $category4_sense_smoothed_3 q4_nucleosome_region_sense.tab
+python $ROTATIONAL_sense $category1_sense_smoothed_3 ${RUNID}_q1_nucleosome_region_sense.tab
+python $ROTATIONAL_sense $category2_sense_smoothed_3 ${RUNID}_q2_nucleosome_region_sense.tab
+python $ROTATIONAL_sense $category3_sense_smoothed_3 ${RUNID}_q3_nucleosome_region_sense.tab
+python $ROTATIONAL_sense $category4_sense_smoothed_3 ${RUNID}_q4_nucleosome_region_sense.tab
+
 #get concatenated list of all unique, significant peaks, THEN get their the mode of their max position (bp)
-cat q1_nucleosome_region_sense.tab q2_nucleosome_region_sense.tab q3_nucleosome_region_sense.tab q4_nucleosome_region_sense.tab > significant_peaks_sense.tab
-python $MODE_sense significant_peaks_sense.tab $MASKED_region significant_peaks_sense_mode.tab
+cat ${RUNID}_q1_nucleosome_region_sense.tab \
+	${RUNID}_q2_nucleosome_region_sense.tab \
+	${RUNID}_q3_nucleosome_region_sense.tab \
+	${RUNID}_q4_nucleosome_region_sense.tab \
+	> ${RUNID}_significant_peaks_sense.tab
+python $MODE_sense ${RUNID}_significant_peaks_sense.tab $MASKED_region ${RUNID}_significant_peaks_sense_mode.tab
+
 #determine unique set of 'significant' peaks from motif strand and do unique sort
-cat q1_nucleosome_region_sense.tab q2_nucleosome_region_sense.tab q3_nucleosome_region_sense.tab q4_nucleosome_region_sense.tab | cut -f1,2 | sort -k1,1 | uniq > output_filtered_nucleosome_sense.tab
+cat ${RUNID}_q1_nucleosome_region_sense.tab \
+	${RUNID}_q2_nucleosome_region_sense.tab \
+	${RUNID}_q3_nucleosome_region_sense.tab \
+	${RUNID}_q4_nucleosome_region_sense.tab \
+	| cut -f1,2 | sort -k1,1 | uniq \
+	> ${RUNID}_output_filtered_nucleosome_sense.tab
+
 #Sense mode needs substituted to match 'opposite strand phase (0-9) then shift by doing by 5' or 3' by 'mode-5' with +=shift 5', -=shift3'
-python $MODE_sense_substitute significant_peaks_sense_mode.tab significant_peaks_sense_mode_substituted.tab
+python $MODE_sense_substitute ${RUNID}_significant_peaks_sense_mode.tab ${RUNID}_significant_peaks_sense_mode_substituted.tab
+
 #sort unique, significant peaks by the above substituted mode'
-python $PEAKS_shift output_filtered_nucleosome_sense.tab significant_peaks_sense_mode_substituted.tab shifted_columns_sense.tab
+python $PEAKS_shift ${RUNID}_output_filtered_nucleosome_sense.tab ${RUNID}_significant_peaks_sense_mode_substituted.tab ${RUNID}_shifted_columns_sense.tab
+
 #take shifted, significant bins and fill out range for each bin
-python $PEAKS_fill $category1_sense_smoothed_3 shifted_columns_sense.tab category1_sense_smoothed_3_full.tab
-python $PEAKS_fill $category2_sense_smoothed_3 shifted_columns_sense.tab category2_sense_smoothed_3_full.tab
-python $PEAKS_fill $category3_sense_smoothed_3 shifted_columns_sense.tab category3_sense_smoothed_3_full.tab
-python $PEAKS_fill $category4_sense_smoothed_3 shifted_columns_sense.tab category4_sense_smoothed_3_full.tab
-#repeat above for opposite strand
+python $PEAKS_fill $category1_sense_smoothed_3 ${RUNID}_shifted_columns_sense.tab category1_sense_smoothed_3_full.tab
+python $PEAKS_fill $category2_sense_smoothed_3 ${RUNID}_shifted_columns_sense.tab category2_sense_smoothed_3_full.tab
+python $PEAKS_fill $category3_sense_smoothed_3 ${RUNID}_shifted_columns_sense.tab category3_sense_smoothed_3_full.tab
+python $PEAKS_fill $category4_sense_smoothed_3 ${RUNID}_shifted_columns_sense.tab category4_sense_smoothed_3_full.tab
+
+
+##repeat above for opposite strand
 #get significant peaks from category1 anti strand and use those respective bins to call peaks from sense strands of categories 2, 3, and 4
-python $ROTATIONAL_anti $category1_anti_smoothed_3 q1_nucleosome_region_anti.tab
-python $ROTATIONAL_anti $category2_anti_smoothed_3 q2_nucleosome_region_anti.tab
-python $ROTATIONAL_anti $category3_anti_smoothed_3 q3_nucleosome_region_anti.tab
-python $ROTATIONAL_anti $category4_anti_smoothed_3 q4_nucleosome_region_anti.tab
+python $ROTATIONAL_anti $category1_anti_smoothed_3 ${RUNID}_q1_nucleosome_region_anti.tab
+python $ROTATIONAL_anti $category2_anti_smoothed_3 ${RUNID}_q2_nucleosome_region_anti.tab
+python $ROTATIONAL_anti $category3_anti_smoothed_3 ${RUNID}_q3_nucleosome_region_anti.tab
+python $ROTATIONAL_anti $category4_anti_smoothed_3 ${RUNID}_q4_nucleosome_region_anti.tab
+
 #get concatenated list of all unique, significant peaks, THEN get their the mode of their max position (bp)
-cat q1_nucleosome_region_anti.tab q2_nucleosome_region_anti.tab q3_nucleosome_region_anti.tab q4_nucleosome_region_anti.tab > significant_peaks_anti.tab
-python $MODE_anti significant_peaks_anti.tab $MASKED_region significant_peaks_anti_mode.tab
+cat ${RUNID}_q1_nucleosome_region_anti.tab \
+	${RUNID}_q2_nucleosome_region_anti.tab \
+	${RUNID}_q3_nucleosome_region_anti.tab \
+	${RUNID}_q4_nucleosome_region_anti.tab \
+	> ${RUNID}_significant_peaks_anti.tab
+python $MODE_anti ${RUNID}_significant_peaks_anti.tab $MASKED_region ${RUNID}_significant_peaks_anti_mode.tab
+
 #determine unique set of 'significant' peaks from opposite strand and do unique sort
-cat q1_nucleosome_region_anti.tab q2_nucleosome_region_anti.tab q3_nucleosome_region_anti.tab q4_nucleosome_region_anti.tab | cut -f1,2 | sort -k1,1 | uniq > output_filtered_nucleosome_anti.tab
+cat ${RUNID}_q1_nucleosome_region_anti.tab \
+	${RUNID}_q2_nucleosome_region_anti.tab \
+	${RUNID}_q3_nucleosome_region_anti.tab \
+	${RUNID}_q4_nucleosome_region_anti.tab \
+	| cut -f1,2 | sort -k1,1 | uniq \
+	> ${RUNID}_output_filtered_nucleosome_anti.tab
+
 #sort unique, significant peaks by the above mode; shift is by adding mode/2 to shift 3' to the motif
-python $PEAKS_shift output_filtered_nucleosome_anti.tab significant_peaks_anti_mode.tab shifted_columns_anti.tab
+python $PEAKS_shift ${RUNID}_output_filtered_nucleosome_anti.tab ${RUNID}_significant_peaks_anti_mode.tab ${RUNID}_shifted_columns_anti.tab
+
 #take shifted, significant bins and fill out range for each bin
-python $PEAKS_fill $category1_anti_smoothed_3 shifted_columns_anti.tab category1_anti_smoothed_3_full.tab
-python $PEAKS_fill $category2_anti_smoothed_3 shifted_columns_anti.tab category2_anti_smoothed_3_full.tab
-python $PEAKS_fill $category3_anti_smoothed_3 shifted_columns_anti.tab category3_anti_smoothed_3_full.tab
-python $PEAKS_fill $category4_anti_smoothed_3 shifted_columns_anti.tab category4_anti_smoothed_3_full.tab
+python $PEAKS_fill $category1_anti_smoothed_3 ${RUNID}_shifted_columns_anti.tab category1_anti_smoothed_3_full.tab
+python $PEAKS_fill $category2_anti_smoothed_3 ${RUNID}_shifted_columns_anti.tab category2_anti_smoothed_3_full.tab
+python $PEAKS_fill $category3_anti_smoothed_3 ${RUNID}_shifted_columns_anti.tab category3_anti_smoothed_3_full.tab
+python $PEAKS_fill $category4_anti_smoothed_3 ${RUNID}_shifted_columns_anti.tab category4_anti_smoothed_3_full.tab
+
+
 #remove rows whose max value (column 8) is within the masked motif region
 python $FILTER category1_sense_smoothed_3_full.tab $MASKED_region $category1_sense_smoothed_3_final
 python $FILTER category2_sense_smoothed_3_full.tab $MASKED_region $category2_sense_smoothed_3_final
@@ -309,4 +340,4 @@ python $SENSE_count $category1_sense_smoothed_3_final SENSE_count.tab
 #calculate the # of unique, significant rotational peaks 3' to motif (from motif set of peaks).
 python $ANTI_count $category1_anti_smoothed_3_final ANTI_count.tab
 #make final file with all key information for this TF
-python $CONCAT $scale_values $PERIOD $translational_values significant_peaks_sense_mode_substituted.tab significant_peaks_anti_mode.tab $rotational_values SENSE_count.tab ANTI_count.tab $FINAL
+python $CONCAT $scale_values $PERIOD $translational_values ${RUNID}_significant_peaks_sense_mode_substituted.tab ${RUNID}_significant_peaks_anti_mode.tab $rotational_values SENSE_count.tab ANTI_count.tab $FINAL
