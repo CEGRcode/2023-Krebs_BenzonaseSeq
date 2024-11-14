@@ -54,11 +54,10 @@ TRANSLATIONAL_average=../bin/translational_range_average_240820.py
 AUTO=../bin/autocorrelation_of_CDT_v2_240818.py
 PERIODICITY=../bin/periodicity_240818.py
 ROTATIONAL=../bin/rotational_ratio_parameterize.py
-MODE_sense=../bin/rotational_sense_mode_v2_240826.py
+MODE=../bin/rotational_mode_parameterize.py
 MODE_sense_substitute=../bin/MODE_sense_substitute_241011.py
 PEAKS_shift=../bin/rotational_peaks_shift_v2_241011.py
 PEAKS_fill=../bin/rotational_peaks_shifted_columns_v3_240825.py
-MODE_anti=../bin/rotational_anti_mode_v2_240826.py
 FILTER=../bin/rotational_peaks_filter_240826.py
 ROTATIONAL_magnitude=../bin/rotational_magnitude_v2_240826.py
 SENSE_count=../bin/rotational_sense_count_240826.py
@@ -209,7 +208,7 @@ cat ${RUNID}_q1_nucleosome_region_sense.tab \
 	${RUNID}_q3_nucleosome_region_sense.tab \
 	${RUNID}_q4_nucleosome_region_sense.tab \
 	> ${RUNID}_significant_peaks_sense.tab
-python $MODE_sense ${RUNID}_significant_peaks_sense.tab $MASKED_region ${RUNID}_significant_peaks_sense_mode.tab
+python $MODE sense ${RUNID}_significant_peaks_sense.tab $MASKED_region ${RUNID}_significant_peaks_sense_mode.tab
 
 #determine unique set of 'significant' peaks from motif strand and do unique sort
 cut -f1,2  ${RUNID}_significant_peaks_sense.tab \
@@ -231,7 +230,7 @@ cat ${RUNID}_q1_nucleosome_region_anti.tab \
 	${RUNID}_q3_nucleosome_region_anti.tab \
 	${RUNID}_q4_nucleosome_region_anti.tab \
 	> ${RUNID}_significant_peaks_anti.tab
-python $MODE_anti ${RUNID}_significant_peaks_anti.tab $MASKED_region ${RUNID}_significant_peaks_anti_mode.tab
+python $MODE anti ${RUNID}_significant_peaks_anti.tab $MASKED_region ${RUNID}_significant_peaks_anti_mode.tab
 
 #determine unique set of 'significant' peaks from opposite strand and do unique sort
 cut -f1,2 ${RUNID}_significant_peaks_anti.tab \
