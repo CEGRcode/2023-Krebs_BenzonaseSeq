@@ -53,12 +53,11 @@ TRANSLATIONAL=../bin/translational_range_parameterize.py
 TRANSLATIONAL_average=../bin/translational_range_average_240820.py
 AUTO=../bin/autocorrelation_of_CDT_v2_240818.py
 PERIODICITY=../bin/periodicity_240818.py
-ROTATIONAL_sense=../bin/rotational_ratio_sense_v7f_240906.py
+ROTATIONAL=../bin/rotational_ratio_parameterize.py
 MODE_sense=../bin/rotational_sense_mode_v2_240826.py
 MODE_sense_substitute=../bin/MODE_sense_substitute_241011.py
 PEAKS_shift=../bin/rotational_peaks_shift_v2_241011.py
 PEAKS_fill=../bin/rotational_peaks_shifted_columns_v3_240825.py
-ROTATIONAL_anti=../bin/rotational_ratio_anti_v7f_240906.py
 MODE_anti=../bin/rotational_anti_mode_v2_240826.py
 FILTER=../bin/rotational_peaks_filter_240826.py
 ROTATIONAL_magnitude=../bin/rotational_magnitude_v2_240826.py
@@ -166,10 +165,10 @@ do
 	# === Check rotation ===
 
 	#get significant peaks from category1 sense strand and use those respective bins to call peaks from sense strands of categories 2, 3, and 4
-	python $ROTATIONAL_sense ${BASE}_sense_smooth3.tab ${RUNID}_q${QUARTILE}_nucleosome_region_sense.tab
+	python $ROTATIONAL sense ${BASE}_sense_smooth3.tab ${RUNID}_q${QUARTILE}_nucleosome_region_sense.tab
 
 	#get significant peaks from category1 anti strand and use those respective bins to call peaks from sense strands of categories 2, 3, and 4
-	python $ROTATIONAL_anti ${BASE}_sense_smooth3.tab ${RUNID}_q${QUARTILE}_nucleosome_region_anti.tab
+	python $ROTATIONAL anti ${BASE}_sense_smooth3.tab ${RUNID}_q${QUARTILE}_nucleosome_region_anti.tab
 
 done
 

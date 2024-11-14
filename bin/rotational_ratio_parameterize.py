@@ -65,7 +65,7 @@ def calculate_bin_statistics(df, start_col, end_col, adjust_position=False, rece
 
             # Add shifted bins to the result
             shifted_bin_stats.append([shifted_start, shifted_stop] + stats_row[2:])
-        
+
         return pd.DataFrame(shifted_bin_stats, columns=['Start_Column', 'End_Column', 'Max', 'Min', 'Ratio', 'Max_Position_Adjusted', 'Min_Position_Adjusted', 'Index_Max', 'Index_Min']), bin_ratios
     else:
         return pd.DataFrame(bin_stats, columns=['Start_Column', 'End_Column', 'Max', 'Min', 'Ratio', 'Max_Position_Adjusted', 'Min_Position_Adjusted', 'Index_Max', 'Index_Min']), bin_ratios
@@ -76,14 +76,23 @@ def calculate_avg_plus_2sd(bin_ratios):
     avg_plus_2sd = avg_ratio + 2 * std_ratio
     return avg_plus_2sd
 
-def main(input_file, output_file_nucleosome):
+if __name__ == "__main__":
+    mode = sys.argv[1]
+    input_file = sys.argv[2]
+    output_file_nucleosome = sys.argv[3]
+
     df = pd.read_csv(input_file, sep="\t", header=None)
 
     # Process nucleosome region
     nucleosome_df, _ = calculate_bin_statistics(df, 301, 701, adjust_position=True)
 
     # Process flank region to calculate 'avg + 2SD'
-    _, bin_ratios = calculate_bin_statistics(df, 11, 110, adjust_position=False)
+    if (mode=="sense"):
+        _, bin_ratios = calculate_bin_statistics(df, 11, 110, adjust_position=False)
+    elif (mode=="anti"):
+        _, bin_ratios = calculate_bin_statistics(df, 892, 991, adjust_position=False)
+    else:
+        raise Exception("Unexpected mode value. Please use one of ['sense','anti']")
     avg_plus_2sd = calculate_avg_plus_2sd(bin_ratios)
 
     # Filter nucleosome bins by 'avg + 2SD'
@@ -91,9 +100,3 @@ def main(input_file, output_file_nucleosome):
 
     # Save results (including 'Ratio' instead of 'Range')
     filtered_nucleosome_df.to_csv(output_file_nucleosome, sep="\t", header=False, index=False)
-
-if __name__ == "__main__":
-    input_file = sys.argv[1]
-    output_file_nucleosome = sys.argv[2]
-
-    main(input_file, output_file_nucleosome)
