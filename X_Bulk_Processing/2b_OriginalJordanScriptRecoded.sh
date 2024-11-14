@@ -82,25 +82,14 @@ BEDFILE_category3_1000bp=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile3_
 BEDFILE_category4_1000bp=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile4_1000bp.bed
 BAM1a=BNase-seq_50U-10min_merge_hg38
 
-OUT2=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_1000bp_allReads.out
 OUT2_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_sense.tab
 OUT2_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_anti.tab
-OUT2_final=01_BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_final.tab
-
-OUT3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_allReads.out
 OUT3_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_sense.tab
 OUT3_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_anti.tab
-OUT3_final=02_BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_final.tab
-
-OUT4=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_allReads.out
 OUT4_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_sense.tab
 OUT4_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_anti.tab
-OUT4_final=03_BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_final.tab
-
-OUT5=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_allReads.out
 OUT5_sense=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_sense.tab
 OUT5_anti=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_anti.tab
-OUT5_final=04_BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_final.tab
 
 NT_count=${RUNID}_NT_count.tab
 MASKED_region=${RUNID}_masked.tab
@@ -164,23 +153,22 @@ category4_anti_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F
 
 # See 03_Call_Motifs for generating initial motifs split into quartiles
 
-#do initial tag-pileUp (output is input directory). Settings: midpoint(m) OR 5 prime end (-5) with read 1 (-1), Gizp output cdt (z), No smoothing (N), required proper PEs (p), load blacklist **total tag option (-t) removed**
-java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT2_final $BEDFILE_category1_1000bp $BAMFILE
-java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT3_final $BEDFILE_category2_1000bp $BAMFILE
-java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT4_final $BEDFILE_category3_1000bp $BAMFILE
-java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT5_final $BEDFILE_category4_1000bp $BAMFILE
-# Slice sense strand
-awk 'NR==1;NR==2' $OUT2_final > $OUT2_sense
-awk 'NR==1;NR==2' $OUT3_final > $OUT3_sense
-awk 'NR==1;NR==2' $OUT4_final > $OUT4_sense
-awk 'NR==1;NR==2' $OUT5_final > $OUT5_sense
-# Slice anti strand
-awk 'NR==1;NR==3' $OUT2_final > $OUT2_anti
-awk 'NR==1;NR==3' $OUT3_final > $OUT3_anti
-awk 'NR==1;NR==3' $OUT4_final > $OUT4_anti
-awk 'NR==1;NR==3' $OUT5_final > $OUT5_anti
+for QUARTILE in {1..4};
+do
+	CATEGORY=${RUNID}_SORT-TFnucRatio_GROUP-Quartile${QUARTILE}
+	BEDFILE=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile${QUARTILE}_1000bp.bed
+	OUT_COMPOSITE=0${QUARTILE}_BNase-seq_50U-10min_merge_hg38_${CATEGORY}_ForComposite_final.tab
 
+	BASE=BNase-seq_50U-10min_merge_hg38_${CATEGORY}_ForComposite_allReads
 
+	# Tag pileup Benzonase cut-sites. Settings: 5 prime end (-5) with read 1 (-1), No smoothing (N), required proper PEs (-p)
+	java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -N -p --cpu 4 -o $OUT_COMPOSITE $BEDFILE $BAMFILE
+
+	# Slice sense and anti strand
+	awk 'NR==1;NR==2' $OUT_COMPOSITE > ${BASE}_sense.tab
+	awk 'NR==1;NR==3' $OUT_COMPOSITE > ${BASE}_anti.tab
+
+done
 
 #extract number of NTs from MEME file
 python $EXTRACT $MEMEFILE $NT_count
