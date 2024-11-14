@@ -95,16 +95,6 @@ category4_anti_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_Fo
 
 scale_values=${RUNID}_scale_values.tab
 
-translational_category1_sense=${RUNID}_GROUP-Quartile1_sense_translational_setting.tab
-translational_category2_sense=${RUNID}_GROUP-Quartile2_sense_translational_setting.tab
-translational_category3_sense=${RUNID}_GROUP-Quartile3_sense_translational_setting.tab
-translational_category4_sense=${RUNID}_GROUP-Quartile4_sense_translational_setting.tab
-
-translational_category1_anti=${RUNID}_GROUP-Quartile1_anti_translational_setting.tab
-translational_category2_anti=${RUNID}_GROUP-Quartile2_anti_translational_setting.tab
-translational_category3_anti=${RUNID}_GROUP-Quartile3_anti_translational_setting.tab
-translational_category4_anti=${RUNID}_GROUP-Quartile4_anti_translational_setting.tab
-
 translational_category1=${RUNID}_GROUP-Quartile1_translational_setting.tab
 translational_category2=${RUNID}_GROUP-Quartile2_translational_setting.tab
 translational_category3=${RUNID}_GROUP-Quartile3_translational_setting.tab
@@ -117,6 +107,7 @@ correlation_results=${RUNID}_correlation_results
 
 rotational_values=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_rotational_values.tab"}')
 FINAL=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_final.tab"}')
+
 category1_sense_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category1_sense_smoothed_3_final.tab"}')
 category2_sense_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category2_sense_smoothed_3_final.tab"}')
 category3_sense_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category3_sense_smoothed_3_final.tab"}')
@@ -164,14 +155,21 @@ do
 	RBASE=${RUNID}_GROUP-Quartile${QUARTILE}
 
 	#get max range (max-min) from -350 to -150 bp for motif strand
-	python $TRANSLATIONAL sense ${BASE}_sense_smooth20.tab ${RBASE}_sense_translational_setting.tab #translational_category1_sense
+	python $TRANSLATIONAL sense ${BASE}_sense_smooth20.tab ${RBASE}_sense_translational_setting.tab
 
 	#get max range (max-min) from +150 to +350 bp for opposite strand
-	python $TRANSLATIONAL anti ${BASE}_sense_smooth20.tab ${RBASE}_anti_translational_setting.tab #translational_category1_anti
+	python $TRANSLATIONAL anti ${BASE}_sense_smooth20.tab ${RBASE}_anti_translational_setting.tab
 
 	#get average of range of translational magnitude from both strands
 	python $TRANSLATIONAL_average ${RBASE}_sense_translational_setting.tab ${RBASE}_anti_translational_setting.tab ${RBASE}_translational_setting.tab #translational_category1
 
+	# === Check rotation ===
+
+	#get significant peaks from category1 sense strand and use those respective bins to call peaks from sense strands of categories 2, 3, and 4
+	python $ROTATIONAL_sense ${BASE}_sense_smooth3.tab ${RUNID}_q${QUARTILE}_nucleosome_region_sense.tab
+
+	#get significant peaks from category1 anti strand and use those respective bins to call peaks from sense strands of categories 2, 3, and 4
+	python $ROTATIONAL_anti ${BASE}_sense_smooth3.tab ${RUNID}_q${QUARTILE}_nucleosome_region_anti.tab
 
 done
 
@@ -202,14 +200,9 @@ cat ${RUNID}_GROUP-Quartile1_translational_setting.tab \
 	> $translational_values
 
 #perform autocorrelation to determine most likely periodicity
-python $AUTO -i $category1_sense_smoothed_3 -o $correlation_results
+python $AUTO -i BNase-seq_50U-10min_merge_hg38_${RUNID}_SORT-TFnucRatio_GROUP-Quartile1_ForComposite_allReads_sense_smooth3.tab -o $correlation_results
 python $PERIODICITY $correlation_results.tsv $PERIOD
 
-#get significant peaks from category1 sense strand and use those respective bins to call peaks from sense strands of categories 2, 3, and 4
-python $ROTATIONAL_sense $category1_sense_smoothed_3 ${RUNID}_q1_nucleosome_region_sense.tab
-python $ROTATIONAL_sense $category2_sense_smoothed_3 ${RUNID}_q2_nucleosome_region_sense.tab
-python $ROTATIONAL_sense $category3_sense_smoothed_3 ${RUNID}_q3_nucleosome_region_sense.tab
-python $ROTATIONAL_sense $category4_sense_smoothed_3 ${RUNID}_q4_nucleosome_region_sense.tab
 
 #get concatenated list of all unique, significant peaks, THEN get their the mode of their max position (bp)
 cat ${RUNID}_q1_nucleosome_region_sense.tab \
@@ -220,11 +213,8 @@ cat ${RUNID}_q1_nucleosome_region_sense.tab \
 python $MODE_sense ${RUNID}_significant_peaks_sense.tab $MASKED_region ${RUNID}_significant_peaks_sense_mode.tab
 
 #determine unique set of 'significant' peaks from motif strand and do unique sort
-cat ${RUNID}_q1_nucleosome_region_sense.tab \
-	${RUNID}_q2_nucleosome_region_sense.tab \
-	${RUNID}_q3_nucleosome_region_sense.tab \
-	${RUNID}_q4_nucleosome_region_sense.tab \
-	| cut -f1,2 | sort -k1,1 | uniq \
+cut -f1,2  ${RUNID}_significant_peaks_sense.tab \
+	| sort -k1,1 | uniq \
 	> ${RUNID}_output_filtered_nucleosome_sense.tab
 
 #Sense mode needs substituted to match 'opposite strand phase (0-9) then shift by doing by 5' or 3' by 'mode-5' with +=shift 5', -=shift3'
@@ -241,11 +231,6 @@ python $PEAKS_fill $category4_sense_smoothed_3 ${RUNID}_shifted_columns_sense.ta
 
 
 ##repeat above for opposite strand
-#get significant peaks from category1 anti strand and use those respective bins to call peaks from sense strands of categories 2, 3, and 4
-python $ROTATIONAL_anti $category1_anti_smoothed_3 ${RUNID}_q1_nucleosome_region_anti.tab
-python $ROTATIONAL_anti $category2_anti_smoothed_3 ${RUNID}_q2_nucleosome_region_anti.tab
-python $ROTATIONAL_anti $category3_anti_smoothed_3 ${RUNID}_q3_nucleosome_region_anti.tab
-python $ROTATIONAL_anti $category4_anti_smoothed_3 ${RUNID}_q4_nucleosome_region_anti.tab
 
 #get concatenated list of all unique, significant peaks, THEN get their the mode of their max position (bp)
 cat ${RUNID}_q1_nucleosome_region_anti.tab \
@@ -256,11 +241,8 @@ cat ${RUNID}_q1_nucleosome_region_anti.tab \
 python $MODE_anti ${RUNID}_significant_peaks_anti.tab $MASKED_region ${RUNID}_significant_peaks_anti_mode.tab
 
 #determine unique set of 'significant' peaks from opposite strand and do unique sort
-cat ${RUNID}_q1_nucleosome_region_anti.tab \
-	${RUNID}_q2_nucleosome_region_anti.tab \
-	${RUNID}_q3_nucleosome_region_anti.tab \
-	${RUNID}_q4_nucleosome_region_anti.tab \
-	| cut -f1,2 | sort -k1,1 | uniq \
+cut -f1,2 ${RUNID}_significant_peaks_anti.tab \
+	| sort -k1,1 | uniq \
 	> ${RUNID}_output_filtered_nucleosome_anti.tab
 
 #sort unique, significant peaks by the above mode; shift is by adding mode/2 to shift 3' to the motif
