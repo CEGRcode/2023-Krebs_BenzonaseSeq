@@ -222,12 +222,6 @@ python $MODE_sense_substitute ${RUNID}_significant_peaks_sense_mode.tab ${RUNID}
 #sort unique, significant peaks by the above substituted mode'
 python $PEAKS_shift ${RUNID}_output_filtered_nucleosome_sense.tab ${RUNID}_significant_peaks_sense_mode_substituted.tab ${RUNID}_shifted_columns_sense.tab
 
-#take shifted, significant bins and fill out range for each bin
-python $PEAKS_fill $category1_sense_smoothed_3 ${RUNID}_shifted_columns_sense.tab category1_sense_smoothed_3_full.tab
-python $PEAKS_fill $category2_sense_smoothed_3 ${RUNID}_shifted_columns_sense.tab category2_sense_smoothed_3_full.tab
-python $PEAKS_fill $category3_sense_smoothed_3 ${RUNID}_shifted_columns_sense.tab category3_sense_smoothed_3_full.tab
-python $PEAKS_fill $category4_sense_smoothed_3 ${RUNID}_shifted_columns_sense.tab category4_sense_smoothed_3_full.tab
-
 
 ##repeat above for opposite strand
 
@@ -247,12 +241,23 @@ cut -f1,2 ${RUNID}_significant_peaks_anti.tab \
 #sort unique, significant peaks by the above mode; shift is by adding mode/2 to shift 3' to the motif
 python $PEAKS_shift ${RUNID}_output_filtered_nucleosome_anti.tab ${RUNID}_significant_peaks_anti_mode.tab ${RUNID}_shifted_columns_anti.tab
 
-#take shifted, significant bins and fill out range for each bin
-python $PEAKS_fill $category1_anti_smoothed_3 ${RUNID}_shifted_columns_anti.tab category1_anti_smoothed_3_full.tab
-python $PEAKS_fill $category2_anti_smoothed_3 ${RUNID}_shifted_columns_anti.tab category2_anti_smoothed_3_full.tab
-python $PEAKS_fill $category3_anti_smoothed_3 ${RUNID}_shifted_columns_anti.tab category3_anti_smoothed_3_full.tab
-python $PEAKS_fill $category4_anti_smoothed_3 ${RUNID}_shifted_columns_anti.tab category4_anti_smoothed_3_full.tab
 
+
+for QUARTILE in {1..4};
+do
+	BEDFILE=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile${QUARTILE}_1000bp.bed
+	OUT_COMPOSITE=0${QUARTILE}_BNase-seq_50U-10min_merge_hg38_${CATEGORY}_ForComposite_final.tab
+
+	CATEGORY=${RUNID}_SORT-TFnucRatio_GROUP-Quartile${QUARTILE}
+	BASE=BNase-seq_50U-10min_merge_hg38_${CATEGORY}_ForComposite_allReads
+
+	smoothed_base=BNase-seq_50U-10min_merge_hg38_${CATEGORY}_ForComposite_allReads
+
+	#take shifted, significant bins and fill out range for each bin
+	python $PEAKS_fill ${smoothed_base}_sense_smooth3.tab ${RUNID}_shifted_columns_sense.tab category${QUARTILE}_sense_smoothed_3_full.tab
+	python $PEAKS_fill ${smoothed_base}_anti_smooth3.tab ${RUNID}_shifted_columns_anti.tab category${QUARTILE}_anti_smoothed_3_full.tab
+
+done
 
 #remove rows whose max value (column 8) is within the masked motif region
 python $FILTER category1_sense_smoothed_3_full.tab $MASKED_region $category1_sense_smoothed_3_final
