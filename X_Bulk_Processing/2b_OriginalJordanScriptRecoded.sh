@@ -146,15 +146,11 @@ translational_category2=${RUNID}_GROUP-Quartile2_translational_setting.tab
 translational_category3=${RUNID}_GROUP-Quartile3_translational_setting.tab
 translational_category4=${RUNID}_GROUP-Quartile4_translational_setting.tab
 
-translational_values=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_translational_values.tab"}')
-PERIOD=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_periodicity.tab"}')
-correlation_results=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_correlation_results"}')
-correlation_results2=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_correlation_results.tsv"}')
-rotational_category1_sense=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_sense_rotational_setting.tab"}')
-rotational_category1_anti=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_anti_rotational_setting.tab"}')
-rotational_category1_sense2=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_sense_rotational_setting_final.tab"}')
-rotational_category1_anti2=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_anti_rotational_setting_final.tab"}')
-rotational_category1_magnitude=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_rotational_setting_magnitude.tab"}')
+translational_values=${RUNID}_translational_values.tab
+PERIOD=${RUNID}_periodicity.tab
+correlation_results=${RUNID}_correlation_results
+
+
 rotational_values=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_rotational_values.tab"}')
 FINAL=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_final.tab"}')
 category1_sense_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_category1_sense_smoothed_3_final.tab"}')
@@ -245,10 +241,15 @@ python $TRANSLATIONAL_average $translational_category4_sense $translational_cate
 
 
 #combine all above tab files (and add first column of quartile info and header). Output is average of peaks from either strand
-cat $translational_category1 $translational_category2 $translational_category3 $translational_category4 | awk 'BEGIN{print "Average_Translational_Magnitude"}1' | awk 'BEGIN{quartile[1]="Quartile"; for(i=2;i<=5;i++) quartile[i]=i-1} {print quartile[NR]"\t"$0} NR>5' > $translational_values
+cat $translational_category1 $translational_category2 $translational_category3 $translational_category4 \
+	| awk 'BEGIN{print "Average_Translational_Magnitude"}1' \
+	| awk 'BEGIN{quartile[1]="Quartile"; for(i=2;i<=5;i++) quartile[i]=i-1} {print quartile[NR]"\t"$0} NR>5' \
+	> $translational_values
+
 #perform autocorrelation to determine most likely periodicity
 python $AUTO -i $category1_sense_smoothed_3 -o $correlation_results
-python $PERIODICITY $correlation_results2 $PERIOD
+python $PERIODICITY $correlation_results.tsv $PERIOD
+
 #get significant peaks from category1 sense strand and use those respective bins to call peaks from sense strands of categories 2, 3, and 4
 python $ROTATIONAL_sense $category1_sense_smoothed_3 q1_nucleosome_region_sense.tab
 python $ROTATIONAL_sense $category2_sense_smoothed_3 q2_nucleosome_region_sense.tab
