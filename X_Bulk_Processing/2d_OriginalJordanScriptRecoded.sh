@@ -8375,49 +8375,46 @@ echo | awk -v V1="$str1" -v V2="$str16" 'BEGIN {print V1"\n"V2}' > $OUT_GC
 echo | awk -v V1="$str1" -v V2="$str17" 'BEGIN {print V1"\n"V2}' > $OUT_GG
 
 #apply normalization (divide values in row2 by the # sites in the bedfile)
-python3 $NORMALIZATION $OUT_AA $OUT_AA_normalized $SITES
-python3 $NORMALIZATION $OUT_AT $OUT_AT_normalized $SITES
-python3 $NORMALIZATION $OUT_AC $OUT_AC_normalized $SITES
-python3 $NORMALIZATION $OUT_AG $OUT_AG_normalized $SITES
-python3 $NORMALIZATION $OUT_TA $OUT_TA_normalized $SITES
-python3 $NORMALIZATION $OUT_TT $OUT_TT_normalized $SITES
-python3 $NORMALIZATION $OUT_TC $OUT_TC_normalized $SITES
-python3 $NORMALIZATION $OUT_TG $OUT_TG_normalized $SITES
-python3 $NORMALIZATION $OUT_CA $OUT_CA_normalized $SITES
-python3 $NORMALIZATION $OUT_CT $OUT_CT_normalized $SITES
-python3 $NORMALIZATION $OUT_CC $OUT_CC_normalized $SITES
-python3 $NORMALIZATION $OUT_CG $OUT_CG_normalized $SITES
-python3 $NORMALIZATION $OUT_GA $OUT_GA_normalized $SITES
-python3 $NORMALIZATION $OUT_GT $OUT_GT_normalized $SITES
-python3 $NORMALIZATION $OUT_GC $OUT_GC_normalized $SITES
-python3 $NORMALIZATION $OUT_GG $OUT_GG_normalized $SITES
+python $NORMALIZATION $OUT_AA $OUT_AA_normalized $SITES
+python $NORMALIZATION $OUT_AT $OUT_AT_normalized $SITES
+python $NORMALIZATION $OUT_AC $OUT_AC_normalized $SITES
+python $NORMALIZATION $OUT_AG $OUT_AG_normalized $SITES
+python $NORMALIZATION $OUT_TA $OUT_TA_normalized $SITES
+python $NORMALIZATION $OUT_TT $OUT_TT_normalized $SITES
+python $NORMALIZATION $OUT_TC $OUT_TC_normalized $SITES
+python $NORMALIZATION $OUT_TG $OUT_TG_normalized $SITES
+python $NORMALIZATION $OUT_CA $OUT_CA_normalized $SITES
+python $NORMALIZATION $OUT_CT $OUT_CT_normalized $SITES
+python $NORMALIZATION $OUT_CC $OUT_CC_normalized $SITES
+python $NORMALIZATION $OUT_CG $OUT_CG_normalized $SITES
+python $NORMALIZATION $OUT_GA $OUT_GA_normalized $SITES
+python $NORMALIZATION $OUT_GT $OUT_GT_normalized $SITES
+python $NORMALIZATION $OUT_GC $OUT_GC_normalized $SITES
+python $NORMALIZATION $OUT_GG $OUT_GG_normalized $SITES
 
 #apply 3 bp smoothing
-python3 $SMOOTH3 $OUT_AA_normalized $OUT_AA_normalized_3
-python3 $SMOOTH3 $OUT_AT_normalized $OUT_AT_normalized_3
-python3 $SMOOTH3 $OUT_AC_normalized $OUT_AC_normalized_3
-python3 $SMOOTH3 $OUT_AG_normalized $OUT_AG_normalized_3
-python3 $SMOOTH3 $OUT_TA_normalized $OUT_TA_normalized_3
-python3 $SMOOTH3 $OUT_TT_normalized $OUT_TT_normalized_3
-python3 $SMOOTH3 $OUT_TC_normalized $OUT_TC_normalized_3
-python3 $SMOOTH3 $OUT_TG_normalized $OUT_TG_normalized_3
-python3 $SMOOTH3 $OUT_CA_normalized $OUT_CA_normalized_3
-python3 $SMOOTH3 $OUT_CT_normalized $OUT_CT_normalized_3
-python3 $SMOOTH3 $OUT_CC_normalized $OUT_CC_normalized_3
-python3 $SMOOTH3 $OUT_CG_normalized $OUT_CG_normalized_3
-python3 $SMOOTH3 $OUT_GA_normalized $OUT_GA_normalized_3
-python3 $SMOOTH3 $OUT_GT_normalized $OUT_GT_normalized_3
-python3 $SMOOTH3 $OUT_GC_normalized $OUT_GC_normalized_3
-python3 $SMOOTH3 $OUT_GG_normalized $OUT_GG_normalized_3
+python $SMOOTH3 $OUT_AA_normalized $OUT_AA_normalized_3
+python $SMOOTH3 $OUT_AT_normalized $OUT_AT_normalized_3
+python $SMOOTH3 $OUT_AC_normalized $OUT_AC_normalized_3
+python $SMOOTH3 $OUT_AG_normalized $OUT_AG_normalized_3
+python $SMOOTH3 $OUT_TA_normalized $OUT_TA_normalized_3
+python $SMOOTH3 $OUT_TT_normalized $OUT_TT_normalized_3
+python $SMOOTH3 $OUT_TC_normalized $OUT_TC_normalized_3
+python $SMOOTH3 $OUT_TG_normalized $OUT_TG_normalized_3
+python $SMOOTH3 $OUT_CA_normalized $OUT_CA_normalized_3
+python $SMOOTH3 $OUT_CT_normalized $OUT_CT_normalized_3
+python $SMOOTH3 $OUT_CC_normalized $OUT_CC_normalized_3
+python $SMOOTH3 $OUT_CG_normalized $OUT_CG_normalized_3
+python $SMOOTH3 $OUT_GA_normalized $OUT_GA_normalized_3
+python $SMOOTH3 $OUT_GT_normalized $OUT_GT_normalized_3
+python $SMOOTH3 $OUT_GC_normalized $OUT_GC_normalized_3
+python $SMOOTH3 $OUT_GG_normalized $OUT_GG_normalized_3
 
 #extract number of NTs from MEME file
-python3 $EXTRACT $MEME $NT_count
+python $EXTRACT $MEME $NT_count
 
 #determine the 5' and 3' boundaries of the motif masked region relative to the center column of tab files at column 256
-python3 $MASKED $NT_count $MASKED_region
+python $MASKED $NT_count $MASKED_region
 
 #get maximum value for each feature (avoiding the columns of the motif or masked region)
 python $MAX $OUT_AA_normalized_3 $OUT_AT_normalized_3 $OUT_AC_normalized_3 $OUT_AG_normalized_3 $OUT_TA_normalized_3 $OUT_TT_normalized_3 $OUT_TC_normalized_3 $OUT_TG_normalized_3 $OUT_CA_normalized_3 $OUT_CT_normalized_3 $OUT_CC_normalized_3 $OUT_CG_normalized_3 $OUT_GA_normalized_3 $OUT_GT_normalized_3 $OUT_GC_normalized_3 $OUT_GG_normalized_3 $MASKED_region $OUT_all_max
-
-# finish script
-echo "DONE"

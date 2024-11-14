@@ -75,40 +75,27 @@ NT_count=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_NT_count
 MASKED_region=$(echo $MEME | rev | cut -d"/" -f1 | rev | awk -F. '{print $1"_masked.tab"}')
 
 sampleID=CTCF_DNAshape_Quartile4_v7_241006.slurm
-rm -f $sampleID
-echo "$JOBSTATS" >> $sampleID
-echo "#set directory" >> $sampleID
-echo "cd $OUTPUT" >> $sampleID
-echo "#determine DNA shape with scriptmanager" >> $sampleID
-echo "java -Djava.awt.headless=true -jar $SCRIPTMANAGER sequence-analysis dna-shape-bed --all --avg-composite -o=$DNAshape $GENOME $QUARTILE4" >> $sampleID
-echo "#apply 3 bp smoothing" >> $sampleID
-echo "python3 $SMOOTH3 $HelT $HelT_3" >> $sampleID
-echo "python3 $SMOOTH3 $MGW $MGW_3" >> $sampleID
-echo "python3 $SMOOTH3 $PropT $PropT_3" >> $sampleID
-echo "python3 $SMOOTH3 $Roll $Roll_3" >> $sampleID
-echo "#extract number of NTs from MEME file" >> $sampleID
-echo "python3 $EXTRACT $MEME $NT_count" >> $sampleID
-echo "#determine the 5' and 3' boundaries of the motif masked region relative to the center column of tab files at column 256" >> $sampleID
-echo "python3 $MASKED $NT_count $MASKED_region" >> $sampleID
-echo "#determine max scale for +/- 2bp arbitary units" >> $sampleID
-echo "python3 $MAX_MIN_SCALE $HelT_3 $MASKED_region $HelT_scale" >> $sampleID
-echo "python3 $MAX_MIN_SCALE $MGW_3 $MASKED_region $MGW_scale" >> $sampleID
-echo "python3 $MAX_MIN_SCALE $PropT_3 $MASKED_region $PropT_scale" >> $sampleID
-echo "python3 $MAX_MIN_SCALE $Roll_3 $MASKED_region $Roll_scale" >> $sampleID
-echo "#change file name of OUT file and swap signs (if most of values are negative)" >> $sampleID
-echo "python3 $FORMAT $HelT_scale $HelT $HelT_final" >> $sampleID
-echo "python3 $FORMAT $MGW_scale $MGW $MGW_final" >> $sampleID
-echo "python3 $FORMAT $PropT_scale $PropT $PropT_final" >> $sampleID
-echo "python3 $FORMAT $Roll_scale $Roll $Roll_final" >> $sampleID
-echo "#make file of scale and indication if values were swapped" >> $sampleID
-echo "python3 $FINAL $HelT_scale $MGW_scale $PropT_scale $Roll_scale $FILE_final" >> $sampleID
-echo "#remove intermediate files" >> $sampleID
-echo "rm $HelT" >> $sampleID
-echo "rm $MGW" >> $sampleID
-echo "rm $PropT" >> $sampleID
-echo "rm $Roll" >> $sampleID
-echo "rm $HelT_3" >> $sampleID
-echo "rm $MGW_3" >> $sampleID
-echo "rm $PropT_3" >> $sampleID
-echo "rm $Roll_3" >> $sampleID
-echo "#script DONE" >> $sampleID
+
+#determine DNA shape with scriptmanager
+java -Djava.awt.headless=true -jar $SCRIPTMANAGER sequence-analysis dna-shape-bed --all --avg-composite -o=$DNAshape $GENOME $QUARTILE4
+#apply 3 bp smoothing
+python $SMOOTH3 $HelT $HelT_3
+python $SMOOTH3 $MGW $MGW_3
+python $SMOOTH3 $PropT $PropT_3
+python $SMOOTH3 $Roll $Roll_3
+#extract number of NTs from MEME file
+python $EXTRACT $MEME $NT_count
+#determine the 5' and 3' boundaries of the motif masked region relative to the center column of tab files at column 256
+python $MASKED $NT_count $MASKED_region
+#determine max scale for +/- 2bp arbitary units
+python $MAX_MIN_SCALE $HelT_3 $MASKED_region $HelT_scale
+python $MAX_MIN_SCALE $MGW_3 $MASKED_region $MGW_scale
+python $MAX_MIN_SCALE $PropT_3 $MASKED_region $PropT_scale
+python $MAX_MIN_SCALE $Roll_3 $MASKED_region $Roll_scale
+#change file name of OUT file and swap signs (if most of values are negative)
+python $FORMAT $HelT_scale $HelT $HelT_final
+python $FORMAT $MGW_scale $MGW $MGW_final
+python $FORMAT $PropT_scale $PropT $PropT_final
+python $FORMAT $Roll_scale $Roll $Roll_final
+#make file of scale and indication if values were swapped
+python $FINAL $HelT_scale $MGW_scale $PropT_scale $Roll_scale $FILE_final

@@ -204,323 +204,195 @@ category4_anti_smoothed_3_final=$(echo $MEME| rev | cut -d"/" -f1 | rev | awk -F
 
 sampleID=$fileID\.slurm
 rm -f $sampleID
-echo "$JOBSTATS" >> $sampleID
-echo "#set output" >> $sampleID
-echo "cd $OUTPUT" >> $sampleID
-echo "#unzip files" >> $sampleID
-echo "gunzip -c $ENCODE_BEDFILE > $ENCODE_BEDFILE_unzipped" >> $sampleID
-echo "#shuffle bedfiles" >> $sampleID
-echo "shuf $ENCODE_BEDFILE_unzipped > $ENCODE_BEDFILE_shuffled" >> $sampleID
-echo "shuf $BEDFILE > $BEDFILE_shuffled" >> $sampleID
-echo "#expand befiles" >> $sampleID
-echo "java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=1000 $ENCODE_BEDFILE_shuffled -o=$OUTPUT/$ENCODE_BEDFILE_1000bp" >> $sampleID
-echo "java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=20 $BEDFILE_shuffled -o=$OUTPUT/$BEDFILE_20bp" >> $sampleID
-echo "# Intersect peaks with motifs - filter to keep overlap - move ENCODE ChIP value ("signal value") to score col - sort by ID, then score" >> $sampleID
-echo "bedtools intersect -loj -a $BEDFILE_20bp -b $ENCODE_BEDFILE_1000bp | awk '{OFS=\"\t\"}{FS=\"\t\"}{if(\$8>0) print \$1,\$2,\$3,\$4,\$13,\$6}' | sort -rnk4,5 > $TARGET_INTERSECT_wDUP" >> $sampleID
-echo "bedtools intersect -loj -a $BEDFILE_20bp -b $ENCODE_BEDFILE_1000bp | awk '{OFS=\"\t\"}{FS=\"\t\"}{if(\$8==-1) print \$1,\$2,\$3,\$4,\$13,\$6}' > $TARGET_noINTERSECT_wDUP" >> $sampleID
-echo "#Deduplicate bound motifs by keeping first instance (larger ENCODE score based on previous command sort)" >> $sampleID
-echo "python $DEDUP -i $TARGET_INTERSECT_wDUP -o $TARGET_Bound" >> $sampleID
-echo "#Deduplicate of unbound motifs does  NOT work as each sites seems to have its own unique 4th column" >> $sampleID
-echo "#get number of rows from intersected bedfile" >> $sampleID
-echo "#expand intersected bedfile" >> $sampleID
-echo "java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=164 $TARGET_Bound -o=$OUTPUT/$TARGET_Bound_164bp" >> $sampleID
-echo "#do initial tag-pileUp (output is input directory). Settings: midpoint(m) OR 5 prime end (-5) with read 1 (-1), Gizp output cdt (z), No smoothing (N), required proper PEs (p), load blacklist **total tag option (-t) removed**" >> $sampleID
-echo "java -jar $SCRIPTMANAGER read-analysis tag-pileup -m -z --output-matrix=$CDT1 -N -p --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT1 $TARGET_Bound_164bp $BAM1" >> $sampleID
-echo "#unzip cdt files" >> $sampleID
-echo "gunzip -c $CDT1b > $CDT1c" >> $sampleID
-echo "#no need to scale here as everything is relative to Benzonase data" >> $sampleID
-echo "#sum the number of tags by each row" >> $sampleID
-echo "java -jar $SCRIPTMANAGER read-analysis aggregate-data --sum -m -l=3 -o=$CDT1_sum -r=1 $CDT1c" >> $sampleID
-echo "#remove header from CDT1_sum file" >> $sampleID
-echo "cat $CDT1_sum | sed '1d' > $CDT1_sum_noHeader" >> $sampleID
-echo "#paste bedfile and CTD1_sum_noHeader, make sure all rows match first, avoid any rows with 0 in TF signal (column 5) or nucleosome occupancy (column 8) then divide encode TF signal to nucleosome occupancy (ratio) in column 7 and sort" >> $sampleID
-echo "paste $TARGET_Bound_164bp $CDT1_sum_noHeader | awk '{OFS=\"\t\"}{FS=\"\t\"}{if (\$12=\$7 && \$5!=0 && \$8!=0) print \$1,\$2,\$3,\$4,\$5,\$6,(\$5/\$8)}' | sort -k7,7n > $TSV_ratio" >> $sampleID
-echo "#get number of rows from intersected bedfile" >> $sampleID
-echo "cat $TARGET_Bound | wc -l | awk '{printf \"%.f\\n\", \$1 * 0.25}' > $NUMBER" >> $sampleID
-echo "cat $TARGET_Bound | wc -l | awk '{printf \"%.f\\n\", \$1 * 0.5}' > $NUMBER2" >> $sampleID
-echo "cat $TARGET_Bound | wc -l | awk '{printf \"%.f\\n\", \$1 * 0.75}' > $NUMBER3" >> $sampleID
-echo "#take sorted sites and split into quartiles" >> $sampleID
-echo "#take above motif dedup bedfile that is sorted by TSV." >> $sampleID
-echo "cat $TSV_ratio | head -\$(cat $NUMBER)  | awk '{print \$1\"\t\"\$2\"\t\"\$3\"\t\"\$4\"\t\"\$5\"\t\"\$6}' > $BEDFILE_category1" >> $sampleID
-echo "cat $TSV_ratio | head -\$(cat $NUMBER2)  | tail -\$(cat $NUMBER) | awk '{print \$1\"\t\"\$2\"\t\"\$3\"\t\"\$4\"\t\"\$5\"\t\"\$6}' > $BEDFILE_category2" >> $sampleID
-echo "cat $TSV_ratio | head -\$(cat $NUMBER3)  | tail -\$(cat $NUMBER) | awk '{print \$1\"\t\"\$2\"\t\"\$3\"\t\"\$4\"\t\"\$5\"\t\"\$6}' > $BEDFILE_category3" >> $sampleID
-echo "cat $TSV_ratio | tail -\$(cat $NUMBER) | awk '{print \$1\"\t\"\$2\"\t\"\$3\"\t\"\$4\"\t\"\$5\"\t\"\$6}' > $BEDFILE_category4" >> $sampleID
-echo "#get the number of sites / category" >> $sampleID
-echo "cat $BEDFILE_category1 | wc -l > $NUMBER_category1" >> $sampleID
-echo "cat $BEDFILE_category2 | wc -l > $NUMBER_category2" >> $sampleID
-echo "cat $BEDFILE_category3 | wc -l > $NUMBER_category3" >> $sampleID
-echo "cat $BEDFILE_category4 | wc -l > $NUMBER_category4" >> $sampleID
-echo "#make rows of CSV values of rows / category" >> $sampleID
-echo "echo | awk -v V1="$BEDFILE_a" -v V2=\$(cat $BEDFILE_category1 | wc -l) -v V3=\$(cat $BEDFILE_category2 | wc -l) -v V4=\$(cat $BEDFILE_category3 | wc -l) -v V5=\$(cat $BEDFILE_category4 | wc -l) 'BEGIN {print \"motif_number\"\"\t\"\"category_1\"\"\t\"\"category_2\"\"\t\"\"category_3\"\"\t\"\"category_4\"\"\n\"V1\"\t\"V2\"\t\"V3\"\t\"V4\"\t\"V5}' > $TAB" >> $sampleID
-echo "#expand bedfiles" >> $sampleID
-echo "java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=1000 $BEDFILE_category1 -o=$BEDFILE_category1_1000bp" >> $sampleID
-echo "java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=1000 $BEDFILE_category2 -o=$BEDFILE_category2_1000bp" >> $sampleID
-echo "java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=1000 $BEDFILE_category3 -o=$BEDFILE_category3_1000bp" >> $sampleID
-echo "java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=1000 $BEDFILE_category4 -o=$BEDFILE_category4_1000bp" >> $sampleID
-echo "#do initial tag-pileUp (output is input directory). Settings: midpoint(m) OR 5 prime end (-5) with read 1 (-1), Gizp output cdt (z), No smoothing (N), required proper PEs (p), load blacklist **total tag option (-t) removed**" >> $sampleID
-echo "java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -z --output-matrix=$CDT2 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT2 $BEDFILE_category1_1000bp $BAM1" >> $sampleID
-echo "java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -z --output-matrix=$CDT3 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT3 $BEDFILE_category2_1000bp $BAM1" >> $sampleID
-echo "java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -z --output-matrix=$CDT4 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT4 $BEDFILE_category3_1000bp $BAM1" >> $sampleID
-echo "java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -z --output-matrix=$CDT5 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT5 $BEDFILE_category4_1000bp $BAM1" >> $sampleID
-echo "#unzip cdt files" >> $sampleID
-echo "gunzip -c $CDT2_sense_gz > $CDT2_sense" >> $sampleID
-echo "gunzip -c $CDT2_anti_gz > $CDT2_anti" >> $sampleID
-echo "gunzip -c $CDT3_sense_gz > $CDT3_sense" >> $sampleID
-echo "gunzip -c $CDT3_anti_gz > $CDT3_anti" >> $sampleID
-echo "gunzip -c $CDT4_sense_gz > $CDT4_sense" >> $sampleID
-echo "gunzip -c $CDT4_anti_gz > $CDT4_anti" >> $sampleID
-echo "gunzip -c $CDT5_sense_gz > $CDT5_sense" >> $sampleID
-echo "gunzip -c $CDT5_anti_gz > $CDT5_anti" >> $sampleID
-echo "#make scaled OUT file for each strand" >> $sampleID
-echo "perl $JOB $CDT2_sense $OUT2_sense" >> $sampleID
-echo "perl $JOB $CDT2_anti $OUT2_anti" >> $sampleID
-echo "perl $JOB $CDT3_sense $OUT3_sense" >> $sampleID
-echo "perl $JOB $CDT3_anti $OUT3_anti" >> $sampleID
-echo "perl $JOB $CDT4_sense $OUT4_sense" >> $sampleID
-echo "perl $JOB $CDT4_anti $OUT4_anti" >> $sampleID
-echo "perl $JOB $CDT5_sense $OUT5_sense" >> $sampleID
-echo "perl $JOB $CDT5_anti $OUT5_anti" >> $sampleID
-echo "#concatenate OUT fles and take lines 1,2,4 to final composite files for each library." >> $sampleID
-echo "cat $OUT2_sense $OUT2_anti | awk 'NR==1;NR==2;NR==4' > $OUT2_final" >> $sampleID
-echo "cat $OUT3_sense $OUT3_anti | awk 'NR==1;NR==2;NR==4' > $OUT3_final" >> $sampleID
-echo "cat $OUT4_sense $OUT4_anti | awk 'NR==1;NR==2;NR==4' > $OUT4_final" >> $sampleID
-echo "cat $OUT5_sense $OUT5_anti | awk 'NR==1;NR==2;NR==4' > $OUT5_final" >> $sampleID
-echo "#extract number of NTs from MEME file" >> $sampleID
-echo "python3 $EXTRACT $MEME $NT_count" >> $sampleID
-echo "#determine the 5' and 3' boundaries of the motif masked region relative to the center column of tab files at column 501" >> $sampleID
-echo "python3 $MASKED $NT_count $MASKED_region" >> $sampleID
-echo "#apply 3 bp smoothing" >> $sampleID
-echo "python3 $SMOOTH3 $OUT2_sense $category1_sense_smoothed_3" >> $sampleID
-echo "python3 $SMOOTH3 $OUT2_anti $category1_anti_smoothed_3" >> $sampleID
-echo "python3 $SMOOTH3 $OUT3_sense $category2_sense_smoothed_3" >> $sampleID
-echo "python3 $SMOOTH3 $OUT3_anti $category2_anti_smoothed_3" >> $sampleID
-echo "python3 $SMOOTH3 $OUT4_sense $category3_sense_smoothed_3" >> $sampleID
-echo "python3 $SMOOTH3 $OUT4_anti $category3_anti_smoothed_3" >> $sampleID
-echo "python3 $SMOOTH3 $OUT5_sense $category4_sense_smoothed_3" >> $sampleID
-echo "python3 $SMOOTH3 $OUT5_anti $category4_anti_smoothed_3" >> $sampleID
-echo "#apply 20 bp smoothing" >> $sampleID
-echo "python3 $SMOOTH20 $OUT2_sense $category1_sense_smoothed_20" >> $sampleID
-echo "python3 $SMOOTH20 $OUT2_anti $category1_anti_smoothed_20" >> $sampleID
-echo "python3 $SMOOTH20 $OUT3_sense $category2_sense_smoothed_20" >> $sampleID
-echo "python3 $SMOOTH20 $OUT3_anti $category2_anti_smoothed_20" >> $sampleID
-echo "python3 $SMOOTH20 $OUT4_sense $category3_sense_smoothed_20" >> $sampleID
-echo "python3 $SMOOTH20 $OUT4_anti $category3_anti_smoothed_20" >> $sampleID
-echo "python3 $SMOOTH20 $OUT5_sense $category4_sense_smoothed_20" >> $sampleID
-echo "python3 $SMOOTH20 $OUT5_anti $category4_anti_smoothed_20" >> $sampleID
-echo "#get max positions (for later scaling) of sense strand from column 276 (bp -225) - 326 (bp-175) AND determine the bp of the max position. OUTPUT file is name, max value, position of max value" >> $sampleID
-echo "python3 $MAX $category1_sense_smoothed_20 $category1_sense_max" >> $sampleID
-echo "python3 $MAX $category2_sense_smoothed_20 $category2_sense_max" >> $sampleID
-echo "python3 $MAX $category3_sense_smoothed_20 $category3_sense_max" >> $sampleID
-echo "python3 $MAX $category4_sense_smoothed_20 $category4_sense_max" >> $sampleID
-echo "#combine all above tab files (and remove headers of last 3)" >> $sampleID
-echo "cat $category1_sense_max $category2_sense_max $category3_sense_max $category4_sense_max | awk 'NR==1;NR==2;NR==4;NR==6;NR==8' > $all_max_values" >> $sampleID
-echo "#get scaling value for all categories" >> $sampleID
-echo "python3 $SCALE $all_max_values $scale_values" >> $sampleID
-echo "#get max range (max-min) from -350 to -150 bp for motif strand" >> $sampleID
-echo "python3 $TRANSLATIONAL_sense $category1_sense_smoothed_20 $translational_category1_sense" >> $sampleID
-echo "python3 $TRANSLATIONAL_sense $category2_sense_smoothed_20 $translational_category2_sense" >> $sampleID
-echo "python3 $TRANSLATIONAL_sense $category3_sense_smoothed_20 $translational_category3_sense" >> $sampleID
-echo "python3 $TRANSLATIONAL_sense $category4_sense_smoothed_20 $translational_category4_sense" >> $sampleID
-echo "#get max range (max-min) from +150 to +350 bp for opposite strand" >> $sampleID
-echo "python3 $TRANSLATIONAL_anti $category1_anti_smoothed_20 $translational_category1_anti" >> $sampleID
-echo "python3 $TRANSLATIONAL_anti $category2_anti_smoothed_20 $translational_category2_anti" >> $sampleID
-echo "python3 $TRANSLATIONAL_anti $category3_anti_smoothed_20 $translational_category3_anti" >> $sampleID
-echo "python3 $TRANSLATIONAL_anti $category4_anti_smoothed_20 $translational_category4_anti" >> $sampleID
-echo "#get average of range of translational magnitude from both strands" >> $sampleID
-echo "python3 $TRANSLATIONAL_average $translational_category1_sense $translational_category1_anti $translational_category1" >> $sampleID
-echo "python3 $TRANSLATIONAL_average $translational_category2_sense $translational_category2_anti $translational_category2" >> $sampleID
-echo "python3 $TRANSLATIONAL_average $translational_category3_sense $translational_category3_anti $translational_category3" >> $sampleID
-echo "python3 $TRANSLATIONAL_average $translational_category4_sense $translational_category4_anti $translational_category4" >> $sampleID
-echo "#combine all above tab files (and add first column of quartile info and header). Output is average of peaks from either strand" >> $sampleID
-echo "cat $translational_category1 $translational_category2 $translational_category3 $translational_category4 | awk 'BEGIN{print \"Average_Translational_Magnitude\"}1' | awk 'BEGIN{quartile[1]=\"Quartile\"; for(i=2;i<=5;i++) quartile[i]=i-1} {print quartile[NR]\"\t\"\$0} NR>5' > $translational_values" >> $sampleID
-echo "#perform autocorrelation to determine most likely periodicity" >> $sampleID
-echo "python3 $AUTO -i $category1_sense_smoothed_3 -o $correlation_results" >> $sampleID
-echo "python $PERIODICITY $correlation_results2 $PERIOD" >> $sampleID
-echo "#get significant peaks from category1 sense strand and use those respective bins to call peaks from sense strands of categories 2, 3, and 4" >> $sampleID
-echo "python3 $ROTATIONAL_sense $category1_sense_smoothed_3 q1_nucleosome_region_sense.tab" >> $sampleID
-echo "python3 $ROTATIONAL_sense $category2_sense_smoothed_3 q2_nucleosome_region_sense.tab" >> $sampleID
-echo "python3 $ROTATIONAL_sense $category3_sense_smoothed_3 q3_nucleosome_region_sense.tab" >> $sampleID
-echo "python3 $ROTATIONAL_sense $category4_sense_smoothed_3 q4_nucleosome_region_sense.tab" >> $sampleID
-echo "#get concatenated list of all unique, significant peaks, THEN get their the mode of their max position (bp)" >> $sampleID
-echo "cat q1_nucleosome_region_sense.tab q2_nucleosome_region_sense.tab q3_nucleosome_region_sense.tab q4_nucleosome_region_sense.tab > significant_peaks_sense.tab" >> $sampleID
-echo "python3 $MODE_sense significant_peaks_sense.tab $MASKED_region significant_peaks_sense_mode.tab" >> $sampleID
-echo "#determine unique set of 'significant' peaks from motif strand and do unique sort" >> $sampleID
-echo "cat q1_nucleosome_region_sense.tab q2_nucleosome_region_sense.tab q3_nucleosome_region_sense.tab q4_nucleosome_region_sense.tab | cut -f1,2 | sort -k1,1 | uniq > output_filtered_nucleosome_sense.tab" >> $sampleID
-echo "#Sense mode needs substituted to match 'opposite strand phase (0-9) then shift by doing by 5' or 3' by 'mode-5' with +=shift 5', -=shift3'" >> $sampleID
-echo "python3 $MODE_sense_substitute significant_peaks_sense_mode.tab significant_peaks_sense_mode_substituted.tab" >> $sampleID
-echo "#sort unique, significant peaks by the above substituted mode'" >> $sampleID
-echo "python3 $PEAKS_shift output_filtered_nucleosome_sense.tab significant_peaks_sense_mode_substituted.tab shifted_columns_sense.tab" >> $sampleID
-echo "#take shifted, significant bins and fill out range for each bin" >> $sampleID
-echo "python3 $PEAKS_fill $category1_sense_smoothed_3 shifted_columns_sense.tab category1_sense_smoothed_3_full.tab" >> $sampleID
-echo "python3 $PEAKS_fill $category2_sense_smoothed_3 shifted_columns_sense.tab category2_sense_smoothed_3_full.tab" >> $sampleID
-echo "python3 $PEAKS_fill $category3_sense_smoothed_3 shifted_columns_sense.tab category3_sense_smoothed_3_full.tab" >> $sampleID
-echo "python3 $PEAKS_fill $category4_sense_smoothed_3 shifted_columns_sense.tab category4_sense_smoothed_3_full.tab" >> $sampleID
-echo "#repeat above for opposite strand" >> $sampleID
-echo "#get significant peaks from category1 anti strand and use those respective bins to call peaks from sense strands of categories 2, 3, and 4" >> $sampleID
-echo "python3 $ROTATIONAL_anti $category1_anti_smoothed_3 q1_nucleosome_region_anti.tab" >> $sampleID
-echo "python3 $ROTATIONAL_anti $category2_anti_smoothed_3 q2_nucleosome_region_anti.tab" >> $sampleID
-echo "python3 $ROTATIONAL_anti $category3_anti_smoothed_3 q3_nucleosome_region_anti.tab" >> $sampleID
-echo "python3 $ROTATIONAL_anti $category4_anti_smoothed_3 q4_nucleosome_region_anti.tab" >> $sampleID
-echo "#get concatenated list of all unique, significant peaks, THEN get their the mode of their max position (bp)" >> $sampleID
-echo "cat q1_nucleosome_region_anti.tab q2_nucleosome_region_anti.tab q3_nucleosome_region_anti.tab q4_nucleosome_region_anti.tab > significant_peaks_anti.tab" >> $sampleID
-echo "python3 $MODE_anti significant_peaks_anti.tab $MASKED_region significant_peaks_anti_mode.tab" >> $sampleID
-echo "#determine unique set of 'significant' peaks from opposite strand and do unique sort" >> $sampleID
-echo "cat q1_nucleosome_region_anti.tab q2_nucleosome_region_anti.tab q3_nucleosome_region_anti.tab q4_nucleosome_region_anti.tab | cut -f1,2 | sort -k1,1 | uniq > output_filtered_nucleosome_anti.tab" >> $sampleID
-echo "#sort unique, significant peaks by the above mode; shift is by adding mode/2 to shift 3' to the motif" >> $sampleID
-echo "python3 $PEAKS_shift output_filtered_nucleosome_anti.tab significant_peaks_anti_mode.tab shifted_columns_anti.tab" >> $sampleID
-echo "#take shifted, significant bins and fill out range for each bin" >> $sampleID
-echo "python3 $PEAKS_fill $category1_anti_smoothed_3 shifted_columns_anti.tab category1_anti_smoothed_3_full.tab" >> $sampleID
-echo "python3 $PEAKS_fill $category2_anti_smoothed_3 shifted_columns_anti.tab category2_anti_smoothed_3_full.tab" >> $sampleID
-echo "python3 $PEAKS_fill $category3_anti_smoothed_3 shifted_columns_anti.tab category3_anti_smoothed_3_full.tab" >> $sampleID
-echo "python3 $PEAKS_fill $category4_anti_smoothed_3 shifted_columns_anti.tab category4_anti_smoothed_3_full.tab" >> $sampleID
-echo "#remove rows whose max value (column 8) is within the masked motif region" >> $sampleID
-echo "python3 $FILTER category1_sense_smoothed_3_full.tab $MASKED_region $category1_sense_smoothed_3_final" >> $sampleID
-echo "python3 $FILTER category2_sense_smoothed_3_full.tab $MASKED_region $category2_sense_smoothed_3_final" >> $sampleID
-echo "python3 $FILTER category3_sense_smoothed_3_full.tab $MASKED_region $category3_sense_smoothed_3_final" >> $sampleID
-echo "python3 $FILTER category4_sense_smoothed_3_full.tab $MASKED_region $category4_sense_smoothed_3_final" >> $sampleID
-echo "python3 $FILTER category1_anti_smoothed_3_full.tab $MASKED_region $category1_anti_smoothed_3_final" >> $sampleID
-echo "python3 $FILTER category2_anti_smoothed_3_full.tab $MASKED_region $category2_anti_smoothed_3_final" >> $sampleID
-echo "python3 $FILTER category3_anti_smoothed_3_full.tab $MASKED_region $category3_anti_smoothed_3_final" >> $sampleID
-echo "python3 $FILTER category4_anti_smoothed_3_full.tab $MASKED_region $category4_anti_smoothed_3_final" >> $sampleID
-echo "#get average of all peaks 5' to motif (motif strand) and 5' to motif (opposite strand)" >> $sampleID
-echo "#calculate average range (magnitude of rotational setting / category) of all peaks on either strand" >> $sampleID
-echo "python3 $ROTATIONAL_magnitude $category1_sense_smoothed_3_final $category1_anti_smoothed_3_final category1_rotational_magnitude.tab" >> $sampleID
-echo "python3 $ROTATIONAL_magnitude $category2_sense_smoothed_3_final $category2_anti_smoothed_3_final category2_rotational_magnitude.tab" >> $sampleID
-echo "python3 $ROTATIONAL_magnitude $category3_sense_smoothed_3_final $category3_anti_smoothed_3_final category3_rotational_magnitude.tab" >> $sampleID
-echo "python3 $ROTATIONAL_magnitude $category4_sense_smoothed_3_final $category4_anti_smoothed_3_final category4_rotational_magnitude.tab" >> $sampleID
-echo "#combine all above tab files (and add first column of quartile info and header). Output is average of peaks from either strand" >> $sampleID
-echo "cat category1_rotational_magnitude.tab category2_rotational_magnitude.tab category3_rotational_magnitude.tab category4_rotational_magnitude.tab | awk 'NR % 2 == 0' | awk 'BEGIN{print \"Average_Rotational_Magnitude\"}1' | awk 'BEGIN{quartile[1]=\"Quartile\"; for(i=2;i<=5;i++) quartile[i]=i-1} {print quartile[NR]\"\t\"\$0} NR>5' > $rotational_values" >> $sampleID
-echo "#calculate the # of unique, significant rotational peaks 5' to motif (from motif set of peaks)." >> $sampleID
-echo "python $SENSE_count $category1_sense_smoothed_3_final SENSE_count.tab" >> $sampleID
-echo "#calculate the # of unique, significant rotational peaks 3' to motif (from motif set of peaks)." >> $sampleID
-echo "python $ANTI_count $category1_anti_smoothed_3_final ANTI_count.tab" >> $sampleID
-echo "#make final file with all key information for this TF" >> $sampleID
-echo "python3 $CONCAT $scale_values $PERIOD $translational_values significant_peaks_sense_mode_substituted.tab significant_peaks_anti_mode.tab $rotational_values SENSE_count.tab ANTI_count.tab $FINAL" >> $sampleID
-echo "#remove intermediate files" >> $sampleID
-echo "rm $ENCODE_BEDFILE_unzipped" >> $sampleID
-echo "rm $ENCODE_BEDFILE_shuffled" >> $sampleID
-echo "rm $BEDFILE_shuffled" >> $sampleID
-echo "rm $ENCODE_BEDFILE_1000bp" >> $sampleID
-echo "rm $BEDFILE_20bp" >> $sampleID
-echo "rm $TARGET_INTERSECT_wDUP" >> $sampleID
-echo "rm $TARGET_noINTERSECT_wDUP" >> $sampleID
-echo "rm $TARGET_Bound" >> $sampleID
-echo "rm $TARGET_noINTERSECT" >> $sampleID
-echo "rm $TARGET_Bound_164bp" >> $sampleID
-echo "rm $OUT1" >> $sampleID
-echo "rm $CDT1" >> $sampleID
-echo "rm $CDT1b" >> $sampleID
-echo "rm $CDT1c" >> $sampleID
-echo "rm $CDT1_sum" >> $sampleID
-echo "rm $CDT1_sum_noHeader" >> $sampleID
-echo "rm $NUMBER" >> $sampleID
-echo "rm $NUMBER2" >> $sampleID
-echo "rm $NUMBER3" >> $sampleID
-echo "rm $BEDFILE_category1" >> $sampleID
-echo "rm $BEDFILE_category2" >> $sampleID
-echo "rm $BEDFILE_category3" >> $sampleID
-echo "rm $BEDFILE_category4" >> $sampleID
-echo "rm $NUMBER_category1" >> $sampleID
-echo "rm $NUMBER_category2" >> $sampleID
-echo "rm $NUMBER_category3" >> $sampleID
-echo "rm $NUMBER_category4" >> $sampleID
-echo "rm $OUT2" >> $sampleID
-echo "rm $CDT2" >> $sampleID
-echo "rm $CDT2_sense_gz" >> $sampleID
-echo "rm $CDT2_anti_gz" >> $sampleID
-echo "rm $CDT2_sense" >> $sampleID
-echo "rm $CDT2_anti" >> $sampleID
-echo "rm $OUT3" >> $sampleID
-echo "rm $CDT3" >> $sampleID
-echo "rm $CDT3_sense_gz" >> $sampleID
-echo "rm $CDT3_anti_gz" >> $sampleID
-echo "rm $CDT3_sense" >> $sampleID
-echo "rm $CDT3_anti" >> $sampleID
-echo "rm $OUT4" >> $sampleID
-echo "rm $CDT4" >> $sampleID
-echo "rm $CDT4_sense_gz" >> $sampleID
-echo "rm $CDT4_anti_gz" >> $sampleID
-echo "rm $CDT4_sense" >> $sampleID
-echo "rm $CDT4_anti" >> $sampleID
-echo "rm $OUT5" >> $sampleID
-echo "rm $CDT5" >> $sampleID
-echo "rm $CDT5_sense_gz" >> $sampleID
-echo "rm $CDT5_anti_gz" >> $sampleID
-echo "rm $CDT5_sense" >> $sampleID
-echo "rm $CDT5_anti" >> $sampleID
-echo "rm $NT_count" >> $sampleID
-echo "rm $MASKED_region" >> $sampleID
-echo "rm $category1_sense_smoothed_3" >> $sampleID
-echo "rm $category1_anti_smoothed_3" >> $sampleID
-echo "rm $category2_sense_smoothed_3" >> $sampleID
-echo "rm $category2_anti_smoothed_3" >> $sampleID
-echo "rm $category3_sense_smoothed_3" >> $sampleID
-echo "rm $category3_anti_smoothed_3" >> $sampleID
-echo "rm $category4_sense_smoothed_3" >> $sampleID
-echo "rm $category4_anti_smoothed_3" >> $sampleID
-echo "rm $category1_sense_smoothed_20" >> $sampleID
-echo "rm $category1_anti_smoothed_20" >> $sampleID
-echo "rm $category2_sense_smoothed_20" >> $sampleID
-echo "rm $category2_anti_smoothed_20" >> $sampleID
-echo "rm $category3_sense_smoothed_20" >> $sampleID
-echo "rm $category3_anti_smoothed_20" >> $sampleID
-echo "rm $category4_sense_smoothed_20" >> $sampleID
-echo "rm $category4_anti_smoothed_20" >> $sampleID
-echo "rm $category1_sense_max" >> $sampleID
-echo "rm $category2_sense_max" >> $sampleID
-echo "rm $category3_sense_max" >> $sampleID
-echo "rm $category4_sense_max" >> $sampleID
-echo "rm $all_max_values" >> $sampleID
-echo "rm $scale_values" >> $sampleID
-echo "rm $translational_category1_sense" >> $sampleID
-echo "rm $translational_category2_sense" >> $sampleID
-echo "rm $translational_category3_sense" >> $sampleID
-echo "rm $translational_category4_sense" >> $sampleID
-echo "rm $translational_category1_anti" >> $sampleID
-echo "rm $translational_category2_anti" >> $sampleID
-echo "rm $translational_category3_anti" >> $sampleID
-echo "rm $translational_category4_anti" >> $sampleID
-echo "rm $translational_category1" >> $sampleID
-echo "rm $translational_category2" >> $sampleID
-echo "rm $translational_category3" >> $sampleID
-echo "rm $translational_category4" >> $sampleID
-echo "rm $translational_values" >> $sampleID
-echo "rm $PERIOD" >> $sampleID
-echo "rm $rotational_category1_sense" >> $sampleID
-echo "rm $rotational_category1_anti" >> $sampleID
-echo "rm $rotational_category1_sense2" >> $sampleID
-echo "rm $rotational_category1_anti2" >> $sampleID
-echo "rm $rotational_category1_magnitude" >> $sampleID
-echo "rm $rotational_values" >> $sampleID
-echo "rm $TSV_ratio" >> $sampleID
-echo "#rm q1_nucleosome_region_sense.tab" >> $sampleID
-echo "#rm q2_nucleosome_region_sense.tab" >> $sampleID
-echo "#rm q3_nucleosome_region_sense.tab" >> $sampleID
-echo "#rm q4_nucleosome_region_sense.tab" >> $sampleID
-echo "#rm significant_peaks_sense.tab" >> $sampleID
-echo "#rm significant_peaks_sense_mode.tab" >> $sampleID
-echo "#rm output_filtered_nucleosome_sense.tab" >> $sampleID
-echo "#rm shifted_columns_sense.tab" >> $sampleID
-echo "#rm category1_sense_smoothed_3_full.tab" >> $sampleID
-echo "#rm category2_sense_smoothed_3_full.tab" >> $sampleID
-echo "#rm category3_sense_smoothed_3_full.tab" >> $sampleID
-echo "#rm category4_sense_smoothed_3_full.tab" >> $sampleID
-echo "#rm q1_nucleosome_region_anti.tab" >> $sampleID
-echo "#rm q2_nucleosome_region_anti.tab" >> $sampleID
-echo "#rm q3_nucleosome_region_anti.tab" >> $sampleID
-echo "#rm q4_nucleosome_region_anti.tab" >> $sampleID
-echo "#rm significant_peaks_anti.tab" >> $sampleID
-echo "#rm significant_peaks_anti_mode.tab" >> $sampleID
-echo "#rm output_filtered_nucleosome_anti.tab" >> $sampleID
-echo "#rm shifted_columns_anti.tab" >> $sampleID
-echo "#rm category1_anti_smoothed_3_full.tab" >> $sampleID
-echo "#rm category2_anti_smoothed_3_full.tab" >> $sampleID
-echo "#rm category3_anti_smoothed_3_full.tab" >> $sampleID
-echo "#rm category4_anti_smoothed_3_full.tab" >> $sampleID
-echo "#rm category1_rotational_magnitude.tab" >> $sampleID
-echo "#rm category2_rotational_magnitude.tab" >> $sampleID
-echo "#rm category3_rotational_magnitude.tab" >> $sampleID
-echo "#rm category4_rotational_magnitude.tab" >> $sampleID
-echo "#rm SENSE_count.tab" >> $sampleID
-echo "#rm ANTI_count.tab" >> $sampleID
-echo "#script DONE" >> $sampleID
+$JOBSTATS
+#set output
+cd $OUTPUT
+#unzip files
+gunzip -c $ENCODE_BEDFILE > $ENCODE_BEDFILE_unzipped
+#shuffle bedfiles
+shuf $ENCODE_BEDFILE_unzipped > $ENCODE_BEDFILE_shuffled
+shuf $BEDFILE > $BEDFILE_shuffled
+#expand befiles
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=1000 $ENCODE_BEDFILE_shuffled -o=$OUTPUT/$ENCODE_BEDFILE_1000bp
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=20 $BEDFILE_shuffled -o=$OUTPUT/$BEDFILE_20bp
+# Intersect peaks with motifs - filter to keep overlap - move ENCODE ChIP value ("signal value") to score col - sort by ID, then score
+bedtools intersect -loj -a $BEDFILE_20bp -b $ENCODE_BEDFILE_1000bp | awk '{OFS="\t"}{FS="\t"}{if($8>0) print $1,$2,$3,$4,$13,$6}' | sort -rnk4,5 > $TARGET_INTERSECT_wDUP
+bedtools intersect -loj -a $BEDFILE_20bp -b $ENCODE_BEDFILE_1000bp | awk '{OFS="\t"}{FS="\t"}{if($8==-1) print $1,$2,$3,$4,$13,$6}' > $TARGET_noINTERSECT_wDUP
+#Deduplicate bound motifs by keeping first instance (larger ENCODE score based on previous command sort)
+python $DEDUP -i $TARGET_INTERSECT_wDUP -o $TARGET_Bound
+#Deduplicate of unbound motifs does  NOT work as each sites seems to have its own unique 4th column
+#get number of rows from intersected bedfile
+#expand intersected bedfile
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=164 $TARGET_Bound -o=$OUTPUT/$TARGET_Bound_164bp
+#do initial tag-pileUp (output is input directory). Settings: midpoint(m) OR 5 prime end (-5) with read 1 (-1), Gizp output cdt (z), No smoothing (N), required proper PEs (p), load blacklist **total tag option (-t) removed**
+java -jar $SCRIPTMANAGER read-analysis tag-pileup -m -z --output-matrix=$CDT1 -N -p --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT1 $TARGET_Bound_164bp $BAM1
+#unzip cdt files
+gunzip -c $CDT1b > $CDT1c
+#no need to scale here as everything is relative to Benzonase data
+#sum the number of tags by each row
+java -jar $SCRIPTMANAGER read-analysis aggregate-data --sum -m -l=3 -o=$CDT1_sum -r=1 $CDT1c
+#remove header from CDT1_sum file
+cat $CDT1_sum | sed '1d' > $CDT1_sum_noHeader
+#paste bedfile and CTD1_sum_noHeader, make sure all rows match first, avoid any rows with 0 in TF signal (column 5) or nucleosome occupancy (column 8) then divide encode TF signal to nucleosome occupancy (ratio) in column 7 and sort
+paste $TARGET_Bound_164bp $CDT1_sum_noHeader | awk '{OFS="\t"}{FS="\t"}{if ($12=$7 && $5!=0 && $8!=0) print $1,$2,$3,$4,$5,$6,($5/$8)}' | sort -k7,7n > $TSV_ratio
+#get number of rows from intersected bedfile
+cat $TARGET_Bound | wc -l | awk '{printf "%.f\n", $1 * 0.25}' > $NUMBER
+cat $TARGET_Bound | wc -l | awk '{printf "%.f\n", $1 * 0.5}' > $NUMBER2
+cat $TARGET_Bound | wc -l | awk '{printf "%.f\n", $1 * 0.75}' > $NUMBER3
+#take sorted sites and split into quartiles
+#take above motif dedup bedfile that is sorted by TSV.
+cat $TSV_ratio | head -$(cat $NUMBER)  | awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6}' > $BEDFILE_category1
+cat $TSV_ratio | head -$(cat $NUMBER2)  | tail -$(cat $NUMBER) | awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6}' > $BEDFILE_category2
+cat $TSV_ratio | head -$(cat $NUMBER3)  | tail -$(cat $NUMBER) | awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6}' > $BEDFILE_category3
+cat $TSV_ratio | tail -$(cat $NUMBER) | awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6}' > $BEDFILE_category4
+#get the number of sites / category
+cat $BEDFILE_category1 | wc -l > $NUMBER_category1
+cat $BEDFILE_category2 | wc -l > $NUMBER_category2
+cat $BEDFILE_category3 | wc -l > $NUMBER_category3
+cat $BEDFILE_category4 | wc -l > $NUMBER_category4
+#make rows of CSV values of rows / category
+echo | awk -v V1="$BEDFILE_a" -v V2=$(cat $BEDFILE_category1 | wc -l) -v V3=$(cat $BEDFILE_category2 | wc -l) -v V4=$(cat $BEDFILE_category3 | wc -l) -v V5=$(cat $BEDFILE_category4 | wc -l) 'BEGIN {print "motif_number\tcategory_1\tcategory_2\tcategory_3\tcategory_4\n"V1"\t"V2"\t"V3"\t"V4"\t"V5}' > $TAB
+#expand bedfiles
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=1000 $BEDFILE_category1 -o=$BEDFILE_category1_1000bp
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=1000 $BEDFILE_category2 -o=$BEDFILE_category2_1000bp
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=1000 $BEDFILE_category3 -o=$BEDFILE_category3_1000bp
+java -jar $SCRIPTMANAGER coordinate-manipulation expand-bed -c=1000 $BEDFILE_category4 -o=$BEDFILE_category4_1000bp
+#do initial tag-pileUp (output is input directory). Settings: midpoint(m) OR 5 prime end (-5) with read 1 (-1), Gizp output cdt (z), No smoothing (N), required proper PEs (p), load blacklist **total tag option (-t) removed**
+java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -z --output-matrix=$CDT2 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT2 $BEDFILE_category1_1000bp $BAM1
+java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -z --output-matrix=$CDT3 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT3 $BEDFILE_category2_1000bp $BAM1
+java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -z --output-matrix=$CDT4 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT4 $BEDFILE_category3_1000bp $BAM1
+java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -z --output-matrix=$CDT5 -N --cpu=4 --blacklist-filter=$BLACKLIST -o=$OUT5 $BEDFILE_category4_1000bp $BAM1
+#unzip cdt files
+gunzip -c $CDT2_sense_gz > $CDT2_sense
+gunzip -c $CDT2_anti_gz > $CDT2_anti
+gunzip -c $CDT3_sense_gz > $CDT3_sense
+gunzip -c $CDT3_anti_gz > $CDT3_anti
+gunzip -c $CDT4_sense_gz > $CDT4_sense
+gunzip -c $CDT4_anti_gz > $CDT4_anti
+gunzip -c $CDT5_sense_gz > $CDT5_sense
+gunzip -c $CDT5_anti_gz > $CDT5_anti
+#make scaled OUT file for each strand
+perl $JOB $CDT2_sense $OUT2_sense
+perl $JOB $CDT2_anti $OUT2_anti
+perl $JOB $CDT3_sense $OUT3_sense
+perl $JOB $CDT3_anti $OUT3_anti
+perl $JOB $CDT4_sense $OUT4_sense
+perl $JOB $CDT4_anti $OUT4_anti
+perl $JOB $CDT5_sense $OUT5_sense
+perl $JOB $CDT5_anti $OUT5_anti
+#concatenate OUT fles and take lines 1,2,4 to final composite files for each library.
+cat $OUT2_sense $OUT2_anti | awk 'NR==1;NR==2;NR==4' > $OUT2_final
+cat $OUT3_sense $OUT3_anti | awk 'NR==1;NR==2;NR==4' > $OUT3_final
+cat $OUT4_sense $OUT4_anti | awk 'NR==1;NR==2;NR==4' > $OUT4_final
+cat $OUT5_sense $OUT5_anti | awk 'NR==1;NR==2;NR==4' > $OUT5_final
+#extract number of NTs from MEME file
+python $EXTRACT $MEME $NT_count
+#determine the 5' and 3' boundaries of the motif masked region relative to the center column of tab files at column 501
+python $MASKED $NT_count $MASKED_region
+#apply 3 bp smoothing
+python $SMOOTH3 $OUT2_sense $category1_sense_smoothed_3
+python $SMOOTH3 $OUT2_anti $category1_anti_smoothed_3
+python $SMOOTH3 $OUT3_sense $category2_sense_smoothed_3
+python $SMOOTH3 $OUT3_anti $category2_anti_smoothed_3
+python $SMOOTH3 $OUT4_sense $category3_sense_smoothed_3
+python $SMOOTH3 $OUT4_anti $category3_anti_smoothed_3
+python $SMOOTH3 $OUT5_sense $category4_sense_smoothed_3
+python $SMOOTH3 $OUT5_anti $category4_anti_smoothed_3
+#apply 20 bp smoothing
+python $SMOOTH20 $OUT2_sense $category1_sense_smoothed_20
+python $SMOOTH20 $OUT2_anti $category1_anti_smoothed_20
+python $SMOOTH20 $OUT3_sense $category2_sense_smoothed_20
+python $SMOOTH20 $OUT3_anti $category2_anti_smoothed_20
+python $SMOOTH20 $OUT4_sense $category3_sense_smoothed_20
+python $SMOOTH20 $OUT4_anti $category3_anti_smoothed_20
+python $SMOOTH20 $OUT5_sense $category4_sense_smoothed_20
+python $SMOOTH20 $OUT5_anti $category4_anti_smoothed_20
+#get max positions (for later scaling) of sense strand from column 276 (bp -225) - 326 (bp-175) AND determine the bp of the max position. OUTPUT file is name, max value, position of max value
+python $MAX $category1_sense_smoothed_20 $category1_sense_max
+python $MAX $category2_sense_smoothed_20 $category2_sense_max
+python $MAX $category3_sense_smoothed_20 $category3_sense_max
+python $MAX $category4_sense_smoothed_20 $category4_sense_max
+#combine all above tab files (and remove headers of last 3)
+cat $category1_sense_max $category2_sense_max $category3_sense_max $category4_sense_max | awk 'NR==1;NR==2;NR==4;NR==6;NR==8' > $all_max_values
+#get scaling value for all categories
+python $SCALE $all_max_values $scale_values
+#get max range (max-min) from -350 to -150 bp for motif strand
+python $TRANSLATIONAL_sense $category1_sense_smoothed_20 $translational_category1_sense
+python $TRANSLATIONAL_sense $category2_sense_smoothed_20 $translational_category2_sense
+python $TRANSLATIONAL_sense $category3_sense_smoothed_20 $translational_category3_sense
+python $TRANSLATIONAL_sense $category4_sense_smoothed_20 $translational_category4_sense
+#get max range (max-min) from +150 to +350 bp for opposite strand
+python $TRANSLATIONAL_anti $category1_anti_smoothed_20 $translational_category1_anti
+python $TRANSLATIONAL_anti $category2_anti_smoothed_20 $translational_category2_anti
+python $TRANSLATIONAL_anti $category3_anti_smoothed_20 $translational_category3_anti
+python $TRANSLATIONAL_anti $category4_anti_smoothed_20 $translational_category4_anti
+#get average of range of translational magnitude from both strands
+python $TRANSLATIONAL_average $translational_category1_sense $translational_category1_anti $translational_category1
+python $TRANSLATIONAL_average $translational_category2_sense $translational_category2_anti $translational_category2
+python $TRANSLATIONAL_average $translational_category3_sense $translational_category3_anti $translational_category3
+python $TRANSLATIONAL_average $translational_category4_sense $translational_category4_anti $translational_category4
+#combine all above tab files (and add first column of quartile info and header). Output is average of peaks from either strand
+cat $translational_category1 $translational_category2 $translational_category3 $translational_category4 | awk 'BEGIN{print "Average_Translational_Magnitude"}1' | awk 'BEGIN{quartile[1]="Quartile"; for(i=2;i<=5;i++) quartile[i]=i-1} {print quartile[NR]"\t"$0} NR>5' > $translational_values
+#perform autocorrelation to determine most likely periodicity
+python $AUTO -i $category1_sense_smoothed_3 -o $correlation_results
+python $PERIODICITY $correlation_results2 $PERIOD
+#get significant peaks from category1 sense strand and use those respective bins to call peaks from sense strands of categories 2, 3, and 4
+python $ROTATIONAL_sense $category1_sense_smoothed_3 q1_nucleosome_region_sense.tab
+python $ROTATIONAL_sense $category2_sense_smoothed_3 q2_nucleosome_region_sense.tab
+python $ROTATIONAL_sense $category3_sense_smoothed_3 q3_nucleosome_region_sense.tab
+python $ROTATIONAL_sense $category4_sense_smoothed_3 q4_nucleosome_region_sense.tab
+#get concatenated list of all unique, significant peaks, THEN get their the mode of their max position (bp)
+cat q1_nucleosome_region_sense.tab q2_nucleosome_region_sense.tab q3_nucleosome_region_sense.tab q4_nucleosome_region_sense.tab > significant_peaks_sense.tab
+python $MODE_sense significant_peaks_sense.tab $MASKED_region significant_peaks_sense_mode.tab
+#determine unique set of 'significant' peaks from motif strand and do unique sort
+cat q1_nucleosome_region_sense.tab q2_nucleosome_region_sense.tab q3_nucleosome_region_sense.tab q4_nucleosome_region_sense.tab | cut -f1,2 | sort -k1,1 | uniq > output_filtered_nucleosome_sense.tab
+#Sense mode needs substituted to match 'opposite strand phase (0-9) then shift by doing by 5' or 3' by 'mode-5' with +=shift 5', -=shift3'
+python $MODE_sense_substitute significant_peaks_sense_mode.tab significant_peaks_sense_mode_substituted.tab
+#sort unique, significant peaks by the above substituted mode'
+python $PEAKS_shift output_filtered_nucleosome_sense.tab significant_peaks_sense_mode_substituted.tab shifted_columns_sense.tab
+#take shifted, significant bins and fill out range for each bin
+python $PEAKS_fill $category1_sense_smoothed_3 shifted_columns_sense.tab category1_sense_smoothed_3_full.tab
+python $PEAKS_fill $category2_sense_smoothed_3 shifted_columns_sense.tab category2_sense_smoothed_3_full.tab
+python $PEAKS_fill $category3_sense_smoothed_3 shifted_columns_sense.tab category3_sense_smoothed_3_full.tab
+python $PEAKS_fill $category4_sense_smoothed_3 shifted_columns_sense.tab category4_sense_smoothed_3_full.tab
+#repeat above for opposite strand
+#get significant peaks from category1 anti strand and use those respective bins to call peaks from sense strands of categories 2, 3, and 4
+python $ROTATIONAL_anti $category1_anti_smoothed_3 q1_nucleosome_region_anti.tab
+python $ROTATIONAL_anti $category2_anti_smoothed_3 q2_nucleosome_region_anti.tab
+python $ROTATIONAL_anti $category3_anti_smoothed_3 q3_nucleosome_region_anti.tab
+python $ROTATIONAL_anti $category4_anti_smoothed_3 q4_nucleosome_region_anti.tab
+#get concatenated list of all unique, significant peaks, THEN get their the mode of their max position (bp)
+cat q1_nucleosome_region_anti.tab q2_nucleosome_region_anti.tab q3_nucleosome_region_anti.tab q4_nucleosome_region_anti.tab > significant_peaks_anti.tab
+python $MODE_anti significant_peaks_anti.tab $MASKED_region significant_peaks_anti_mode.tab
+#determine unique set of 'significant' peaks from opposite strand and do unique sort
+cat q1_nucleosome_region_anti.tab q2_nucleosome_region_anti.tab q3_nucleosome_region_anti.tab q4_nucleosome_region_anti.tab | cut -f1,2 | sort -k1,1 | uniq > output_filtered_nucleosome_anti.tab
+#sort unique, significant peaks by the above mode; shift is by adding mode/2 to shift 3' to the motif
+python $PEAKS_shift output_filtered_nucleosome_anti.tab significant_peaks_anti_mode.tab shifted_columns_anti.tab
+#take shifted, significant bins and fill out range for each bin
+python $PEAKS_fill $category1_anti_smoothed_3 shifted_columns_anti.tab category1_anti_smoothed_3_full.tab
+python $PEAKS_fill $category2_anti_smoothed_3 shifted_columns_anti.tab category2_anti_smoothed_3_full.tab
+python $PEAKS_fill $category3_anti_smoothed_3 shifted_columns_anti.tab category3_anti_smoothed_3_full.tab
+python $PEAKS_fill $category4_anti_smoothed_3 shifted_columns_anti.tab category4_anti_smoothed_3_full.tab
+#remove rows whose max value (column 8) is within the masked motif region
+python $FILTER category1_sense_smoothed_3_full.tab $MASKED_region $category1_sense_smoothed_3_final
+python $FILTER category2_sense_smoothed_3_full.tab $MASKED_region $category2_sense_smoothed_3_final
+python $FILTER category3_sense_smoothed_3_full.tab $MASKED_region $category3_sense_smoothed_3_final
+python $FILTER category4_sense_smoothed_3_full.tab $MASKED_region $category4_sense_smoothed_3_final
+python $FILTER category1_anti_smoothed_3_full.tab $MASKED_region $category1_anti_smoothed_3_final
+python $FILTER category2_anti_smoothed_3_full.tab $MASKED_region $category2_anti_smoothed_3_final
+python $FILTER category3_anti_smoothed_3_full.tab $MASKED_region $category3_anti_smoothed_3_final
+python $FILTER category4_anti_smoothed_3_full.tab $MASKED_region $category4_anti_smoothed_3_final
+#get average of all peaks 5' to motif (motif strand) and 5' to motif (opposite strand)
+#calculate average range (magnitude of rotational setting / category) of all peaks on either strand
+python $ROTATIONAL_magnitude $category1_sense_smoothed_3_final $category1_anti_smoothed_3_final category1_rotational_magnitude.tab
+python $ROTATIONAL_magnitude $category2_sense_smoothed_3_final $category2_anti_smoothed_3_final category2_rotational_magnitude.tab
+python $ROTATIONAL_magnitude $category3_sense_smoothed_3_final $category3_anti_smoothed_3_final category3_rotational_magnitude.tab
+python $ROTATIONAL_magnitude $category4_sense_smoothed_3_final $category4_anti_smoothed_3_final category4_rotational_magnitude.tab
+#combine all above tab files (and add first column of quartile info and header). Output is average of peaks from either strand
+cat category1_rotational_magnitude.tab category2_rotational_magnitude.tab category3_rotational_magnitude.tab category4_rotational_magnitude.tab | awk 'NR % 2 == 0' | awk 'BEGIN{print "Average_Rotational_Magnitude"}1' | awk 'BEGIN{quartile[1]="Quartile"; for(i=2;i<=5;i++) quartile[i]=i-1} {print quartile[NR]"\t"$0} NR>5' > $rotational_values
+#calculate the # of unique, significant rotational peaks 5' to motif (from motif set of peaks).
+python $SENSE_count $category1_sense_smoothed_3_final SENSE_count.tab
+#calculate the # of unique, significant rotational peaks 3' to motif (from motif set of peaks).
+python $ANTI_count $category1_anti_smoothed_3_final ANTI_count.tab
+#make final file with all key information for this TF
+python $CONCAT $scale_values $PERIOD $translational_values significant_peaks_sense_mode_substituted.tab significant_peaks_anti_mode.tab $rotational_values SENSE_count.tab ANTI_count.tab $FINAL

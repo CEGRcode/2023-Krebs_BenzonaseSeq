@@ -2157,25 +2157,22 @@ echo | awk -v V1="$str1" -v V2="$str4" 'BEGIN {print V1"\n"V2}' > $OUT_YY
 echo | awk -v V1="$str1" -v V2="$str5" 'BEGIN {print V1"\n"V2}' > $OUT_RR
 
 #apply normalization (divide values in row2 by the # sites in the bedfile)
-python3 $NORMALIZATION $OUT_WW $OUT_WW_normalized $SITES
-python3 $NORMALIZATION $OUT_SS $OUT_SS_normalized $SITES
-python3 $NORMALIZATION $OUT_YY $OUT_YY_normalized $SITES
-python3 $NORMALIZATION $OUT_RR $OUT_RR_normalized $SITES
+python $NORMALIZATION $OUT_WW $OUT_WW_normalized $SITES
+python $NORMALIZATION $OUT_SS $OUT_SS_normalized $SITES
+python $NORMALIZATION $OUT_YY $OUT_YY_normalized $SITES
+python $NORMALIZATION $OUT_RR $OUT_RR_normalized $SITES
 
 #apply 3 bp smoothing
-python3 $SMOOTH3 $OUT_WW_normalized $OUT_WW_normalized_3
-python3 $SMOOTH3 $OUT_SS_normalized $OUT_SS_normalized_3
-python3 $SMOOTH3 $OUT_YY_normalized $OUT_YY_normalized_3
-python3 $SMOOTH3 $OUT_RR_normalized $OUT_RR_normalized_3
+python $SMOOTH3 $OUT_WW_normalized $OUT_WW_normalized_3
+python $SMOOTH3 $OUT_SS_normalized $OUT_SS_normalized_3
+python $SMOOTH3 $OUT_YY_normalized $OUT_YY_normalized_3
+python $SMOOTH3 $OUT_RR_normalized $OUT_RR_normalized_3
 
 #extract number of NTs from MEME file
-python3 $EXTRACT $MEME $NT_count
+python $EXTRACT $MEME $NT_count
 
 #determine the 5' and 3' boundaries of the motif masked region relative to the center column of tab files at column 256
-python3 $MASKED $NT_count $MASKED_region
+python $MASKED $NT_count $MASKED_region
 
 #get maximum value for each feature (uses all columns as it is assumed that flank columns will have smaller values)
 python $MAX $OUT_WW_normalized_3 $OUT_SS_normalized_3 $OUT_YY_normalized_3 $OUT_RR_normalized_3 $MASKED_region $OUT_all_max
-
-# finish script
-echo "DONE"
