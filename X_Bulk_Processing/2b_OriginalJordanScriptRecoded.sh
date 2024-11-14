@@ -35,8 +35,9 @@ ENCODE=`sed "${SLURM_ARRAY_TASK_ID}q;d" $METADATA | awk '{print $3}'`
 
 # Inputs and outputs
 MEMEFILE=../data/JASPAR/${TARGET}_${JASPAR}.meme
-BAMFILE=../data/BAM/BNase-seq_50U-10min_merge_hg38.bam		#BAM1
+BAMFILE=../data/BAM/BNase-seq_50U-10min_merge_hg38.bam
 BLACKLIST=../data/hg38_files/ENCFF356LFX_hg38_exclude.bed.gz
+MOTIF=../data/RefPT-JASPAR
 
 #output directory
 OUTPUT=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/240909_TFBS/01_final_TF_pipeline_jobs_240913/CTCF_NucOccupancy_settings_pipeline_MA1929_1_v13_241011
@@ -50,7 +51,7 @@ SMOOTH=../bin/smoothing_parameterize.py
 MAX=../bin/max_position_v3_240818.py
 SCALE=../bin/scaling_240814.py
 TRANSLATIONAL=../bin/translational_range_parameterize.py
-TRANSLATIONAL_average=../bin/translational_range_average_240820.py
+TRANSLATIONAL_AVG=../bin/translational_range_average_240820.py
 AUTO=../bin/autocorrelation_of_CDT_v2_240818.py
 PERIODICITY=../bin/periodicity_240818.py
 ROTATIONAL=../bin/rotational_ratio_parameterize.py
@@ -67,36 +68,18 @@ CONCAT=../bin/concatenate_v3_241011.py
 # ===============================================================================================================================
 
 RUNID=${TARGET}_${JASPAR}
-MOTIF=../data/RefPT-JASPAR
+
+ODIR=Library/${RUNID}
+[ -d $ODIR ] || mkdir -p $ODIR
+[ -d logs ] || mkdir logs
+
+FILEBASE=$ODIR/${RUNID}
 
 #set output file names
-BEDFILE_category1=${RUNID}_SORT-TFnucRatio_GROUP-Quartile1
-BEDFILE_category2=${RUNID}_SORT-TFnucRatio_GROUP-Quartile2
-BEDFILE_category3=${RUNID}_SORT-TFnucRatio_GROUP-Quartile3
-BEDFILE_category4=${RUNID}_SORT-TFnucRatio_GROUP-Quartile4
-BEDFILE_category1_1000bp=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile1_1000bp.bed
-BEDFILE_category2_1000bp=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile2_1000bp.bed
-BEDFILE_category3_1000bp=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile3_1000bp.bed
-BEDFILE_category4_1000bp=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile4_1000bp.bed
-
-NT_count=${RUNID}_NT_count.tab
-MASKED_region=${RUNID}_masked.tab
-
-category1_sense_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_sense_smooth3.tab
-category2_sense_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_sense_smooth3.tab
-category3_sense_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_sense_smooth3.tab
-category4_sense_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_sense_smooth3.tab
-category1_anti_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category1}_ForComposite_allReads_anti_smooth3.tab
-category2_anti_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category2}_ForComposite_allReads_anti_smooth3.tab
-category3_anti_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category3}_ForComposite_allReads_anti_smooth3.tab
-category4_anti_smoothed_3=BNase-seq_50U-10min_merge_hg38_${BEDFILE_category4}_ForComposite_allReads_anti_smooth3.tab
-
 scale_values=${RUNID}_scale_values.tab
 
-translational_category1=${RUNID}_GROUP-Quartile1_translational_setting.tab
-translational_category2=${RUNID}_GROUP-Quartile2_translational_setting.tab
-translational_category3=${RUNID}_GROUP-Quartile3_translational_setting.tab
-translational_category4=${RUNID}_GROUP-Quartile4_translational_setting.tab
+NT_count=${FILEBASE}_NT_count.tab
+MASKED_region=${FILEBASE}_masked.tab
 
 translational_values=${RUNID}_translational_values.tab
 PERIOD=${RUNID}_periodicity.tab
@@ -124,58 +107,60 @@ python $MASKED $NT_count $MASKED_region
 
 for QUARTILE in {1..4};
 do
-	CATEGORY=${RUNID}_SORT-TFnucRatio_GROUP-Quartile${QUARTILE}
+	# Build input filepath
 	BEDFILE=$MOTIF/1000bp/${RUNID}_SORT-TFnucRatio_GROUP-Quartile${QUARTILE}_1000bp.bed
-	OUT_COMPOSITE=0${QUARTILE}_BNase-seq_50U-10min_merge_hg38_${CATEGORY}_ForComposite_final.tab
 
+	# Build outpput filepath
+	QFILEBASE=${FILEBASE}_Quartile-${QUARTILE}
+	OUT_COMPOSITE=$ODIR/0${QUARTILE}_${RUNID}_BNase-seq_50U-10min_merge_hg38_Quartile-${QUARTILE}_5both.out
+
+	# output variables to reduce away
+	CATEGORY=${RUNID}_SORT-TFnucRatio_GROUP-Quartile${QUARTILE}
 	BASE=BNase-seq_50U-10min_merge_hg38_${CATEGORY}_ForComposite_allReads
 
 	# Tag pileup Benzonase cut-sites. Settings: 5 prime end (-5) with read 1 (-1), No smoothing (N), required proper PEs (-p)
-	java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -N -p --cpu 4 -o $OUT_COMPOSITE $BEDFILE $BAMFILE
+	java -jar $SCRIPTMANAGER read-analysis tag-pileup -a -5 -N -p --cpu 4 -o ${OUT_COMPOSITE} $BEDFILE $BAMFILE
 
 	# Slice sense and anti strand
-	awk 'NR==1;NR==2' $OUT_COMPOSITE > ${BASE}_sense.tab
-	awk 'NR==1;NR==3' $OUT_COMPOSITE > ${BASE}_anti.tab
+	awk 'NR==1;NR==2' $OUT_COMPOSITE > ${QFILEBASE}_sense.tab
+	awk 'NR==1;NR==3' $OUT_COMPOSITE > ${QFILEBASE}_anti.tab
 
 	# Apply smoothing (3) to sense and anti
-	python $SMOOTH 3 ${BASE}_sense.tab ${BASE}_sense_smooth3.tab	#category1_sense_smoothed_3
-	python $SMOOTH 3 ${BASE}_anti.tab ${BASE}_anti_smooth3.tab		#category1_anti_smoothed_3
+	python $SMOOTH 3 ${QFILEBASE}_sense.tab ${QFILEBASE}_sense_smooth3.tab
+	python $SMOOTH 3 ${QFILEBASE}_anti.tab ${QFILEBASE}_anti_smooth3.tab
 
 	# Apply smoothing (20) to sense and anti
-	python $SMOOTH 20 ${BASE}_sense.tab ${BASE}_sense_smooth20.tab
-	python $SMOOTH 20 ${BASE}_anti.tab ${BASE}_anti_smooth20.tab
+	python $SMOOTH 20 ${QFILEBASE}_sense.tab ${QFILEBASE}_sense_smooth20.tab
+	python $SMOOTH 20 ${QFILEBASE}_anti.tab ${QFILEBASE}_anti_smooth20.tab
 
 	# Get max positions (for later scaling) of sense strand from column 276 (bp -225) - 326 (bp-175) AND determine the bp of the max position. OUTPUT file is name, max value, position of max value
-	python $MAX ${BASE}_sense_smooth20.tab ${BASE}_sense_smooth20_max.tab
+	python $MAX ${QFILEBASE}_sense_smooth20.tab ${QFILEBASE}_sense_smooth20_max.tab
 
 	# === Check translational setting ===
 
-	RBASE=${RUNID}_GROUP-Quartile${QUARTILE}
-
 	#get max range (max-min) from -350 to -150 bp for motif strand
-	python $TRANSLATIONAL sense ${BASE}_sense_smooth20.tab ${RBASE}_sense_translational_setting.tab
+	python $TRANSLATIONAL sense ${QFILEBASE}_sense_smooth20.tab ${QFILEBASE}_sense_smooth20_translational.tab
 
 	#get max range (max-min) from +150 to +350 bp for opposite strand
-	python $TRANSLATIONAL anti ${BASE}_sense_smooth20.tab ${RBASE}_anti_translational_setting.tab
+	python $TRANSLATIONAL anti ${QFILEBASE}_anti_smooth20.tab ${QFILEBASE}_anti_smooth20_translational.tab
 
 	#get average of range of translational magnitude from both strands
-	python $TRANSLATIONAL_average ${RBASE}_sense_translational_setting.tab ${RBASE}_anti_translational_setting.tab ${RBASE}_translational_setting.tab #translational_category1
+	python $TRANSLATIONAL_AVG ${QFILEBASE}_sense_smooth20_translational.tab ${QFILEBASE}_anti_smooth20_translational.tab ${QFILEBASE}_translational_setting.tab
 
 	# === Check rotation ===
 
 	#get significant peaks from category1 sense strand and use those respective bins to call peaks from sense strands of categories 2, 3, and 4
-	python $ROTATIONAL sense ${BASE}_sense_smooth3.tab ${RUNID}_q${QUARTILE}_nucleosome_region_sense.tab
+	python $ROTATIONAL sense ${QFILEBASE}_sense_smooth3.tab ${RUNID}_q${QUARTILE}_nucleosome_region_sense.tab
 
 	#get significant peaks from category1 anti strand and use those respective bins to call peaks from sense strands of categories 2, 3, and 4
-	python $ROTATIONAL anti ${BASE}_sense_smooth3.tab ${RUNID}_q${QUARTILE}_nucleosome_region_anti.tab
+	python $ROTATIONAL anti ${QFILEBASE}_anti_smooth3.tab ${RUNID}_q${QUARTILE}_nucleosome_region_anti.tab
 
 done
 
-
-Q1=BNase-seq_50U-10min_merge_hg38_${RUNID}_SORT-TFnucRatio_GROUP-Quartile1_ForComposite_allReads
-Q2=BNase-seq_50U-10min_merge_hg38_${RUNID}_SORT-TFnucRatio_GROUP-Quartile2_ForComposite_allReads
-Q3=BNase-seq_50U-10min_merge_hg38_${RUNID}_SORT-TFnucRatio_GROUP-Quartile3_ForComposite_allReads
-Q4=BNase-seq_50U-10min_merge_hg38_${RUNID}_SORT-TFnucRatio_GROUP-Quartile4_ForComposite_allReads
+Q1=${FILEBASE}_Quartile-1
+Q2=${FILEBASE}_Quartile-2
+Q3=${FILEBASE}_Quartile-3
+Q4=${FILEBASE}_Quartile-4
 
 #combine all above tab files (and remove headers of last 3)
 cat ${Q1}_sense_smooth20_max.tab \
@@ -189,16 +174,16 @@ cat ${Q1}_sense_smooth20_max.tab \
 python $SCALE ${RUNID}_all_max_values.tab $scale_values
 
 #combine all above tab files (and add first column of quartile info and header). Output is average of peaks from either strand
-cat ${RUNID}_GROUP-Quartile1_translational_setting.tab \
-	${RUNID}_GROUP-Quartile2_translational_setting.tab \
-	${RUNID}_GROUP-Quartile3_translational_setting.tab \
-	${RUNID}_GROUP-Quartile4_translational_setting.tab \
+cat ${Q1}_translational_setting.tab \
+	${Q2}_translational_setting.tab \
+	${Q3}_translational_setting.tab \
+	${Q4}_translational_setting.tab \
 	| awk 'BEGIN{print "Average_Translational_Magnitude"}1' \
 	| awk 'BEGIN{quartile[1]="Quartile"; for(i=2;i<=5;i++) quartile[i]=i-1} {print quartile[NR]"\t"$0} NR>5' \
 	> $translational_values
 
 #perform autocorrelation to determine most likely periodicity
-python $AUTO -i BNase-seq_50U-10min_merge_hg38_${RUNID}_SORT-TFnucRatio_GROUP-Quartile1_ForComposite_allReads_sense_smooth3.tab -o $correlation_results
+python $AUTO -i ${Q1}_sense_smooth3.tab -o $correlation_results
 python $PERIODICITY $correlation_results.tsv $PERIOD
 
 
@@ -250,11 +235,11 @@ do
 	CATEGORY=${RUNID}_SORT-TFnucRatio_GROUP-Quartile${QUARTILE}
 	BASE=BNase-seq_50U-10min_merge_hg38_${CATEGORY}_ForComposite_allReads
 
-	smoothed_base=BNase-seq_50U-10min_merge_hg38_${CATEGORY}_ForComposite_allReads
+	QFILEBASE=${FILEBASE}_Quartile-${QUARTILE}
 
 	#take shifted, significant bins and fill out range for each bin
-	python $PEAKS_fill ${smoothed_base}_sense_smooth3.tab ${RUNID}_shifted_columns_sense.tab category${QUARTILE}_sense_smoothed_3_full.tab
-	python $PEAKS_fill ${smoothed_base}_anti_smooth3.tab ${RUNID}_shifted_columns_anti.tab category${QUARTILE}_anti_smoothed_3_full.tab
+	python $PEAKS_fill ${QFILEBASE}_sense_smooth3.tab ${RUNID}_shifted_columns_sense.tab category${QUARTILE}_sense_smoothed_3_full.tab
+	python $PEAKS_fill ${QFILEBASE}_anti_smooth3.tab ${RUNID}_shifted_columns_anti.tab category${QUARTILE}_anti_smoothed_3_full.tab
 
 	#remove rows whose max value (column 8) is within the masked motif region
 	python $FILTER category${QUARTILE}_sense_smoothed_3_full.tab $MASKED_region ${RUNID}_category${QUARTILE}_sense_smoothed_3_final.tab
