@@ -127,12 +127,12 @@ FACTOR=`wc -l $BEDFILE | awk '{print 1/$1}'`
 
 OLIST=""
 # for SEQ in "AA-AT-TA-TT" "CC-CG-GC-GG" "AC-CA-TG-GT" "AG-GA-TC-CT";
-for SEQ in "AA" "AT" "AC" "AG" "TA" "TT" "TC" "TG" "CA" "CT" "CC" "CG" "GA" "GT" "GC" "GG";
+for SEQ in "AA" "AT" "AC" "AG" "TA" "TT" "TC" "TG" "CA" "CT" "CC" "CG" "GA" "GT" "GC" "GG" "WW" "SS" "YY" "RR";
 do
 	# Dinucleotide analysis
 	python $DINUCLEOTIDE -i $DIR/Dinucleotide/${BED}.fa --seq $SEQ -o $DIR/Dinucleotide/${SEQ}_${BED}.cdt
 
 	# CDT to composite
-	perl $COMPOSITE $DIR/Dinucleotide/${SEQ}_${BED}.cdt $DIR/Dinucleotide/${SEQ}_${BED}.out
+	perl $COMPOSITE $DIR/Dinucleotide/${SEQ}_${BED}.cdt $DIR/Dinucleotide/${SEQ}_${BED}_AVG.out
 
 done

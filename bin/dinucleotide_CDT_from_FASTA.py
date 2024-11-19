@@ -1,6 +1,22 @@
 import sys, argparse
 
-NT = ["A","T","C","G"]
+IUPAC_REGEX = {
+	'A':['A'],
+	'C':['C'],
+	'G':['G'],
+	'T':['T'],
+	'R':['A',',G'],
+	'Y':['C',',T'],
+	'S':['G',',C'],
+	'W':['A',',T'],
+	'K':['G',',T'],
+	'M':['A',',C'],
+	'B':['C',',G',',T'],
+	'D':['A',',G',',T'],
+	'H':['A',',C',',T'],
+	'V':['A',',C',',G'],
+	'N':['A',',C',',G',',T']
+}
 
 def getParams():
 	'''Parse parameters from the command line'''
@@ -11,7 +27,7 @@ Get 0/1 matrix (CDT format) of dinucleotides
 """, formatter_class = argparse.RawTextHelpFormatter)
 
 	parser.add_argument('-i','--input', metavar='fasta_fn', required=True, help='the FASTA file to analyze')
-	parser.add_argument('-s','--seq', metavar='dinucleotides_str', required=True, help='the \"-\" delimited set of dinucleotides to check for')
+	parser.add_argument('-s','--seq', metavar='dinucleotides_str', required=True, help='the \"-\" delimited set of IUPAC dinucleotides to check for')
 	parser.add_argument('-o','--output', metavar='tsv_fn', required=True, help='the output CDT formatted 0/1 matrix of dinucleotide matches')
 
 	args = parser.parse_args()
@@ -25,8 +41,15 @@ def dint_str_to_list(dint_str):
 	for d in dints:
 		if (len(d)!=2):
 			raise Exception("Dinucleotides must be *two* nucleotides long: %s" % d)
-		if (d[0] not in NT and d[1] not in NT):
-			raise Exception("Dinucleotides must be made up of \"A\", \"T\", \"C\", or \"G\":" % d)
+		if (d[0] not in IUPAC_REGEX.keys() and d[1] not in IUPAC_REGEX.keys()):
+			raise Exception("Dinucleotides must be made up of IUPAC letters:" % d)
+		diset = set(dints)
+		# Build IUPAC nucleotide matches
+		for first in IUPAC_REGEX[d[0]]:
+			for second in IUPAC_REGEX[d[1]]:
+				diset.add("%s%s" % (first, second))
+	# Deduplicate candidates
+	dints = list(diset)
 	return(dints)
 
 if __name__ == '__main__':
