@@ -61,7 +61,7 @@ OUTPUT=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/24
 # Script shortcuts
 SCRIPTMANAGER=../bin/ScriptManager-v0.15.jar
 NORMALIZATION=../bin/division_240923.py
-SMOOTH3=../bin/smoothing_240813.py
+SMOOTH=../bin/smoothing_parameterize.py
 EXTRACT=../bin/extract_row_number_240817.py
 MASKED=../bin/masked_region_dinuc_241003.py
 MAX=../bin/max_4sets_241005.py
@@ -2180,10 +2180,10 @@ python $NORMALIZATION $ODIR/${BED}_YY_dinuc_freq.out $ODIR/${BED}_YY_normalized.
 python $NORMALIZATION $ODIR/${BED}_RR_dinuc_freq.out $ODIR/${BED}_RR_normalized.tab $SITES
 
 #apply 3 bp smoothing
-python $SMOOTH3 $ODIR/${BED}_WW_normalized.tab $ODIR/${BED}_WW_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_SS_normalized.tab $ODIR/${BED}_SS_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_YY_normalized.tab $ODIR/${BED}_YY_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_RR_normalized.tab $ODIR/${BED}_RR_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_WW_normalized.tab $ODIR/${BED}_WW_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_SS_normalized.tab $ODIR/${BED}_SS_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_YY_normalized.tab $ODIR/${BED}_YY_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_RR_normalized.tab $ODIR/${BED}_RR_normalized_smooth3.tab
 
 #extract number of NTs from MEME file
 python $EXTRACT $MEME ${RUNID}_NT_count.tab

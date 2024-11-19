@@ -60,7 +60,7 @@ OUTPUT=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/24
 # Script shortcuts
 SCRIPTMANAGER=../bin/ScriptManager-v0.15.jar
 NORMALIZATION=../bin/division_240923.py
-SMOOTH3=../bin/smoothing_240813.py
+SMOOTH=../bin/smoothing_parameterize.py
 EXTRACT=../bin/extract_row_number_240817.py
 MASKED=../bin/masked_region_dinuc_241003.py
 MAX=../bin/max_16sets_v2_241003.py
@@ -8351,22 +8351,22 @@ python $NORMALIZATION $ODIR/${BED}_GC_dinuc_freq.out $ODIR/${BED}_GC_normalized.
 python $NORMALIZATION $ODIR/${BED}_GG_dinuc_freq.out $ODIR/${BED}_GG_normalized.tab $SITES
 
 #apply 3 bp smoothing
-python $SMOOTH3 $ODIR/${BED}_AA_normalized.tab $ODIR/${BED}_AA_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_AT_normalized.tab $ODIR/${BED}_AT_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_AC_normalized.tab $ODIR/${BED}_AC_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_AG_normalized.tab $ODIR/${BED}_AG_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_TA_normalized.tab $ODIR/${BED}_TA_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_TT_normalized.tab $ODIR/${BED}_TT_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_TC_normalized.tab $ODIR/${BED}_TC_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_TG_normalized.tab $ODIR/${BED}_TG_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_CA_normalized.tab $ODIR/${BED}_CA_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_CT_normalized.tab $ODIR/${BED}_CT_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_CC_normalized.tab $ODIR/${BED}_CC_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_CG_normalized.tab $ODIR/${BED}_CG_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_GA_normalized.tab $ODIR/${BED}_GA_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_GT_normalized.tab $ODIR/${BED}_GT_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_GC_normalized.tab $ODIR/${BED}_GC_normalized_smooth3.tab
-python $SMOOTH3 $ODIR/${BED}_GG_normalized.tab $ODIR/${BED}_GG_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_AA_normalized.tab $ODIR/${BED}_AA_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_AT_normalized.tab $ODIR/${BED}_AT_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_AC_normalized.tab $ODIR/${BED}_AC_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_AG_normalized.tab $ODIR/${BED}_AG_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_TA_normalized.tab $ODIR/${BED}_TA_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_TT_normalized.tab $ODIR/${BED}_TT_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_TC_normalized.tab $ODIR/${BED}_TC_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_TG_normalized.tab $ODIR/${BED}_TG_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_CA_normalized.tab $ODIR/${BED}_CA_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_CT_normalized.tab $ODIR/${BED}_CT_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_CC_normalized.tab $ODIR/${BED}_CC_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_CG_normalized.tab $ODIR/${BED}_CG_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_GA_normalized.tab $ODIR/${BED}_GA_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_GT_normalized.tab $ODIR/${BED}_GT_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_GC_normalized.tab $ODIR/${BED}_GC_normalized_smooth3.tab
+python $SMOOTH 3 $ODIR/${BED}_GG_normalized.tab $ODIR/${BED}_GG_normalized_smooth3.tab
 
 #extract number of NTs from MEME file
 python $EXTRACT $MEME ${RUNID}_NT_count.tab

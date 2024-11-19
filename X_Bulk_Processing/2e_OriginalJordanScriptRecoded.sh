@@ -58,7 +58,7 @@ OUTPUT=/storage/group/bfp2/default/juk398-JordanKrebs/NucleosomeAtlas_project/24
 
 # Script shortcuts
 SCRIPTMANAGER=../bin/ScriptManager-v0.15.jar
-SMOOTH3=../bin/smoothing_240813.py
+SMOOTH=../bin/smoothing_parameterize.py
 EXTRACT=../bin/extract_row_number_240817.py
 MASKED=../bin/masked_region_DNAshape_241006.py
 MAX_MIN_SCALE=../bin/max_min_scale_v2_241006.py
@@ -75,10 +75,10 @@ python $MASKED ${BASE}_NT_count.tab $MASKED_region
 java -Djava.awt.headless=true -jar $SCRIPTMANAGER sequence-analysis dna-shape-bed --all --composite -o $BASE $GENOME $BEDFILE
 
 #apply 3 bp smoothing
-python $SMOOTH3 ${BASE}_AVG_HelT.out ${BASE}_HelT_smooth3.tab
-python $SMOOTH3 ${BASE}_AVG_MGW.out ${BASE}_MGW_smooth3.tab
-python $SMOOTH3 ${BASE}_AVG_PropT.out ${BASE}_PropT_smooth3.tab
-python $SMOOTH3 ${BASE}_AVG_Roll.out ${BASE}_Roll_smooth3.tab
+python $SMOOTH 3 ${BASE}_AVG_HelT.out ${BASE}_HelT_smooth3.tab
+python $SMOOTH 3 ${BASE}_AVG_MGW.out ${BASE}_MGW_smooth3.tab
+python $SMOOTH 3 ${BASE}_AVG_PropT.out ${BASE}_PropT_smooth3.tab
+python $SMOOTH 3 ${BASE}_AVG_Roll.out ${BASE}_Roll_smooth3.tab
 
 #determine max scale for +/- 2bp arbitary units
 python $MAX_MIN_SCALE ${BASE}_HelT_smooth3.tab $MASKED_region ${BASE}_HelT_smooth3_scale.tab
