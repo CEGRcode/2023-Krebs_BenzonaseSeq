@@ -61,8 +61,6 @@ PEAKS_shift=../bin/rotational_peaks_shift_v2_241011.py
 PEAKS_fill=../bin/rotational_peaks_shifted_columns_v3_240825.py
 FILTER=../bin/rotational_peaks_filter_240826.py
 ROTATIONAL_magnitude=../bin/rotational_magnitude_v2_240826.py
-SENSE_count=../bin/rotational_sense_count_240826.py
-ANTI_count=../bin/rotational_anti_count_240826.py
 CONCAT=../bin/concatenate_v3_241011.py
 
 # ===============================================================================================================================
@@ -245,9 +243,9 @@ cat ${Q1}_rotational_magnitude.tab \
 	| awk 'BEGIN{quartile[1]="Quartile"; for(i=2;i<=5;i++) quartile[i]=i-1} {print quartile[NR]"\t"$0} NR>5' \
 	> $rotational_values
 
-#calculate the # of unique, significant rotational peaks 3' to motif (from motif set of peaks).
-python $SENSE_count ${Q1}_sense_smooth3_final.tab ${FILEBASE}_SENSE_count.tab
-python $ANTI_count ${Q1}_anti_smooth3_final.tab ${FILEBASE}_ANTI_count.tab
+# count motifs with peak 5' (sense) or 3' (anti)
+sed '1d' ${Q1}_sense_smooth3_final.tab | awk '{if ($2 < 501) print}' | wc -l | awk '{print "Unique, significant peaks 5\047 to motif: "$1}' > ${FILEBASE}_SENSE_count.tab
+sed '1d' ${Q1}_anti_smooth3_final.tab  | awk '{if ($2 > 501) print}' | wc -l | awk '{print "Unique, significant peaks 3\047 to motif: "$1}' > ${FILEBASE}_ANTI_count.tab
 
 #make final file with all key information for this TF
 python $CONCAT $scale_values $period $translational_values ${FILEBASE}_significant_peaks_sense_mode_substituted.tab ${FILEBASE}_significant_peaks_anti_mode.tab $rotational_values ${FILEBASE}_SENSE_count.tab ${FILEBASE}_ANTI_count.tab $FINAL
